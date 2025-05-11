@@ -82,15 +82,26 @@ jobs:
           path: dist
           include-hidden-files: true # otherwise .NET.html doesn't get included!
 
-  publish_to_netlify_pr:
+      - name: Upload wrangler.jsonc
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler.jsonc
+          path: wrangler.jsonc
+
+  publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
     needs: build
-    name: Publish PR to Netlify
+    name: Publish PR to Cloudflare Pages
     if: github.event_name == 'pull_request'
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # - name: Checkout
+      #   uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 10.x
 
       - name: Download dist artifact
         uses: actions/download-artifact@v4
@@ -98,89 +109,27 @@ jobs:
           name: dist
           path: dist
 
-      - name: List files in dist
-        run: ls -alR dist
-
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
-
-      - name: Deploy PR build to Netlify
-        run: |
-          netlify deploy --dir=dist --json --message "${{ github.event.pull_request.head.title }}" > deploy.json
-          cat deploy.json
-
-          # Post deploy_url to PR comment
-          deploy_url=$(jq -r '.deploy_url' deploy.json)
-
-          # Post PR comment with deploy_url
-          gh pr comment ${{ github.event.pull_request.number }} --body "Preview URL: $deploy_url"
-
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
-          GH_TOKEN: ${{ github.token }}
-
-  # Push to Netlify if not a PR build and this is the astro-blog-engine repo
-  publish_to_netlify:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Publish to Netlify
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'flcdrg/astro-blog-engine'
-
-    # Allow one concurrent deployment
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
-
-    steps:
-      - name: Download dist artifact
+      - name: Download wrangler.jsonc
         uses: actions/download-artifact@v4
         with:
-          name: dist
-          path: dist
+          name: wrangler.jsonc
+          path: .
 
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
-
-      - name: Publish to Netlify
-        run: |
-          netlify deploy --prod --dir=dist --message "${{ github.event.head_commit.message }}"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
-
-  # We want this to run in this repo as well as the blog repo, so we only depend on 'build'
-  # and not 'publish_to_netlify'.
-  clean_netlify:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Clean Netlify Deploys
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
-
-      - name: Clean Netlify Deploy previews
-        run: |
-          $listData = @{ site_id = $env:NETLIFY_SITE_ID } | ConvertTo-Json
-          $json = netlify api listSiteDeploys --data $listData | ConvertFrom-Json
-          $json | Sort-Object -Property id -Descending | Where-Object { $_.context -eq "deploy-preview" } | ForEach-Object {
-              $deleteData = @{ site_id = $env:NETLIFY_SITE_ID; deploy_id = $_.id } | ConvertTo-Json
-              Write-Host "Deleting deploy preview: $($_.id)"
-              netlify api deleteSiteDeploy --data $deleteData
-          }
-
-        shell: pwsh
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+      - name: Cloudflare
+        uses: cloudflare/wrangler-action@v3.14.1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+          # Optional: Enable this if you want to have GitHub Deployments triggered
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: 4.14.4
 
   publish_to_cloudflare:
     runs-on: ubuntu-latest
     needs: build
     name: Publish to Cloudflare Pages
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     # Allow one concurrent deployment
     concurrency:
@@ -188,6 +137,14 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      # - name: Checkout
+      #   uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 10.x
+
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
@@ -195,13 +152,13 @@ jobs:
           path: dist
 
       # Push to Cloudflare Pages if not a PR build and this is not the astro-blog-engine repo
-      - name: Publish to Cloudflare Pages
-        uses: The-Noah/pages-action@v1.0.2
+      - name: Cloudflare
+        uses: cloudflare/wrangler-action@v3.14.1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: blog
-          directory: dist
+          command: pages deploy dist --project-name=${{ github.event.repository.name }} --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}
+          # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   update_readme:

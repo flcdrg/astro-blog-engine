@@ -17,7 +17,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@types/luxon": "^3.6.2",
-    "astro": "^5.7.10",
+    "astro": "^5.7.12",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^1.0.42",
     "luxon": "^3.6.1",
@@ -47,7 +47,7 @@
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
-    "@types/sanitize-html": "^2.15.0",
+    "@types/sanitize-html": "^2.16.0",
     "netlify-cli": "^20.1.1"
   }
 }
