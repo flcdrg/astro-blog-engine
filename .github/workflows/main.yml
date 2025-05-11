@@ -88,16 +88,17 @@ jobs:
           name: wrangler.jsonc
           path: wrangler.jsonc
 
-  publish_to_cloudflare_pr:
+  publish_to_cloudflare:
     runs-on: ubuntu-latest
     needs: build
-    name: Publish PR to Cloudflare Pages
-    if: github.event_name == 'pull_request'
+    name: Publish to Cloudflare Pages
+
+    # Allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
 
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
         with:
@@ -121,45 +122,8 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
-          # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           wranglerVersion: 4.14.4
-
-  publish_to_cloudflare:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Publish to Cloudflare Pages
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    # Allow one concurrent deployment
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
-
-    steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4.1.0
-        with:
-          version: 10.x
-
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      # Push to Cloudflare Pages if not a PR build and this is not the astro-blog-engine repo
-      - name: Cloudflare
-        uses: cloudflare/wrangler-action@v3.14.1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ github.event.repository.name }} --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   update_readme:
     runs-on: ubuntu-latest
