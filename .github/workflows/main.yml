@@ -82,6 +82,12 @@ jobs:
           path: dist
           include-hidden-files: true # otherwise .NET.html doesn't get included!
 
+      - name: Upload wrangler.jsonc
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler.jsonc
+          path: wrangler.jsonc
+
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
     needs: build
@@ -103,14 +109,21 @@ jobs:
           name: dist
           path: dist
 
+      - name: Download wrangler.jsonc
+        uses: actions/download-artifact@v4
+        with:
+          name: wrangler.jsonc
+          path: .
+
       - name: Cloudflare
         uses: cloudflare/wrangler-action@v3.14.1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ github.event.pull_request.base.repo.name }} --branch=${{ github.head_ref }} --commit-hash=${{ github.sha }} --commit-message="${{ github.event.pull_request.head.title }}" 
+          command: deploy
           # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: 4.14.4
 
   publish_to_cloudflare:
     runs-on: ubuntu-latest
