@@ -9,7 +9,7 @@ tags:
 
 It hasn't all been smooth sailing with my [new laptop](/2023/04/new-laptop). I had some stability issues last year where it was blue screening, and when it restarted the NVidia GPU was not present in the Device Manager (or Task Manager). After a few attempts with Dell Support replacing parts, it eventually started behaving again.
 
-Then a couple of weeks ago, I had a notification popup on my laptop. The Dell 'SupportAssist' app had noticed the fan had failed a couple of times recently. I was surprised, as I hadn't noticed any issues. I contacted Dell Support and they asked me to run the firmware-level SupportAssist diagnostic. Sure enough, it said there was an issue with a 'SKIN' sensor reading 'is lower than expected'. I'm not sure exactly what that is, but I did find a mention of the Error Code "2000-0315" on [this page](https://www.dell.com/support/kbdoc/en-au/000181167/reference-table-of-epsa-psa-error-codes-and-troubleshooting-steps-2000-0nnn-series).
+Then a couple of weeks ago, I had a notification popup on my laptop. The Dell 'SupportAssist' app had noticed the fan had failed a couple of times recently. I was surprised, as I hadn't noticed any issues. I contacted Dell Support and they asked me to run the firmware-level SupportAssist diagnostic. Sure enough, it said there was an issue with a 'SKIN' sensor reading 'is lower than expected'. I'm not sure exactly what that is, but I did find a mention of the Error Code "2000-0315" on [this page](https://web.archive.org/web/20240413011200/https://www.dell.com/support/kbdoc/en-au/000181167/reference-table-of-epsa-psa-error-codes-and-troubleshooting-steps-2000-0nnn-series).
 
 ![Screenshot of SKIN sensor error message](../../assets/2024/02/dell-skin-sensor.jpg)
 

@@ -123,7 +123,7 @@ Copy-Item install.wim knowngood.wim
 
 ### Step 4. Add drivers
 
-I should point out that I originally was following the instructions outlined in [this post](https://www.tenforums.com/tutorials/95008-dism-add-remove-drivers-offline-image.html). Those instructions cover how to capture the currently installed drivers on a machine, exporting them out, and then adding them to an install image. I tried this but my install hung. I'm not really sure why - probably one of the drivers wasn't happy tring to install at OS install time? I'm not sure - it should work in theory.
+I should point out that I originally was following the instructions outlined in [this post](https://web.archive.org/web/20250423213648/https://www.tenforums.com/tutorials/95008-dism-add-remove-drivers-offline-image.html). Those instructions cover how to capture the currently installed drivers on a machine, exporting them out, and then adding them to an install image. I tried this but my install hung. I'm not really sure why - probably one of the drivers wasn't happy tring to install at OS install time? I'm not sure - it should work in theory.
 
 So instead I remembered that most OEM manufacturers not only make the latest device drivers available for their hardware, but often they also provide a 'bundle' download with all the current drivers in one .zip, intended for just this scenario.
 
