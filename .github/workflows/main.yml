@@ -268,7 +268,7 @@ jobs:
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v2.3.0 # 2.4.0 has a bug. Don't upgrade until fixed
+        uses: lycheeverse/lychee-action@v2.4.1 # 2.4.0 has a bug. Don't upgrade until fixed
         with:
           fail: false
           output: ${{ github.workspace }}/output.json
