@@ -48,6 +48,6 @@
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.0",
-    "netlify-cli": "^20.1.1"
+    "netlify-cli": "^21.2.1"
   }
 }
