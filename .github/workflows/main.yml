@@ -91,7 +91,12 @@ jobs:
   publish_to_cloudflare:
     runs-on: ubuntu-latest
     needs: build
-    name: Publish to Cloudflare Pages
+    name: Publish to Cloudflare
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+
+    if: github.ref == 'refs/heads/main'
 
     # Allow one concurrent deployment
     concurrency:
@@ -118,10 +123,54 @@ jobs:
 
       - name: Cloudflare
         uses: cloudflare/wrangler-action@v3.14.1
+        id: deploy
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: 4.14.4
+
+  publish_to_cloudflare_pr:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Preview PR on Cloudflare
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.deployment-url }}
+
+    if: github.ref != 'refs/heads/main'
+
+    # Allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    steps:
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 10.x
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Download wrangler.jsonc
+        uses: actions/download-artifact@v4
+        with:
+          name: wrangler.jsonc
+          path: .
+
+      - name: Cloudflare Preview
+        uses: cloudflare/wrangler-action@v3.14.1
+        id: deploy
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           wranglerVersion: 4.14.4
 
