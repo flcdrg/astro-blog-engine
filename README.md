@@ -19,4 +19,4 @@ Inside of your Astro project, you'll see the following folders and files:
 
 ## Development
 
-- Uses `pnpm` for package management
+- Uses `pnpm` for package management and itself is managed by `corepack`. To upgrade pnpm, use `corepack up`
