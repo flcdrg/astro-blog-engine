@@ -47,8 +47,6 @@ const { Content } = await render(post);
 {
   post && (
     <MarkdownPostLayout frontmatter={post.data}>
-      <link rel="canonical" href={new URL(Astro.url.pathname.replace(".html", ""), Astro.site)} slot="head" />
-
       <Content />
     </MarkdownPostLayout>
   )

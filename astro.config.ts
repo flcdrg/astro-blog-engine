@@ -10,7 +10,8 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au/",
+  compressHTML: false,
+  site: process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au",
   integrations: [sitemap({
     serialize(item) {
 

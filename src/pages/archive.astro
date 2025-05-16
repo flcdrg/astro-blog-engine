@@ -11,8 +11,6 @@ const posts = (await getCollection("blog")).filter(onlyCurrent);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <link rel="canonical" href={new URL(Astro.url, Astro.site)} slot="head" />
-
   <h1>Posts by year</h1>
   <ul>
     {

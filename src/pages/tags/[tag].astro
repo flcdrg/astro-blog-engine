@@ -40,7 +40,6 @@ const { posts } = Astro.props as Props;
 ---
 
 <BaseLayout pageTitle={tag}>
-  <link rel="canonical" href={new URL(Astro.url.pathname.replace(".html", ""), Astro.site)} slot="head" />
   <p>Posts tagged with {tag}</p>
   <ul>
     {
