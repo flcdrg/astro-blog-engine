@@ -19,8 +19,6 @@ const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <link rel="canonical" href={new URL(Astro.url.pathname.replace(".html", ""), Astro.site)} slot="head" />
-
   <div class="tags">
     {
       tags.map(([tag, count]) => (

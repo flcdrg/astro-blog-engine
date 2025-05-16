@@ -60,8 +60,6 @@ function formatDateWithSuffix(dateString: string) {
 ---
 
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
-  <link rel="canonical" href={new URL(year + "/", Astro.site)} slot="head" />
-
   <h1>{year}</h1>
 
   <ul class="list-none">

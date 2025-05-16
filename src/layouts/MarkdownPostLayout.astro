@@ -20,7 +20,6 @@ const { frontmatter } = Astro.props;
     <meta name="description" content={frontmatter.description} slot="head" />
   )}
   
-  
   <h1>{frontmatter.title}</h1>
 
   <p><DateTimeComponent date={frontmatter.date} /></p>
