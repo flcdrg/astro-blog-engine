@@ -23,6 +23,7 @@
     "luxon": "^3.6.1",
     "markdown-it": "^14.1.0",
     "marked": "^15.0.11",
+    "node-html-parser": "^7.0.1",
     "sanitize-html": "^2.17.0",
     "sharp": "^0.34.1",
     "typescript": "^5.8.3"
