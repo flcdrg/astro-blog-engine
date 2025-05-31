@@ -243,16 +243,32 @@ jobs:
         with:
           node-version: 22.x
 
+      - name: Extract latest post URL from feed
+        id: extract-url
+        run: |
+          [xml]$feedXml = Get-Content "dist/feed.xml"
+          $firstEntry = $feedXml.feed.entry[0]
+          $originalUrl = $firstEntry.link | Where-Object { $_.rel -eq "alternate" -and $_.type -eq "text/html" } | Select-Object -First 1 | ForEach-Object { $_.href }
+          $localhostUrl = $originalUrl -replace "https://[^/]+", "http://localhost"
+
+          # append .html to the URL if it doesn't already end with .html
+          if ($localhostUrl -notlike "*.html") {
+            $localhostUrl += ".html"
+          }
+          echo "latest-url=$localhostUrl" >> $env:GITHUB_OUTPUT
+          echo "Latest URL: $localhostUrl"
+        shell: pwsh
+
       - name: run Lighthouse CI
         run: |
           # Robots.txt defaults to disallow, which is not what we want for the lighthouse test
           rm dist/robots.txt
 
           npm install -g @lhci/cli@0.14.x
-          lhci autorun
+
+          lhci autorun --collect.url="${{ steps.extract-url.outputs.latest-url }}" --collect.url="http://localhost/index.html" --collect.url="http://localhost/speaking.html" --collect.url="http://localhost/2025.html"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_MAX_AUTODISCOVER_URLS: ${{ github.ref != 'refs/heads/main' && 6 || 10 }} # Limit the number of URLs to 5 for PR builds
 
       - name: Lighthouse Summary
         run: |
