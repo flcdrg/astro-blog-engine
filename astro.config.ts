@@ -61,6 +61,10 @@ export default defineConfig({
         // Catch any errors to prevent build failures
         console.error(`Error processing sitemap item ${item.url}: ${error instanceof Error ? error.message : String(error)}`);
       }
+
+      if (item.links && item.links.length > 0) {
+        console.log(`Sitemap item ${item.url} has links: ${JSON.stringify(item.links)}`);
+      }
       
       return item;
     }

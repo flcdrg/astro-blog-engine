@@ -1,6 +1,7 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection, getCollection, reference, z } from "astro:content";
 import { DateTime } from "luxon";
+import onlyCurrent from "./scripts/filters";
 
 const blog = defineCollection({
   type: "content_layer",
@@ -28,4 +29,45 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const tags = defineCollection({
+  type: "content_layer",
+  loader: async () => {
+    const allPosts: Array<{ data: { tags: string[] }; id: string }> = (await getCollection("blog")).filter(onlyCurrent);
+
+    // Collate all tags from all posts and count posts per tag
+    const tagCounts = allPosts
+      .flatMap((post: any) => post.data.tags)
+      .reduce((acc: Record<string, number>, tag: string) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+      }, {});
+
+    const list = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
+      tagA.localeCompare(tagB)
+    );
+
+    // dictionary of tags and their posts
+    const tagPosts: Record<string, Array<string>> = {};
+    allPosts.forEach((post) => {
+      post.data.tags.forEach((tag) => {
+        if (!tagPosts[tag]) {
+          tagPosts[tag] = [];
+        }
+        tagPosts[tag].push(post.id);
+      });
+    });
+
+    return list.map(([tag, count]) => ({
+      id: tag,
+      count,
+      posts: (tagPosts[tag] ?? []).map((postId) => postId),
+    }));
+  },
+  schema: z.object({
+    id: z.string(),
+    count: z.number(),
+    posts: z.array(reference("blog")),
+  }),
+});
+
+export const collections = { blog, tags };
