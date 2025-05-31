@@ -159,7 +159,7 @@ You would need separate `azurerm_monitor_diagnostic_setting` resources if you we
 
 ### The diagnostic setting can't find the master database
 
-Error: creating Monitor Diagnostics Setting "diagnostic_setting" for Resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master": unexpected status 404 (404 Not Found) with error: ResourceNotFound: The Resource 'Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master' under resource group 'rg-terraform-sql-auditing-australiaeast' was not found. For more details please go to https://aka.ms/ARMResourceNotFoundFix
+Error: creating Monitor Diagnostics Setting "diagnostic_setting" for Resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master": unexpected status 404 (404 Not Found) with error: ResourceNotFound: The Resource 'Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master' under resource group 'rg-terraform-sql-auditing-australiaeast' was not found. For more details please go to <https://aka.ms/ARMResourceNotFoundFix>
 
 It appears that [sometimes the `azurerm_mssql_server` resource reports it is created, but the master database is not yet ready](https://github.com/hashicorp/terraform-provider-azurerm/issues/22226
 ). The workaround is to add a dependency on another database resource - as by definition the master database must exist before any other user databases can be created.

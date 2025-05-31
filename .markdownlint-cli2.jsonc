@@ -1,0 +1,21 @@
+{
+    "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json",
+    "config": {
+        "line-length": false,
+        "descriptive-link-text": false,
+        "ul-style": {
+            "style": "dash"
+        },
+        "no-inline-html": {
+            "allowed_elements": [
+                "kbd"
+            ],
+        },
+        "no-emphasis-as-heading": false
+    },
+    "globs": [
+        "**/*.md",
+        "!**/node_modules/**",
+        "!**/dist/**"
+    ],
+}

@@ -37,7 +37,7 @@ As it turns out, the CFS [publish some RSS feeds](https://cfs.sa.gov.au/warnings
 
 There is the `identifier` element that is non-standard, but I suspect the main issue is the `guid` element. For some reason, the `isPermaLink` attribute is set to false. On the face of it, that looks like a mistake. That URI (which incorporates the identifier value) does appear to be unique. With `isPermaLink` set to false, it hints that the value can't be used as a unique identifier. I'm guessing because of that, Mastofeed had no way to distinguish posts in the RSS feed.
 
-So we're out of luck using the simple option. My next thought was whether there was something that could transform/fix up the RSS on the fly - an 'XSLT proxy' if you like, but I've not found a free offering like that. 
+So we're out of luck using the simple option. My next thought was whether there was something that could transform/fix up the RSS on the fly - an 'XSLT proxy' if you like, but I've not found a free offering like that.
 
 Maybe I can write some code to do the job instead. Hosting it in an Azure Function should work, and ideally would be free (or really cheap).
 

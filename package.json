@@ -2,11 +2,12 @@
   "name": "astro-tutorial-blog",
   "type": "module",
   "version": "0.0.1",
-  "scripts": {
+ "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "validate-frontmatter": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content $_.FullName -Raw) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\""
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -48,6 +49,7 @@
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
-    "@types/sanitize-html": "^2.16.0"
+    "@types/sanitize-html": "^2.16.0",
+    "markdownlint-cli2": "^0.18.1"
   }
 }
