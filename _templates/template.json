@@ -1,0 +1,22 @@
+{
+    "name" : "Blog post",
+    "description" : "New blog post",
+    "defaultName" : "post.md",
+    "sortOrder" : "100",
+    "category" : "Blog",
+    "iconLight" : "icon-light.svg",
+    "iconDark" : "icon-dark.svg",
+    "elements" : [
+            {
+                "fileName" : "post.md",
+                "targetName" : "$year$-$monthPadded$-$dayPadded$-title.md",
+                "replaceParameters" : true,
+                "open" : true
+            }        
+        ],
+    "isProject" : false,
+    "command" : "",
+    "commandParameters" : [],
+    "openFiles" : [],
+    "settingsProcessors" : []
+}

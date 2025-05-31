@@ -1,3 +1,10 @@
 {
+    "vzfiletemplates.userTemplatesFolders": [
+        "./_templates/"
+    ],
+    "vzfiletemplates.customVariablesConstructor": "./.vscode/customVars.cjs",
+    "cSpell.enabledFileTypes": {
+        "md": true,
+    },
     "cSpell.language": "en,en-AU"
 }

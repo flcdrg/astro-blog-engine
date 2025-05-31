@@ -1,6 +1,8 @@
 {
   "recommendations": [
     "astro-build.astro-vscode",
+		"visualzoran.vz-file-templates",
+		"davidanson.vscode-markdownlint",
     "github.vscode-github-actions",
     "redhat.vscode-xml"
   ],
