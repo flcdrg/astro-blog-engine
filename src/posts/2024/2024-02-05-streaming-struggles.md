@@ -14,8 +14,8 @@ I already had a Microsoft LifeCam Studio Webcam (available as [business](https:/
 
 I had some funds put aside for the user group as well as a generous donation, so I decided to put that towards some hardware to help with streaming our meetings. I bought the following gear:
 
-* Elgato Game Capture HD60S+ screen capture (now superseded by the [model X](https://www.amazon.com.au/Elgato-HD60-External-Capture-Card/dp/B09V1KJ3J4?th=1&linkCode=ll1&tag=flcdrg07-22&linkId=03235850b6762954dc8fa7d5dae0ed70&language=en_AU&ref_=as_li_ss_tl))
-* [Rode Wireless GO II](https://www.amazon.com.au/R%C3%98DE-Ultra-compact-Dual-channel-Microphone-Microphones/dp/B08XFQ6KP9?&linkCode=ll1&tag=flcdrg07-22&linkId=dd81d961ba9000e738c536cd97b83965&language=en_AU&ref_=as_li_ss_tl) USB wireless microphones.
+- Elgato Game Capture HD60S+ screen capture (now superseded by the [model X](https://www.amazon.com.au/Elgato-HD60-External-Capture-Card/dp/B09V1KJ3J4?th=1&linkCode=ll1&tag=flcdrg07-22&linkId=03235850b6762954dc8fa7d5dae0ed70&language=en_AU&ref_=as_li_ss_tl))
+- [Rode Wireless GO II](https://www.amazon.com.au/R%C3%98DE-Ultra-compact-Dual-channel-Microphone-Microphones/dp/B08XFQ6KP9?&linkCode=ll1&tag=flcdrg07-22&linkId=dd81d961ba9000e738c536cd97b83965&language=en_AU&ref_=as_li_ss_tl) USB wireless microphones.
 
 Both of these are well-regarded brands so I felt confident that I had selected reliable products to use. If only that was the case.
 

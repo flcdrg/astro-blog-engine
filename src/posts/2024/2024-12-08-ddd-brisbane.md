@@ -83,4 +83,4 @@ It was such a privilege to be able to attend and I can't thank enough the organi
 
 ![David next to the DDD Brisbane banner](../../assets/2024/12/ddd-bne-david-banner.jpg)
 
-* [OAM]: Medal of the Order of Australia
+- [OAM]: Medal of the Order of Australia
