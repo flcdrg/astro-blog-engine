@@ -88,9 +88,9 @@ jobs:
         if: github.event_name == 'pull_request'
         run: pnpm build --devOutput
 
-      # Regular production build (for non-PR builds)
+      # Regular production build (e.g. on push to main)
       - name: Build
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: pnpm build
 
       # dist as artifact
@@ -148,7 +148,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: 4.14.4
+          wranglerVersion: 4.18.0 # https://github.com/cloudflare/workers-sdk/releases
 
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
