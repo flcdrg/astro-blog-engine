@@ -24,8 +24,7 @@ export const getStaticPaths = (async () => {
         slug: post.id
       },
       props: {
-        post: post,
-        year: DateTime.fromISO(post.data.date).toFormat("yyyy"),
+        post: post
       },
     });
   });
