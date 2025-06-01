@@ -88,9 +88,9 @@ jobs:
         if: github.event_name == 'pull_request'
         run: pnpm build --devOutput
 
-      # Regular production build (e.g. on push to main)
+      # Regular production build for anything else
       - name: Build
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name != 'pull_request'
         run: pnpm build
 
       # dist as artifact
