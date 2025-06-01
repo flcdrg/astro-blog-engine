@@ -1,18 +1,35 @@
 ---
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 
 interface Props {
-    date: string;
+  date: string;
+  class?: string;
+  /**
+   * Whether to hide the year in the date format.
+   * Defaults to false.
+   */
+  hideYear?: boolean;
 }
-const {date} = Astro.props;
+const { date, class: className, hideYear } = Astro.props;
+
+const newLocal: Intl.DateTimeFormatOptions = { month: "long" };
+if (!hideYear) {
+  newLocal.year = "numeric";
+} else {
+  newLocal.year = undefined;
+}
 
 // https://stackoverflow.com/a/76508946/25702
-const locale = 'en-AU',
-      suffixMap = { one: 'st', two: 'nd', few: 'rd', other: 'th' },
-      pluralRule = new Intl.PluralRules(locale, { type: 'ordinal', }),
-      withOrdinal = (n:number) => `${n}${suffixMap[pluralRule.select(n) as keyof typeof suffixMap]}`,
-      formatDate = (date: DateTime) => `${withOrdinal(date.day)} ${date.toLocaleString({ month: 'long', year: 'numeric' })}`;
+const locale = "en-AU",
+  suffixMap = { one: "st", two: "nd", few: "rd", other: "th" },
+  pluralRule = new Intl.PluralRules(locale, { type: "ordinal" }),
+  withOrdinal = (n: number) =>
+    `${n}${suffixMap[pluralRule.select(n) as keyof typeof suffixMap]}`,
+  formatDate = (date: DateTime) =>
+    `${withOrdinal(date.day)} ${date.toLocaleString(newLocal)}`;
 
-const dateTime = DateTime.fromISO(date);
+const dateTime = DateTime.fromISO(date, { zone: "Australia/Adelaide" });
 ---
-<time datetime={dateTime.toISO()}>{formatDate(dateTime)}</time>
+
+<time class={className} datetime={dateTime.toISO()}>{formatDate(dateTime)}</time
+>
