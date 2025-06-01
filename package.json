@@ -2,12 +2,14 @@
   "name": "astro-tutorial-blog",
   "type": "module",
   "version": "0.0.1",
- "scripts": {
+  "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "validate-frontmatter": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content $_.FullName -Raw) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\""
+    "validate-frontmatter": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content $_.FullName -Raw) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\"",
+    "lint": "markdownlint-cli2",
+    "lint:fix": "markdownlint-cli2 --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -18,7 +20,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@types/luxon": "^3.6.2",
-    "astro": "^5.8.0",
+    "astro": "^5.8.1",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^1.0.48",
     "luxon": "^3.6.1",
