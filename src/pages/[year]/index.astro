@@ -10,6 +10,7 @@ import type {
   GetStaticPaths,
 } from "astro";
 import onlyCurrent from "../../scripts/filters";
+import DateTimeComponent from "../../components/DateTimeComponent.astro";
 
 export const getStaticPaths = (async () => {
   const posts = (await getCollection("blog")).filter(onlyCurrent);
@@ -43,20 +44,6 @@ const pageTitle = `Posts from ${year}`;
 const frontmatter = {
   description: `Summary list of posts from the year ${year}`,
 };
-
-function formatDateWithSuffix(dateString: string) {
-  const date = DateTime.fromISO(dateString);
-  const day = date.day;
-  const suffix =
-    day % 10 === 1 && day !== 11
-      ? "st"
-      : day % 10 === 2 && day !== 12
-        ? "nd"
-        : day % 10 === 3 && day !== 13
-          ? "rd"
-          : "th";
-  return `${date.toFormat("d")}${suffix} ${date.toFormat("MMMM")}`;
-}
 ---
 
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
@@ -66,9 +53,11 @@ function formatDateWithSuffix(dateString: string) {
     {
       posts.map((post) => (
         <li>
-          <time datetime={post.data.date} class="text-gray-500">
-            {formatDateWithSuffix(post.data.date)}
-          </time>
+          <DateTimeComponent
+            date={post.data.date}
+            class="text-gray-500"
+            hideYear={true}
+          />
           - <a href={`/${post.id}`}>{post.data.title}</a>
         </li>
       ))
