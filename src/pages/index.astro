@@ -37,8 +37,8 @@ const allPosts = (await getCollection("blog"))
           { post.data.image &&
           <CustomImage desktopImgUrl={post.data.image!} alt={post.data.imageAlt} />
           }
-          
-          <BlogPostExcerpt body={post.body} length={500} /> <a href={post.id}>Read more...</a>
+
+          <BlogPostExcerpt body={post.data.description || post.body} length={500} /> <a href={post.id}>Read more...</a>
 
           <div style="clear: both" />
 
