@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import BlogPost from '../components/BlogPost.astro';
-import BlogPostExcerpt from '../components/BlogPostExcerpt.astro';
-import CustomImage from '../components/CustomImage.astro';
-import DateTimeComponent from '../components/DateTimeComponent.astro';
-import onlyCurrent from '../scripts/filters';
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogPost from "../components/BlogPost.astro";
+import BlogPostExcerpt from "../components/BlogPostExcerpt.astro";
+import CustomImage from "../components/CustomImage.astro";
+import DateTimeComponent from "../components/DateTimeComponent.astro";
+import onlyCurrent from "../scripts/filters";
 
 const pageTitle = "David Gardiner";
 
@@ -17,48 +17,52 @@ const allPosts = (await getCollection("blog"))
   )
   .slice(0, 5);
 
-  const frontmatter = {
-    description: "Dave's Daydreams - A blog of software development, .NET and other interesting things"
-  };
-
+const frontmatter = {
+  description:
+    "Dave's Daydreams - A blog of software development, .NET and other interesting things",
+};
 ---
+
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
 
   <p>Recent posts:</p>
 
-    {
-      allPosts.map(async (post) => (
-        <section>
-          <h2><BlogPost url={post.id} title={post.data.title} /></h2>
-
-          <p><DateTimeComponent date={post.data.date} /> </p>
-
-          { post.data.image &&
-          <CustomImage desktopImgUrl={post.data.image!} alt={post.data.imageAlt} />
-          }
-
-          <BlogPostExcerpt body={post.data.description || post.body} length={500} /> <a href={post.id}>Read more...</a>
-
-          <div style="clear: both" />
-
-          <div class="tags">
-            {post.data.tags.map((tag: string) => (
-              <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
-            ))}
-          </div>
-
-        </section>
-      ))
-    }
-
+  {
+    allPosts.map(async (post) => (
+      <section>
+        <h2>
+          <BlogPost url={post.id} title={post.data.title} />
+        </h2>
+        <p>
+          <DateTimeComponent date={post.data.date} />{" "}
+        </p>
+        {post.data.image && (
+          <CustomImage
+            desktopImgUrl={post.data.image!}
+            alt={post.data.imageAlt}
+          />
+        )}
+        <BlogPostExcerpt
+          body={post.data.description || post.body}
+          length={500}
+        />{" "}
+        <a href={post.id}>Read more...</a>
+        <div style="clear: both" />
+        <div class="tags">
+          {post.data.tags.map((tag: string) => (
+            <p class="tag">
+              <a href={`/tags/${tag}`}>{tag}</a>
+            </p>
+          ))}
+        </div>
+      </section>
+    ))
+  }
 </BaseLayout>
 
 <style>
-
   .list-none {
     list-style-type: none;
   }
-
-  
 </style>

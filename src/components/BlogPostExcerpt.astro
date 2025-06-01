@@ -3,16 +3,15 @@ import { marked } from "marked";
 import getExcerpt from "../scripts/getExcerpt";
 
 interface Props {
-    body: string | undefined;
-    length: number;
+  body: string | undefined;
+  length: number;
 }
 
-const {body, length} = Astro.props;
+const { body, length } = Astro.props;
 
 // Using marked because of https://github.com/withastro/astro/issues/10604
 
 const content = await marked.parse(body || "");
-
 ---
 
 <summary set:html={getExcerpt(content, length)} />
