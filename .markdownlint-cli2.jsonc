@@ -8,8 +8,9 @@
         },
         "no-inline-html": {
             "allowed_elements": [
-                "kbd"
-            ],
+                "kbd",
+                "br"
+            ]
         },
         "no-emphasis-as-heading": false
     },
@@ -17,5 +18,5 @@
         "**/*.md",
         "!**/node_modules/**",
         "!**/dist/**"
-    ],
+    ]
 }

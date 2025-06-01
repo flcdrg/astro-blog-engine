@@ -16,7 +16,7 @@ importers:
         version: 0.9.4(typescript@5.8.3)
       '@astrojs/mdx':
         specifier: ^4.3.0
-        version: 4.3.0(astro@5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0))
+        version: 4.3.0(astro@5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0))
       '@astrojs/rss':
         specifier: ^4.0.11
         version: 4.0.11
@@ -36,8 +36,8 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       astro:
-        specifier: ^5.8.0
-        version: 5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
+        specifier: ^5.8.1
+        version: 5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
       astro-disqus:
         specifier: ^1.0.1
         version: 1.0.1
@@ -866,8 +866,8 @@ packages:
   astro-disqus@1.0.1:
     resolution: {integrity: sha512-x0VAc/f8zzt09RBef4ffmqaVBEL8tS1qZBUPvuFygGkrlkz/QV1tld0oLSl+/SwgNOYOMfuXJerKiMLC1+n3WQ==}
 
-  astro@5.8.0:
-    resolution: {integrity: sha512-G57ELkdIntDiSrucA5lQaRtBOjquaZ9b9NIwoz2f471ZuuJcynLjWgItgBzlrz5UMY4WqnFbVWUCKlJb7nt9bA==}
+  astro@5.8.1:
+    resolution: {integrity: sha512-lkBg1smMRFW+FQ6i92SgEN53o4+ItRjlRt6Ck+rEjmTcb57Bid7faTNKUQNYuNnxiesTWw3NJDyVPQPbfKDyfw==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -2400,12 +2400,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@4.3.0(astro@5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0))':
+  '@astrojs/mdx@4.3.0(astro@5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.2
       '@mdx-js/mdx': 3.1.0(acorn@8.14.1)
       acorn: 8.14.1
-      astro: 5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
+      astro: 5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
       es-module-lexer: 1.7.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -3057,7 +3057,7 @@ snapshots:
 
   astro-disqus@1.0.1: {}
 
-  astro@5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0):
+  astro@5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0):
     dependencies:
       '@astrojs/compiler': 2.12.0
       '@astrojs/internal-helpers': 0.6.1
@@ -3159,7 +3159,7 @@ snapshots:
 
   astrojs-atom@1.0.48(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0):
     dependencies:
-      astro: 5.8.0(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
+      astro: 5.8.1(@netlify/blobs@8.2.0)(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0)
       fast-xml-parser: 5.2.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
