@@ -1,4 +1,4 @@
-User-agent: Google Inspection Tool*
+User-agent: Google-InspectionTool*
 Allow: /
 
 User-agent: *
