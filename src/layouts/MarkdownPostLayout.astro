@@ -9,15 +9,40 @@ interface Props {
     date: string;
     description?: undefined | string;
     tags: string[];
+    imageAlt?: string | undefined;
+    image?: {
+      src: string;
+      width: number;
+      height: number;
+    } | undefined;
   };
 }
 const { frontmatter } = Astro.props;
+
+const description = frontmatter.description;
+const image = frontmatter.image;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
   <slot name="head" slot="head" />
-  {frontmatter.description && (
-    <meta name="description" content={frontmatter.description} slot="head" />
+  {description && (
+    <meta name="description" content={description} slot="head" />
+  )}
+  {description && (
+    <meta name="og:description" content={description} slot="head" />
+  )}
+
+  <meta name="og:title" content={frontmatter.title} slot="head" />
+  <meta name="og:type" content="article" slot="head" />
+  <meta name="og:url" content={new URL(Astro.url.pathname.replace(".html", ""), Astro.site)} slot="head" />
+  {image && (
+    <meta name="og:image" content={image.src} slot="head" />
+  )}
+  {image && (
+    <meta name="og:image:width" content={image.width.toString()} slot="head" />
+  )}
+  {image && (
+    <meta name="og:image:height" content={image.height.toString()} slot="head" />
   )}
   
   <h1>{frontmatter.title}</h1>
