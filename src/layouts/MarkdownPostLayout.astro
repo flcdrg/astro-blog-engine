@@ -9,16 +9,75 @@ interface Props {
     date: string;
     description?: undefined | string;
     tags: string[];
+    imageAlt?: string | undefined;
+    image?: {
+      src: string;
+      width: number;
+      height: number;
+    } | undefined;
   };
 }
 const { frontmatter } = Astro.props;
+
+const description = frontmatter.description;
+const image = frontmatter.image;
+const title = frontmatter.title;
+const canonicalURL = new URL(Astro.url.pathname.replace(".html", ""), Astro.site).toString();
+
+// https://www.cemkiray.com/posts/how-to-add-json-ld-schema-in-astro/
+// https://developers.google.com/search/docs/appearance/structured-data/article
+// Construct JSON-LD data for the blog post
+const blogJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalURL,
+  },
+  headline: title,
+  description: description,
+  image: image?.src,
+  author: {
+    "@type": "Person",
+    name: "David Gardiner",
+    url: Astro.site?.toString(),
+  },
+  datePublished: frontmatter.date,
+  // dateModified: modDatetime?.toISOString(),
+};
+
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
+<BaseLayout pageTitle={title}>
   <slot name="head" slot="head" />
-  {frontmatter.description && (
-    <meta name="description" content={frontmatter.description} slot="head" />
+  {description && (
+    <meta name="description" content={description} slot="head" />
   )}
+  {description && (
+    <meta name="og:description" content={description} slot="head" />
+  )}
+
+  <meta name="og:title" content={title} slot="head" />
+  <meta name="og:type" content="article" slot="head" />
+  <meta name="og:url" content={canonicalURL} slot="head" />
+  {image && (
+    <meta name="og:image" content={image.src} slot="head" />
+  )}
+  {image && (
+    <meta name="og:image:width" content={image.width.toString()} slot="head" />
+  )}
+  {image && (
+    <meta name="og:image:height" content={image.height.toString()} slot="head" />
+  )}
+
+    {
+      blogJsonLd && (
+        <script slot="head" is:raw is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(blogJsonLd)}
+        />
+      )
+    }
   
   <h1>{frontmatter.title}</h1>
 
