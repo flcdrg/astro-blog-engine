@@ -63,11 +63,14 @@ const blogJsonLd = {
   {image && (
     <meta name="og:image" content={image.src} slot="head" />
   )}
-  {image && (
+  {image && image.width && (
     <meta name="og:image:width" content={image.width.toString()} slot="head" />
   )}
-  {image && (
+  {image && image.height && (
     <meta name="og:image:height" content={image.height.toString()} slot="head" />
+  )}
+  {frontmatter.imageAlt && (
+    <meta name="og:image:alt" content={frontmatter.imageAlt} slot="head" />
   )}
 
     {
