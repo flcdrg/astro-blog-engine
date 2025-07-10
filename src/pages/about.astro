@@ -1,12 +1,51 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import profilePicture from '../assets/david-gardiner-1x1.jpg';
+
 const pageTitle = "About David";
 
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "dateCreated": "2025-01-01T12:34:00+10:30",
+    "dateModified": "2025-07-10T20:34:00+09:30",
+    "mainEntity": {
+        "@type": "Person",
+        "name": "David Gardiner",
+        "alternateName": "flcdrg",
+        "image": profilePicture.src,
+        "sameAs": [
+            "https://github.com/flcdrg",
+            "https://www.linkedin.com/in/davidrgardiner",
+            "https://stackoverflow.com/users/25702/david-gardiner",
+            "https://mastodon.online/@DavidRGardiner",
+            "https://bsky.app/profile/david.gardiner.net.au"
+        ]
+    }
+};
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-<p>David Gardiner has been creating software for over 25 years. He has a passion for continual learning and improving quality, and enjoys being in and creating environments where these happen. A Microsoft MVP (Development Technologies), he runs the <a href="https://www.meetup.com/Adelaide-dotNET/">Adelaide .NET User Group</a>.</p>
+    {
+      jsonLd && (
+        <script slot="head" is:raw is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+<Image src={profilePicture} alt="Photo of David Gardiner" width="300" height="300" loading="eager" class="profile" />
+<p>David Gardiner has been creating software for over 25 years. He has a passion for continual learning and improving quality, and enjoys being in and creating environments where these happen. A Microsoft MVP (Development Technologies), he helps run the <a href="https://www.meetup.com/Adelaide-dotNET/">Adelaide .NET User Group</a>, 
+    and is one of the organisers of <a href="https://dddadelaide.com">DDD Adelaide</a>.</p>
 
 <p>Based in Adelaide, South Australia, he works as a Senior Developer at <a href="https://sixpivot.com.au/">SixPivot</a>. In his spare time, he contributes to numerous open source projects (including some of his own) and is a package moderator at <a href="https://Chocolatey.org">Chocolatey.org</a>.</p>
+
+<div style="clear: both;"></div>
 </BaseLayout>
-	
+<style>
+  .profile {
+    /* align image left */
+    float: left;
+    margin-right: 1rem;
+  }
