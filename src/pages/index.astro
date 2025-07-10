@@ -21,11 +21,29 @@ const frontmatter = {
   description:
     "Dave's Daydreams - A blog of software development, .NET and other interesting things",
 };
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "David Gardiner",
+  alternateName: ["Dave's Daydreams", "david.gardiner.net.au"],
+  url: "https://david.gardiner.net.au/",
+};
 ---
 
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
-
+  {
+    (
+      <script
+        slot="head"
+        is:raw
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd)}
+      />
+    )
+  }
   <p>Recent posts:</p>
 
   {
