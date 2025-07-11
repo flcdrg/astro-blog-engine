@@ -1,0 +1,32 @@
+---
+import SiteTitle from "./SiteTitle.astro";
+---
+
+<div class="profile">
+  <a href="/">
+    <img
+      src="https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab"
+      alt="Photo of David Gardiner"
+      width="80"
+      height="80"
+    />
+  </a>
+  <slot name="site-title">
+    <SiteTitle />
+  </slot>
+</div>
+
+<style>
+  /* Profile section styles */
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0; /* Prevent profile from shrinking */
+    max-width: 60%; /* Limit profile width on larger screens */
+  }
+
+  .profile img {
+    border-radius: 50%;
+  }
+</style>

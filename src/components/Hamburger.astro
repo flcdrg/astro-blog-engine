@@ -1,0 +1,96 @@
+---
+
+---
+
+<button
+  class="hamburger"
+  aria-label="Toggle navigation menu"
+  aria-expanded="false"
+>
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+</button>
+
+<style>
+  /* Hamburger menu button - hidden by default */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+  }
+
+  .hamburger-line {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-color, #000);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    /* Show hamburger button on mobile */
+    .hamburger {
+      display: flex;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Execute immediately without waiting for DOMContentLoaded
+  (function () {
+    const hamburger = document.querySelector(".hamburger");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (hamburger && navLinks) {
+      hamburger.addEventListener("click", function (e) {
+        e.preventDefault();
+        navLinks.classList.toggle("active");
+
+        const isExpanded = navLinks.classList.contains("active");
+        hamburger.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+
+        const hamburgerLines = hamburger.querySelectorAll(".hamburger-line");
+        if (isExpanded) {
+          (hamburgerLines[0] as HTMLElement).style.transform =
+            "rotate(45deg) translate(5px, 5px)";
+          (hamburgerLines[1] as HTMLElement).style.opacity = "0";
+          (hamburgerLines[2] as HTMLElement).style.transform =
+            "rotate(-45deg) translate(5px, -5px)";
+        } else {
+          (hamburgerLines[0] as HTMLElement).style.transform = "none";
+          (hamburgerLines[1] as HTMLElement).style.opacity = "1";
+          (hamburgerLines[2] as HTMLElement).style.transform = "none";
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (event) {
+        if (
+          hamburger &&
+          !hamburger.contains(event.target as Node) &&
+          !navLinks.contains(event.target as Node) &&
+          navLinks.classList.contains("active")
+        ) {
+          navLinks.classList.remove("active");
+          hamburger.setAttribute("aria-expanded", "false");
+
+          const hamburgerLines = hamburger.querySelectorAll(".hamburger-line");
+          (hamburgerLines[0] as HTMLElement).style.transform = "none";
+          (hamburgerLines[1] as HTMLElement).style.opacity = "1";
+          (hamburgerLines[2] as HTMLElement).style.transform = "none";
+        }
+      });
+    }
+  })();
+</script>

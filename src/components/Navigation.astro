@@ -1,30 +1,18 @@
 ---
 import ThemeIcon from "./ThemeIcon.astro";
+import Profile from "./Profile.astro";
+import Hamburger from "./Hamburger.astro";
+import SiteTitle from "./SiteTitle.astro";
 ---
 
 <div class="nav-container">
-  <div class="profile">
-    <a href="/">
-    <img
-      src="https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab"
-      alt="Photo of David Gardiner"
-      width="80"
-      height="80"
-    />
-    </a>
-    <div class="site-title">
-      <div>David Gardiner</div>
-      <div class="site-subtitle">
-        A blog of software development, .NET and other interesting things
-      </div>
-    </div>
-  </div>
 
-  <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-  </button>
+  <Profile>
+    <slot name="site-title" slot="site-title">
+      <SiteTitle />
+    </slot>
+  </Profile>
+  <Hamburger />
 
   <div class="nav-links">
     <a href="/">Home</a>
@@ -46,33 +34,6 @@ import ThemeIcon from "./ThemeIcon.astro";
     align-items: center;
     padding: 1rem;
     width: 100%;
-  }
-
-  /* Profile section styles */
-  .profile {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-shrink: 0; /* Prevent profile from shrinking */
-    max-width: 60%; /* Limit profile width on larger screens */
-  }
-
-  .profile img {
-    border-radius: 50%;
-  }
-
-  .site-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-    width: 100%; /* Take full width of parent */
-  }
-
-  .site-subtitle {
-    font-size: clamp(0.7rem, 1vw, 0.8rem); /* Responsive font size */
-    font-weight: normal;
-    color: #666;
-    width: 100%; /* Take full width of parent */
-    overflow-wrap: break-word; /* Ensure text wraps properly */
   }
 
   /* Navigation links styles */
@@ -98,43 +59,12 @@ import ThemeIcon from "./ThemeIcon.astro";
     text-decoration: underline;
   }
 
-  /* Hamburger menu button - hidden by default */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 10;
-  }
-
-  .hamburger-line {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background-color: var(--text-color, #000);
-    border-radius: 3px;
-    transition: all 0.3s ease;
-  }
-
   /* Mobile styles - screen width less than 768px */
   @media (max-width: 768px) {
     .nav-container {
       flex-direction: column;
       align-items: flex-start;
       width: 100%; /* Ensure container takes full width */
-    }
-
-    /* Show hamburger button on mobile */
-    .hamburger {
-      display: flex;
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
     }
 
     /* Hide nav links by default on mobile */
@@ -160,48 +90,3 @@ import ThemeIcon from "./ThemeIcon.astro";
     }
   }
 </style>
-
-<script>
-  // Execute immediately without waiting for DOMContentLoaded
-  (function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (hamburger && navLinks) {
-      hamburger.addEventListener('click', function(e) {
-        e.preventDefault();
-        navLinks.classList.toggle('active');
-        
-        const isExpanded = navLinks.classList.contains('active');
-        hamburger.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-        
-        const hamburgerLines = hamburger.querySelectorAll('.hamburger-line');
-        if (isExpanded) {
-          (hamburgerLines[0] as HTMLElement).style.transform = 'rotate(45deg) translate(5px, 5px)';
-          (hamburgerLines[1] as HTMLElement).style.opacity = '0';
-          (hamburgerLines[2] as HTMLElement).style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-          (hamburgerLines[0] as HTMLElement).style.transform = 'none';
-          (hamburgerLines[1] as HTMLElement).style.opacity = '1';
-          (hamburgerLines[2] as HTMLElement).style.transform = 'none';
-        }
-      });
-      
-      // Close menu when clicking outside
-      document.addEventListener('click', function(event) {
-        if (hamburger && 
-            !hamburger.contains(event.target as Node) && 
-            !navLinks.contains(event.target as Node) && 
-            navLinks.classList.contains('active')) {
-          navLinks.classList.remove('active');
-          hamburger.setAttribute('aria-expanded', 'false');
-          
-          const hamburgerLines = hamburger.querySelectorAll('.hamburger-line');
-          (hamburgerLines[0] as HTMLElement).style.transform = 'none';
-          (hamburgerLines[1] as HTMLElement).style.opacity = '1';
-          (hamburgerLines[2] as HTMLElement).style.transform = 'none';
-        }
-      });
-    }
-  })();
-</script>
