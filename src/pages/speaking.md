@@ -3,7 +3,10 @@ layout: ../layouts/BaseLayout.astro
 title: Speaking
 ---
 
-Talks and presentations I have given:
+<!-- markdownlint-disable MD025 -->
+# Talks and presentations
+
+Here's a list of the talks and presentations I have given to user groups, conferences and online.
 
 | Date | Title | Event | Links |
 |-------|-------|------|-------|
