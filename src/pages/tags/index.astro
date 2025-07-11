@@ -19,6 +19,9 @@ const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <h1>Tags</h1>
+
+  <p>Find posts categorized by tags:</p>
   <div class="tags">
     {
       tags.map(([tag, count]) => (
