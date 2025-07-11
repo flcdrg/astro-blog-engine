@@ -1,7 +1,8 @@
 ---
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import Navigation from "../components/Navigation.astro";
+import SiteTitle from "../components/SiteTitle.astro";
 
 interface Props {
   pageTitle?: string;
@@ -33,7 +34,15 @@ const { pageTitle, frontmatter } = Astro.props;
     }
   </head>
   <body>
-    <Header />
+    <header>
+      <nav>
+        <Navigation>
+          <slot name="site-title" slot="site-title">
+            <SiteTitle />
+          </slot>
+        </Navigation>
+      </nav>
+    </header>
     <main>
       <slot />
     </main>
