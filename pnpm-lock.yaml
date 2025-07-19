@@ -45,8 +45,8 @@ importers:
         specifier: ^1.0.48
         version: 1.0.48(@netlify/blobs@8.2.0)(@types/node@24.0.10)(jiti@2.4.2)(rollup@4.44.2)(typescript@5.8.3)(yaml@2.8.0)
       luxon:
-        specifier: ^3.6.1
-        version: 3.6.1
+        specifier: ^3.7.1
+        version: 3.7.1
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -1396,8 +1396,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  luxon@3.6.1:
-    resolution: {integrity: sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==}
+  luxon@3.7.1:
+    resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
     engines: {node: '>=12'}
 
   magic-string@0.30.17:
@@ -3817,7 +3817,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  luxon@3.6.1: {}
+  luxon@3.7.1: {}
 
   magic-string@0.30.17:
     dependencies:
