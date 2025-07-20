@@ -93,6 +93,13 @@ jobs:
         if: github.event_name != 'pull_request'
         run: pnpm build
 
+      - name: Install Verify.CLI
+        run: dotnet tool install --global Verify.CLI
+
+      - name: Verify
+        run: |-
+          verify --file dist/feed.xml --verified-dir verified
+
       # dist as artifact
       - name: Upload dist as artifact
         uses: actions/upload-artifact@v4
