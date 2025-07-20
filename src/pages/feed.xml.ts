@@ -2,12 +2,12 @@ import atom from "astrojs-atom";
 import type { AtomEntry } from "astrojs-atom";
 import { getCollection } from "astro:content";
 import sanitizeHtml from "sanitize-html";
-import MarkdownIt from "markdown-it";
 import type { APIContext } from "astro";
 import getExcerpt from "../scripts/getExcerpt";
 import onlyCurrent from "../scripts/filters";
 import { parse as htmlParser } from "node-html-parser";
 import { getImage } from "astro:assets";
+import { marked } from "marked";
 
 // From https://billyle.dev/posts/adding-rss-feed-content-and-fixing-markdown-image-paths-in-astro
 
@@ -15,8 +15,6 @@ import { getImage } from "astro:assets";
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/**/*.{jpeg,jpg,png,gif}" // add more image formats if needed
 );
-
-const parser = new MarkdownIt();
 
 export async function GET(context: APIContext) {
   if (!context.site) {
@@ -40,9 +38,10 @@ export async function GET(context: APIContext) {
 
   for (const post of postsToInclude) {
     // convert markdown to html string
-    const body = parser.render(post.body!);
+    const body = await marked.parse(post.body!);
+
     // convert html string to DOM-like structure
-    const html = htmlParser.parse(body);
+    const html = htmlParser.parse(body, { comment: false});
     // hold all img tags in variable images
     const images = html.querySelectorAll("img");
 

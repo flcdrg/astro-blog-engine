@@ -47,9 +47,6 @@ importers:
       luxon:
         specifier: ^3.7.1
         version: 3.7.1
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.0
       marked:
         specifier: ^16.0.0
         version: 16.0.0
