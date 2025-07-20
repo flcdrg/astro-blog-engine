@@ -35,3 +35,6 @@ artifacts/output.md
 wayback/replacements.json
 .lycheecache
 /.lighthouseci
+
+# VerifyTests
+*.received.*
