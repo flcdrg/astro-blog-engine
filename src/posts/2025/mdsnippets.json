@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SimonCropp/MarkdownSnippets/master/schema.json",
+  "ReadOnly": false,
+  "LinkFormat": "GitHub",
+  "TocLevel": 3,
+  "UrlsAsSnippets": [ 
+    "https://raw.githubusercontent.com/flcdrg/azure-pipelines-template-expressions/refs/heads/main/azure-pipelines.yml" 
+     ],
+  "TocExcludes": [ "Exclude Heading1", "Exclude Heading2" ],
+  "Convention": "InPlaceOverwrite",
+  "WriteHeader": false,
+  "MaxWidth": 80,
+  "Header": "GENERATED FILE - Source File: {relativePath}",
+  "UrlPrefix": "TheUrlPrefix",
+  "TreatMissingAsWarning": true,
+  "ValidateContent": false,
+  "OmitSnippetLinks": true
+}
