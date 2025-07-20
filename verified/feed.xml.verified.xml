@@ -38,45 +38,49 @@ and see some common examples of their usage.]]>
 <h3>Conditionally include stage, job or step</h3>
 <p>The official documentation calls this <a href="https://learn.microsoft.com/en-au/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#conditional-insertion">Conditional Insertion</a>.</p>
 <p>Here's an example where we only want to publish build artifacts if we're building the main branch:</p>
-<p>&lt;!-- snippet: TemplateExpression-conditional-step --&gt;</p>
+
 <pre><code>- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
       displayName: "Publish Artifact"
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <h3>Conditionally set variable</h3>
 <p>Using template expressions to conditionally set the values of variables is a common use case.</p>
-<p>&lt;!-- snippet: TemplateExpression-variables1 --&gt;</p>
+
 <pre><code>variables:
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     Environment: "Production"
   ${{ else }}:
     Environment: "Not-Production"
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <p>Note that YAML formatting rules apply - each property must be unique, so you can't repeat the expression line more than once. Instead you would just group additional variable declarations together.</p>
 <h3>Conditionally set stage or job dependency</h3>
 <p>DependsOn applies to stages and jobs. We can conditionally include the entire dependency:</p>
-<p>&lt;!-- snippet: TemplateExpression-conditional-dependson --&gt;</p>
+
 <pre><code>${{ if ne(parameters.DependsOn, '') }}:
   dependsOn:
     - Version
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <p>Or when we have multiple dependencies, we can conditionally include an additional dependency. Because dependsOn in this case is referring to an array, we need to use the array syntax for our template expression.</p>
-<p>&lt;!-- snippet: TemplateExpression-conditional-dependson-extra --&gt;</p>
+
 <pre><code>dependsOn:
   - Version
   - ${{ if ne(parameters.DependsOn, '') }}:
       - ${{ parameters.DependsOn }}
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <h3>Looping</h3>
 <p>The official name for this in the documentation is <a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#iterative-insertion">Iterative insertion</a>.
 Loop expressions are a powerful technique that can be used to reduce duplication in your pipelines.</p>
 <p>If you need to define an array, the only way I'm aware of doing that is by declaring a parameter, as one of the types supported by parameters is <code>object</code>. As an object, you can use YAML to define it as an array and add sub-properties etc to that as required.</p>
-<p>&lt;!-- snippet: TemplateExpression-parameters --&gt;</p>
+
 <pre><code>parameters:
   - name: Environments
     type: object
@@ -88,9 +92,10 @@ Loop expressions are a powerful technique that can be used to reduce duplication
       - name: Prod
         displayName: "Production"
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <p>I tend to add a <code>displayName</code> on those parameters just to make it clear they're just there to store the array data (and you probably shouldn't be altering the values in the Azure Pipelines web UI if you run the pipeline manually)</p>
-<p>&lt;!-- snippet: TemplateExpression-conditional-each --&gt;</p>
+
 <pre><code>- ${{ each env in parameters.Environments }}:
     - stage: DeployTo${{ env.name }}
       jobs:
@@ -100,7 +105,8 @@ Loop expressions are a powerful technique that can be used to reduce duplication
             - script: echo "Deploying to ${{ env.name }} environment..."
               displayName: "Deploy to ${{ env.name }}"
 </code></pre>
-<p>&lt;!-- endSnippet --&gt;</p>
+
+
 <h2>Conclusion</h2>
 <p>Template expressions are a powerful feature. Curiously, despite GitHub Actions having many similarities to Azure Pipelines, this is one aspect that they didn't port over.</p>
 <p>Often I see custom conditions being used where template expressions would be a better fit. It's worth considering if using them more could simplify and improve your pipelines.</p>
@@ -219,7 +225,6 @@ Loop expressions are a powerful technique that can be used to reduce duplication
     condition: and(succeeded(), eq(variables.varFrom_Stage1DeploymentJob1, 'Variable set in stepVar_Stage1Job1'))
     variables:
       varFrom_Stage1DeploymentJob1: $[ stageDependencies.Stage1.Stage1DeploymentJob1.outputs['Stage1DeploymentJob1.stepVar_Stage1DeploymentJob1.my_Stage1DeploymentJob1_OutputVar'] ]
-
 </code></pre>
 <p>Take a look at the pipelines defined in my <a href="https://github.com/flcdrg/azure-pipelines-variables">azure-pipelines-variables GitHub repository</a> for more examples of these.</p>
 <p>Here's an example of a pipeline run with custom conditions similar to the code excerpts above:</p>
@@ -612,36 +617,27 @@ ImageSize        : 18,698,341,519 bytes
 <p>An easier alternative is this very nifty <a href="https://schneegans.de/windows/unattend-generator/"><code>autounattend.xml</code> generator website</a>.</p>
 <p>I set the following settings:</p>
 <ul>
-<li>
-<p>Language - English (Australian)</p>
+<li><p>Language - English (Australian)</p>
 </li>
-<li>
-<p>Home location - Australia</p>
+<li><p>Home location - Australia</p>
 </li>
-<li>
-<p>Computer name</p>
+<li><p>Computer name</p>
 </li>
-<li>
-<p>Time zone - Adelaide</p>
+<li><p>Time zone - Adelaide</p>
 </li>
-<li>
-<p>Use custom diskpart to configure Windows partition. In my case I know that partition 3 of disk 0 is where I want Windows to be installed, and I also want to do a clean format of the partition</p>
+<li><p>Use custom diskpart to configure Windows partition. In my case I know that partition 3 of disk 0 is where I want Windows to be installed, and I also want to do a clean format of the partition</p>
 <pre><code>SELECT DISK=0
 SELECT PARTITION=3
 FORMAT QUICK FS=NTFS LABEL="Windows"
 </code></pre>
 </li>
-<li>
-<p>Use generic product key and install 'Pro'</p>
+<li><p>Use generic product key and install 'Pro'</p>
 </li>
-<li>
-<p>Always show file extensions</p>
+<li><p>Always show file extensions</p>
 </li>
-<li>
-<p>Show End task command in the taskbar</p>
+<li><p>Show End task command in the taskbar</p>
 </li>
-<li>
-<p>Configure icons in the taskbar to just show Windows Explorer and Windows Terminal (Ideally I'd pin a few other applications but they aren't installed until after the OS install so you can't use this for that)</p>
+<li><p>Configure icons in the taskbar to just show Windows Explorer and Windows Terminal (Ideally I'd pin a few other applications but they aren't installed until after the OS install so you can't use this for that)</p>
 <pre><code>&lt;LayoutModificationTemplate xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification" xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" Version="1"&gt;
 &lt;CustomTaskbarLayoutCollection PinListPlacement="Replace"&gt;
     &lt;defaultlayout:TaskbarLayout&gt;
@@ -654,29 +650,21 @@ FORMAT QUICK FS=NTFS LABEL="Windows"
 &lt;/LayoutModificationTemplate&gt;
 </code></pre>
 </li>
-<li>
-<p>Disable widgets</p>
+<li><p>Disable widgets</p>
 </li>
-<li>
-<p>Don't show Bing results</p>
+<li><p>Don't show Bing results</p>
 </li>
-<li>
-<p>Remove all pins in the start menu</p>
+<li><p>Remove all pins in the start menu</p>
 </li>
-<li>
-<p>Enable long paths</p>
+<li><p>Enable long paths</p>
 </li>
-<li>
-<p>Allow execution of PowerShell scripts</p>
+<li><p>Allow execution of PowerShell scripts</p>
 </li>
-<li>
-<p>Hide Edge first run experience</p>
+<li><p>Hide Edge first run experience</p>
 </li>
-<li>
-<p>Delete empty c:\Windows.old folder</p>
+<li><p>Delete empty c:\Windows.old folder</p>
 </li>
-<li>
-<p>Remove bloatware</p>
+<li><p>Remove bloatware</p>
 <ul>
 <li>3D Viewer</li>
 <li>Bing search</li>
@@ -716,8 +704,7 @@ FORMAT QUICK FS=NTFS LABEL="Windows"
 <li>Your Phone</li>
 </ul>
 </li>
-<li>
-<p>Scripts to run when first user logs in after Windows has been installed (I'm installing <a href="https://chocolatey.org/">Chocolatey</a>, as I'll be using that almost immediately once I sign in the first time).</p>
+<li><p>Scripts to run when first user logs in after Windows has been installed (I'm installing <a href="https://chocolatey.org/">Chocolatey</a>, as I'll be using that almost immediately once I sign in the first time).</p>
 <pre><code>Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 </code></pre>
 <pre><code>choco feature enable -n=allowGlobalConfirmation
@@ -727,7 +714,7 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
 </ul>
 <p>And then download the file and save it in the root of your bootable USB</p>
 <h3>Step 8. Try it out</h3>
-<p>You will need to restart your target machine and get it to boot off the USB drive. For my laptop, the easiest way to do that is to hit &lt;kbd&gt;F12&lt;/kbd&gt; when the Dell logo appears while powering up. You may also have to go into your BIOS/UEFI settings to disable secure boot mode and enable booting from USB. The Rufus instructions suggest that it may work without disabling secure boot mode, but I did it anyway.</p>
+<p>You will need to restart your target machine and get it to boot off the USB drive. For my laptop, the easiest way to do that is to hit <kbd>F12</kbd> when the Dell logo appears while powering up. You may also have to go into your BIOS/UEFI settings to disable secure boot mode and enable booting from USB. The Rufus instructions suggest that it may work without disabling secure boot mode, but I did it anyway.</p>
 <p>If all goes well, you'll see a few different Windows installation screens, but won't get prompted where to install, which keyboard or location to use.</p>
 <p>You will still get some UI prompts that can't be avoided (like entering your Microsoft Account details), but at the end after a few reboots you should be greeted by a clean install of Windows, and if you check the Windows Device Manager, there should not be any unknown devices. Likewise, looking in Settings | Apps, should show either no or the bare minimum of applications. No bloatware to be seen!</p>
 <p>You'll still need to allow the latest Windows cumulative updates to install (adding that to the WIM file is a task for another day), and there may still be some driver updates that Windows discovers that are newer, but not too many.</p>
@@ -933,14 +920,12 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 <p>It's useful to refer back to the <a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-setup?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655">Azure SQL documentation on setting up auditing</a> to understand how to use these.</p>
 <p>A couple of points that are worth highlighting:</p>
 <ol>
-<li>
-<p>If you don't use the <code>audit_actions_and_groups</code> property, the default groups of actions that will be audited are:</p>
-<p>BATCH_COMPLETED_GROUP
-SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP
-FAILED_DATABASE_AUTHENTICATION_GROUP</p>
+<li><p>If you don't use the <code>audit_actions_and_groups</code> property, the default groups of actions that will be audited are:</p>
+<p> BATCH_COMPLETED_GROUP
+ SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP
+ FAILED_DATABASE_AUTHENTICATION_GROUP</p>
 </li>
-<li>
-<p>If you do define auditing at the server level, the policy applies to all existing and newly created databases on the server. If you define auditing at the database level, the policy will apply in addition to any server level settings. So be careful you don't end up auditing the same thing twice unintentionally!</p>
+<li><p>If you do define auditing at the server level, the policy applies to all existing and newly created databases on the server. If you define auditing at the database level, the policy will apply in addition to any server level settings. So be careful you don't end up auditing the same thing twice unintentionally!</p>
 </li>
 </ol>
 <p>Sometimes it can also be useful to review equivalent the Bicep/ARM definitions <a href="https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/extendedauditingsettings?pivots=deployment-language-bicep&amp;WT.mc_id=DOP-MVP-5001655">Microsoft.Sql/servers/extendedAuditingSettings</a>, as sometimes they can clarify how to use various properties.</p>
