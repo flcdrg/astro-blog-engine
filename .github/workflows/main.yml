@@ -93,6 +93,23 @@ jobs:
         if: github.event_name != 'pull_request'
         run: pnpm build
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Install Verify.Cli
+        run: dotnet tool install --global Verify.Cli
+
+      - name: Verify
+        run: |
+          verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
+
+      - name: Diff files if error
+        if: failure()
+        run: |
+          diff -u dist/feed.xml verified/feed.xml.verified.xml
+
       # dist as artifact
       - name: Upload dist as artifact
         uses: actions/upload-artifact@v4

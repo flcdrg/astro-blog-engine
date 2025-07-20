@@ -1,0 +1,1511 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-AU" xmlns:media="http://search.yahoo.com/mrss/">
+  <id>https://david.gardiner.net.au/feed.xml</id>
+  <title type="html">David Gardiner</title>
+  <updated>DateTime_1</updated>
+  <subtitle>A blog of software development, .NET and other interesting things</subtitle>
+  <generator uri="https://github.com/flcdrg/astrojs-atom" version="1.0.48">astrojs-atom</generator>
+  <author>
+    <name>David Gardiner</name>
+  </author>
+  <link href="https://david.gardiner.net.au/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://david.gardiner.net.au/" rel="alternate" type="text/html" hreflang="en-AU"/>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression</id>
+    <updated>2025-07-14T08:00:00.000+09:30</updated>
+    <title>Azure Pipelines template expressions</title>
+    <link href="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression" rel="alternate" type="text/html" title="Azure Pipelines template expressions"/>
+    <category term="Azure Pipelines"/>
+    <published>2025-07-14T08:00:00.000+09:30</published>
+    <summary type="html">
+      <![CDATA[Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
+and see some common examples of their usage.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression">
+      <![CDATA[<p>In my <a href="/2025/06/azure-pipeline-conditionals">last post</a> I wrote about using custom conditions in Azure Pipelines to evaluate whether to skip a step, job or stage at runtime.</p>
+<p>Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can't do with runtime custom conditions).</p>
+<p>The important thing to remember is that template expression are a "compile time" feature. They can only operate on things that are available at compile time. <a href="https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Variables set by scripts</a>, and <a href="https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&amp;tabs=yaml%2Cbatch&amp;WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks">task output variables</a> are two examples of things that are not available at compile time.</p>
+<p>Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the 'Publish Artifact' step is executed or not. Notice the 'Publish Artifact' step is listed, but the icon shown is a white arrow (rather than green tick)
+<img src="https://david.gardiner.net.au/_astro/azure-pipelines-custom-conditions.Be6IaBQz_101Uki.webp" alt="Job showing a step 'Publish Artifact' that was conditionally not executed" /></p>
+<p>If we use a template expression, then if it evaluates to false then the step is not even included in the job!</p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-pipelines-template-expressions.kRV13og-_2f5chf.webp" alt="Job without a 'Publish Artifact' step " /></p>
+<p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Template expressions</a> use the syntax <code>${{ }}</code></p>
+<p>You can reference <code>parameters</code> and <code>variables</code> in template expressions. The latter are only variables that are defined in the YAML file and most of the <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">predefined variables</a>. (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)</p>
+<p>You can't reference variables that are created by scripts or anything else that is only available at runtime.</p>
+<p>You can use <a href="https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#functions">general functions</a> (the same ones we used previously with runtime Custom Conditions) in template expressions, as well as two special <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#template-expression-functions">Template expression functions</a>.</p>
+<h2>Common patterns</h2>
+<p>You can see a complete pipeline demonstrating all the following patterns at <a href="https://github.com/flcdrg/azure-pipelines-template-expressions/blob/main/azure-pipelines.yml">https://github.com/flcdrg/azure-pipelines-template-expressions/blob/main/azure-pipelines.yml</a>.</p>
+<h3>Conditionally include stage, job or step</h3>
+<p>The official documentation calls this <a href="https://learn.microsoft.com/en-au/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#conditional-insertion">Conditional Insertion</a>.</p>
+<p>Here's an example where we only want to publish build artifacts if we're building the main branch:</p>
+<p>&lt;!-- snippet: TemplateExpression-conditional-step --&gt;</p>
+<pre><code>- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: drop
+      displayName: "Publish Artifact"
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<h3>Conditionally set variable</h3>
+<p>Using template expressions to conditionally set the values of variables is a common use case.</p>
+<p>&lt;!-- snippet: TemplateExpression-variables1 --&gt;</p>
+<pre><code>variables:
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    Environment: "Production"
+  ${{ else }}:
+    Environment: "Not-Production"
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<p>Note that YAML formatting rules apply - each property must be unique, so you can't repeat the expression line more than once. Instead you would just group additional variable declarations together.</p>
+<h3>Conditionally set stage or job dependency</h3>
+<p>DependsOn applies to stages and jobs. We can conditionally include the entire dependency:</p>
+<p>&lt;!-- snippet: TemplateExpression-conditional-dependson --&gt;</p>
+<pre><code>${{ if ne(parameters.DependsOn, '') }}:
+  dependsOn:
+    - Version
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<p>Or when we have multiple dependencies, we can conditionally include an additional dependency. Because dependsOn in this case is referring to an array, we need to use the array syntax for our template expression.</p>
+<p>&lt;!-- snippet: TemplateExpression-conditional-dependson-extra --&gt;</p>
+<pre><code>dependsOn:
+  - Version
+  - ${{ if ne(parameters.DependsOn, '') }}:
+      - ${{ parameters.DependsOn }}
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<h3>Looping</h3>
+<p>The official name for this in the documentation is <a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#iterative-insertion">Iterative insertion</a>.
+Loop expressions are a powerful technique that can be used to reduce duplication in your pipelines.</p>
+<p>If you need to define an array, the only way I'm aware of doing that is by declaring a parameter, as one of the types supported by parameters is <code>object</code>. As an object, you can use YAML to define it as an array and add sub-properties etc to that as required.</p>
+<p>&lt;!-- snippet: TemplateExpression-parameters --&gt;</p>
+<pre><code>parameters:
+  - name: Environments
+    type: object
+    default:
+      - name: Dev
+        displayName: "Development"
+      - name: Test
+        displayName: "Testing"
+      - name: Prod
+        displayName: "Production"
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<p>I tend to add a <code>displayName</code> on those parameters just to make it clear they're just there to store the array data (and you probably shouldn't be altering the values in the Azure Pipelines web UI if you run the pipeline manually)</p>
+<p>&lt;!-- snippet: TemplateExpression-conditional-each --&gt;</p>
+<pre><code>- ${{ each env in parameters.Environments }}:
+    - stage: DeployTo${{ env.name }}
+      jobs:
+        - job: DeployTo${{ env.name }}
+          displayName: "Deploy to ${{ env.name }}"
+          steps:
+            - script: echo "Deploying to ${{ env.name }} environment..."
+              displayName: "Deploy to ${{ env.name }}"
+</code></pre>
+<p>&lt;!-- endSnippet --&gt;</p>
+<h2>Conclusion</h2>
+<p>Template expressions are a powerful feature. Curiously, despite GitHub Actions having many similarities to Azure Pipelines, this is one aspect that they didn't port over.</p>
+<p>Often I see custom conditions being used where template expressions would be a better fit. It's worth considering if using them more could simplify and improve your pipelines.</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals</id>
+    <updated>2025-06-30T07:00:00.000+09:30</updated>
+    <title>Azure Pipeline conditionals</title>
+    <link href="https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals" rel="alternate" type="text/html" title="Azure Pipeline conditionals"/>
+    <category term="Azure Pipelines"/>
+    <published>2025-06-30T07:00:00.000+09:30</published>
+    <summary type="html">
+      <![CDATA[How to use custom conditions in your Azure Pipelines to evaluate at runtime whether to execute a given step, job or stage.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals">
+      <![CDATA[<p>There are two main ways to make parts of your Azure Pipeline conditional:</p>
+<ol>
+<li>Add a custom <code>condition</code> to the step, job or stage.</li>
+<li>Use conditional insertion with template expressions.</li>
+</ol>
+<p>In this post we'll look at custom conditions.</p>
+<h3>Custom conditions</h3>
+<p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/conditions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Custom conditions</a> are evaluated at runtime.</p>
+<p>Here's an example of a step with a custom condition which causes it to be skipped if the pipeline runs on a branch other than 'main':</p>
+<pre><code>- script: echo "hello world"
+  condition: eq(variables['Build.SourceBranchName'], 'main')
+</code></pre>
+<p>You can use any of the <a href="https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#job-status-functions">Job status check functions</a> for the condition expression, or to form part of it:</p>
+<ul>
+<li><code>always()</code> - evaluates to <code>True</code></li>
+<li><code>canceled()</code> - evaluates to <code>True</code> if the pipeline was cancelled</li>
+<li><code>failed()</code> - evaluates to <code>True</code> if any previous dependent job failed.</li>
+<li><code>failed(JOBNAME)</code> - evaluates to <code>True</code> if the named job failed.</li>
+<li><code>succeeded()</code> - evaluates to <code>True</code> all previous dependent jobs succeeded or partially succeeded</li>
+<li><code>succeeded(JOBNAME)</code> - evaluates to <code>True</code> if the named job succeeded</li>
+<li><code>succeededOrFailed()</code> - evalutes to <code>True</code> regardless of any dependent jobs succeeding or failing</li>
+<li><code>succeededOrFailed(JOBNAME)</code> - evalates to <code>True</code> if the job succeeded or failed</li>
+</ul>
+<p>Often you'll combine these with the <a href="https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#not"><code>not()</code></a> function. For example:</p>
+<ul>
+<li><code>not(cancelled())</code> - evaluates to <code>True</code> if no dependent jobs were cancelled. This is often the best choice where there's a chance one of the dependent jobs may have been skipped (which means it has neither succeeded or failed)</li>
+<li><code>not(always())</code> - evaluates to <code>False</code>. Useful if you wish to ensure a step, job or stage is always skipped, for example as a temporary measure while you're debugging a problem with a pipeline.</li>
+</ul>
+<p>You can reference predefined and custom pipeline variables in the expression. In addition to the <code>not()</code> function we've just seen, the other functions I most commonly use are:</p>
+<ul>
+<li><code>eq()</code> - Evaluates to <code>True</code> if the two parameters are equal (string comparisons are case-insensitive)</li>
+<li><code>ne()</code> - Evaluates to <code>True</code> if the two parameters are not equal</li>
+<li><code>and()</code> - Evaluates to <code>True</code> if all the parameters (2 or more) are <code>True</code></li>
+<li><code>or()</code> - Evaluates to <code>True</code> if any of the parameters (2 or more) are <code>True</code></li>
+</ul>
+<p>There are <a href="https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655#functions">more functions documented</a> that may be useful in more unique scenarios.</p>
+<p>Be aware that as soon as you add a custom condition then the evaluation of the expression will determine whether that step, job or stage is executed. This can mean it ignores any previous failures or cancellations (which may not be what you intended!)</p>
+<p>eg. This step will always be executed when the current branch is 'main', even if previous steps have failed.</p>
+<pre><code>- script: echo "hello world"
+  condition: eq(variables['Build.SourceBranchName'], 'main')
+</code></pre>
+<p>To preserve the more common behaviour of skipping the step if any previous steps have failed you need to use this approach:</p>
+<pre><code>- script: echo "hello world"
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'main'))
+</code></pre>
+<p>This also means that the condition in the next example is effectively redundant. If you see code like this then I'd recommend deleting the condition - it's just noise!</p>
+<pre><code>- script: echo "hello world"
+  condition: succeeded()
+</code></pre>
+<p>Another common scenario is when a task creates output variables that you can then use to determine if subsequent tasks need to be run. The <a href="https://marketplace.visualstudio.com/items?itemName=JasonBJohnson.azure-pipelines-tasks-terraform">Terraform tasks</a> are a good example - if the 'Plan' task does not identify any required changes, then you can safely skip the 'Apply' task.</p>
+<p>eg.</p>
+<pre><code>
+- task: TerraformCLI@2
+  displayName: "Terraform: plan"
+  inputs:
+    command: plan
+    workingDirectory: "$(TerraformSourceDirectory)"
+    commandOptions: -no-color -input=false -detailed-exitcode
+    environmentServiceName: Azure MSDN - rg-tfupgrade-australiasoutheast
+    publishPlanResults: Plan
+    allowTelemetryCollection: false
+
+- task: TerraformCLI@2
+  displayName: "Terraform: apply"
+  condition: and(succeeded(), eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true'))
+  inputs:
+    command: apply
+    workingDirectory: "$(TerraformSourceDirectory)"
+    commandOptions: -no-color -input=false -auto-approve
+    allowTelemetryCollection: false
+</code></pre>
+<p>If you want to use a condition where the expression needs to reference an output variable from a previous job or stage, then you will need to first declare that variable in the current job or stage's variable block. You can then reference it in the condition expression.</p>
+<p>eg. For jobs:</p>
+<pre><code>
+      - job: Job1
+        steps:
+          - bash: echo "##vso[task.setvariable variable=my_Job1_OutputVar;isOutput=true]Variable set in stepVar_Job1"
+            name: stepVar_Job1
+
+      - job: Job2
+        dependsOn: Job1
+        condition: and(succeeded(), eq( variables.varFrom_Job1, 'Variable set in stepVar_Job1'))
+        variables:
+          varFrom_Job1: $[ dependencies.Job1.outputs['stepVar_Job1.my_Job1_OutputVar'] ]
+</code></pre>
+<p>and for stages (note the use of <code>stageDependencies</code>):</p>
+<pre><code>  - stage: Stage1
+    jobs:
+      - job: Stage1Job1
+        steps:
+          - bash: echo "##vso[task.setvariable variable=my_Stage1Job1_OutputVar;isOutput=true]Variable set in stepVar_Stage1Job1"
+            name: stepVar_Stage1Job1
+
+  - stage: Stage3
+    displayName: Stage 3
+    dependsOn: Stage1
+    condition: and(succeeded(), eq(variables.varFrom_Stage1DeploymentJob1, 'Variable set in stepVar_Stage1Job1'))
+    variables:
+      varFrom_Stage1DeploymentJob1: $[ stageDependencies.Stage1.Stage1DeploymentJob1.outputs['Stage1DeploymentJob1.stepVar_Stage1DeploymentJob1.my_Stage1DeploymentJob1_OutputVar'] ]
+
+</code></pre>
+<p>Take a look at the pipelines defined in my <a href="https://github.com/flcdrg/azure-pipelines-variables">azure-pipelines-variables GitHub repository</a> for more examples of these.</p>
+<p>Here's an example of a pipeline run with custom conditions similar to the code excerpts above:</p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-pipeline-custom-conditions.B1_FfUuy_2rbVXE.webp" alt="Screenshot of pipeline run with custom conditions. A conditional step in the first job has been executed. Stage shows that it was not executed as the condition evaluated to false" /></p>
+<p>For activities that were skipped, when you select the specific task, job or stage, you can view the conditional expression and the actual parameters that were used in its evaluation to understand why it resulted in a <code>False</code> value. In the screenshot above, notice that while the <code>succeeded()</code> function evaluated to <code>True</code>, the <code>ne()</code> function did not, and because those two were combined with an <code>and()</code> then the final result was also <code>False</code>.</p>
+<p>In the next post we'll look at conditional insertion with template expressions and discuss when you'd use that approach over custom conditions.</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/04/edifier-speakers</id>
+    <updated>2025-04-21T15:00:00.000+09:30</updated>
+    <title>Edifier MR4 Powered Studio Monitor Speakers</title>
+    <link href="https://david.gardiner.net.au/2025/04/edifier-speakers" rel="alternate" type="text/html" title="Edifier MR4 Powered Studio Monitor Speakers"/>
+    <category term="Hardware"/>
+    <category term="Work"/>
+    <published>2025-04-21T15:00:00.000+09:30</published>
+    <summary type="html">
+      <![CDATA[Adding some external speakers to my work desk, and what I thought of the Edifier MR4
+Powered Studio Monitor speakers.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/04/edifier-speakers">
+      <![CDATA[<p>I quite often like to have music playing in the background when I'm working. <a href="https://www.abc.net.au/listen/doublej">Double J</a> is my default choice, though I sometimes will pick out an old CD that I have copied onto my Synology, or for that rare time when I'm under the pump then some calming classical music (via <a href="https://www.abc.net.au/listen/live/classic2">ABC Classic 2</a>) is just the ticket.</p>
+<p>Also worth calling out that this isn't something you can easily do if you work in an office unless you have your own room or you're happy to wear headphones. Kind of funny that earlier in my career I did have my own private office, but later on the transition to open-plan seating came into fashion and I'm not keen on wearing headphones all day so music listening was put on hold. So yeah, another big plus for working from home!</p>
+<p>The speakers on my <a href="/2023/04/new-laptop">Dell XPS 9530</a> are surprisingly good, but I wondered if adding some external speakers might make it even better.</p>
+<p>I had accrued some <a href="https://handbook.sixpivot.com.au/perks-and-benefits/rewards-shop">SixPivot "Good Vibes points"</a>, so I thought I'd spend some of those on some new speakers.</p>
+<p>There's so many options, so I asked my colleagues for recommendations. Two caught my attention:</p>
+<ul>
+<li><a href="https://www.amazon.com.au/Creative-Under-Monitor-Bluetooth-Dual-Driver-Compatible/dp/B0B28MG2SL?th=1&amp;linkCode=ll1&amp;tag=flcdrg07-22&amp;linkId=1fc52f0f8f21eb9dd368409491bb7b26&amp;language=en_AU&amp;ref_=as_li_ss_tl">Creative Stage Air PC V2 Under Monitor Soundbar</a></li>
+<li><a href="https://www.amazon.com.au/dp/B09FX5FZ6Y?th=1&amp;linkCode=ll1&amp;tag=flcdrg07-22&amp;linkId=599f7effce2769beb32fe6ba48758575&amp;language=en_AU&amp;ref_=as_li_ss_tl">Edifier MR4 Powered Studio Monitor Speakers</a> (affiliate links)</li>
+</ul>
+<p>The Soundbar was the cheaper option so I went with that. I plugged it in and was all excited to hear wonderful improved sound, but queue the sad trombones - it was very disappointing. The sound was muddy, like listening to an old AM radio. Needless to say I sent it back.</p>
+<p>I then decided to give the Edifier speakers a try. My colleague <a href="https://becdetat.com/">Rebecca</a> had a positive experience with these, so I was hopeful.</p>
+<p>They're actually just speakers - no Bluetooth or USB inputs, which was actually my preference. Do one thing and hopefully it will do it well! They arrived and I plugged them into my laptop, and they sounded really nice.</p>
+<p>I'm relatively tall, so I have my monitors raised up on monitor stands, which means the speakers just sit nicely in the gap underneath.</p>
+<p><img src="https://david.gardiner.net.au/_astro/desk-with-speakers.BhW-UfYf_aBR9q.webp" alt="Speakers on David's desk, with laptop and three monitors" /></p>
+<p>While my laptop does have an audio jack, I realised that my Dell WD19TB Dock also has one, and figured that would be a better option to use long-term. Then I just need to unplug the one Thunderbolt cable for those times I want to take my laptop to the sofa while watching TV.</p>
+<p>But to my surprise, the audio quality went really bad - a lot like the Creative speaker. A bit of online searching and I found a comment that said to set <strong>Audio enhancements</strong> to <strong>Off</strong> in the device properties. That fixed the problem! (I'm now wondering if that might have been the cause of the poor experience with the Creative Soundbar?)</p>
+<p><img src="https://david.gardiner.net.au/_astro/audio-device-settings.muhWzkxA_vkw1C.webp" alt="Windows Settings, showing audio enhancements set to 'off' for audio device" /></p>
+<p>I also made use of the <strong>Rename</strong> option to rename the device so I can tell them apart from the other audio devices on the machine. It's a pity you can't change the icon from headphones to desk speakers, but that's not a big deal.</p>
+<p>The speakers have RCA and TRS inputs on the rear. There's also an Aux input and headphone output jack on the front of the right speaker. I used the supplied RCA to 3.5mm cable to connect to my laptop/dock. My limited understanding is that the TRS jack is intended for connecting to a 'balanced' device like an audio mixer, not a computer. There's more technical data about the speakers on the <a href="https://edifier.com.au/products/edifier-mr4-p-au">Edifier site</a>.</p>
+<p><img src="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg_17QqVV.webp" alt="Rear view of speaker showing input jacks and bass/treble knobs" /></p>
+<p>One thing to be aware of if you regularly turn off the power to your devices when you're not using them (like I do to save power) - when mains power is restored they default to 'off' mode. So you need to press the power button on the front of the speakers to turn them on.</p>
+<p>So thanks Rebecca, those were a good recommendation. I'm enjoying them a lot!</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/04/touchpad-settings</id>
+    <updated>2025-04-13T19:00:00.000+09:30</updated>
+    <title>Changing the Windows touchpad settings programmatically</title>
+    <link href="https://david.gardiner.net.au/2025/04/touchpad-settings" rel="alternate" type="text/html" title="Changing the Windows touchpad settings programmatically"/>
+    <category term=".NET"/>
+    <category term="PowerShell"/>
+    <category term="Windows 11"/>
+    <published>2025-04-13T19:00:00.000+09:30</published>
+    <summary type="html">
+      <![CDATA[Now that I've got a reliable process for reinstalling Windows, I do have a list of things that I'd like to automate to get it configured "just right". As such, I've created a new repository on GitHub and added issues to track each one of these. While my Boxstarter scripts will remain for now as GitHub Gists, I think it's going to be easier to manage all of these things together in the one Git repository.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/04/touchpad-settings">
+      <![CDATA[<p>Now that I've got <a href="/2025/04/reinstalling-laptop">a reliable process for reinstalling Windows</a>, I do have a list of things that I'd like to automate to get it configured "just right". As such, I've created a new repository on GitHub and <a href="https://github.com/flcdrg/reinstall-windows/issues">added issues to track each one of these</a>. While my <a href="https://gist.github.com/flcdrg/87802af4c92527eb8a30">Boxstarter scripts</a> will remain for now as GitHub Gists, I think it's going to be easier to manage all of these things together in the one <a href="https://github.com/flcdrg/reinstall-windows">Git repository</a>.</p>
+<p>One customisation I like to make to Windows is to disable the 'Tap with a single finger to single-click' for the touchpad. I find I'm less likely to accidentally click on something when I was just tapping the touch pad to move the cursor if I turn this off.</p>
+<p><img src="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok_Z1Xdsmm.webp" alt="Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked" /></p>
+<p>I found some <a href="https://learn.microsoft.com/answers/questions/1258054/how-to-turn-off-touch-gestures-in-windows-10-11-%28d?WT.mc_id=DOP-MVP-5001655">online articles</a> that suggested this was managed by the Registry setting <code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad</code>. Experimenting with this seems to be partly true. I can see the Registry value <code>TapsEnabled</code> is updated when I enable or disable the checkbox in Windows Settings. But the reverse did not seem to be true - if I modified the Registry key, Windows Settings doesn't change, nor does the touchpad behaviour.</p>
+<p><img src="https://david.gardiner.net.au/_astro/registry-editor.DJW3oChB_ZYv0KS.webp" alt="Windows Registry Editor showing keys for PrecisionTouchPad" /></p>
+<p>Further searching lead me to the <a href="https://learn.microsoft.com/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655">Tuning Guidelines</a> page of the Windows Hardware Precision Touchpad Implementation Guide. I'm no hardware manufacturer, but this does document the <a href="https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655#tap-with-a-single-finger-to-single-click"><code>TapsEnabled</code></a> setting. Interestinly, down the bottom of that page it does also mention:</p>
+<blockquote>
+<p>As of Windows 11, build 26027, the user's touchpad settings can be queried and modified dynamically via the SystemParametersInfo API</p>
+</blockquote>
+<p>I'm running Windows 11 24H2, which is build 26100, so that <a href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-systemparametersinfoa?WT.mc_id=DOP-MVP-5001655">'SystemParametersInfo'</a> API should be available to me. Let's see if calling that does the trick.</p>
+<p>My C/C++ is pretty rusty, whereas I'm quite at home in C# or PowerShell. My preference would be to use <a href="https://learn.microsoft.com/dotnet/standard/native-interop/pinvoke?WT.mc_id=DOP-MVP-5001655">.NET P/Invoke</a> to call the Windows API.</p>
+<p>As I've learned from previous times using P/Invoke, The trick to getting it working properly is to make sure you have the method signature(s) and data structures correct.</p>
+<p>While my final goal is to call this from a PowerShell script, prototyping in a simple .NET console application should allow me to quickly test my definitions, plus get C# syntax highlighting and code completion within my IDE.</p>
+<p>Let's try and find an existing definition of <code>SystemParametersInfo</code>. I searched for ".NET PInvoke" and noticed <a href="https://github.com/dotnet/pinvoke">https://github.com/dotnet/pinvoke</a>, but that repository is archived and you are instead pointed to <a href="https://github.com/microsoft/CsWin32">https://github.com/microsoft/CsWin32</a>. This project provides a .NET source generator that will create Win32 P/Invoke methods for you, based off of the latest metadata from the Windows team. That sounds perfect!</p>
+<p>As per <a href="https://microsoft.github.io/CsWin32/docs/getting-started.html">the documentation</a>, I added a package reference</p>
+<pre><code>dotnet add package Microsoft.Windows.CsWin32
+</code></pre>
+<p>Then created a <code>NativeMethods.txt</code> file and added <code>SystemParametersInfo</code> to it.</p>
+<p>I then edited <code>Program.cs</code> and tried to use my new method:</p>
+<p><img src="https://david.gardiner.net.au/_astro/visual-studio-missing-enum.B4AvDanC_W2Avs.webp" alt="Screenshot of editing Program.cs in Visual Studio" /></p>
+<p>Except <code>SPI_GETTOUCHPADPARAMETERS</code> isn't available!</p>
+<p>The documentation suggested you can get newer metadata for the source generator to use by adding a reference to the latest prerelease <code>Microsoft.Windows.SDK.Win32Metadata</code> package. I tried that, but still no joy. I've <a href="https://github.com/microsoft/win32metadata/issues/2079">raised an issue</a> in the <a href="https://github.com/microsoft/win32metadata">microsoft/win32metadata</a> repo, but for now it looks like I'll need to hand-roll a few of the types myself.</p>
+<p>The docs for SPI_GETTOUCHPADPARAMETERS say the following:</p>
+<ul>
+<li>The <code>pvParam</code> parameter must point to a <code>TOUCHPAD_PARAMETERS</code> structure.</li>
+<li>The <code>uiParam</code> parameter must specify the size of the structure.</li>
+<li>The value of the <code>versionNumber</code> field in the <code>TOUCHPAD_PARAMETERS</code> structure must be set to the appropriate value for the version of the structure being used.</li>
+</ul>
+<p>The <a href="https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-touchpad_parameters?WT.mc_id=DOP-MVP-5001655">TOUCHPAD_PARAMETERS structure</a> is documented using C++. I asked GitHub Copilot if it could translate that into equivalent C# for me. It came up with this:</p>
+<pre><code>// DO NOT USE THIS - IT IS INCORRECT!!
+[StructLayout(LayoutKind.Sequential)]
+public struct TOUCHPAD_PARAMETERS
+{
+    public uint VersionNumber;
+    public uint MaxSupportedContacts;
+    public LEGACY_TOUCHPAD_FEATURES LegacyTouchpadFeatures;
+
+    // Bit fields are represented as individual boolean fields in C#
+    public bool TouchpadPresent;
+    public bool LegacyTouchpadPresent;
+    public bool ExternalMousePresent;
+    public bool TouchpadEnabled;
+    public bool TouchpadActive;
+    public bool FeedbackSupported;
+    public bool ClickForceSupported;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 25)]
+    public bool[] Reserved1;
+
+    public bool AllowActiveWhenMousePresent;
+    public bool FeedbackEnabled;
+    public bool TapEnabled;
+    public bool TapAndDragEnabled;
+    public bool TwoFingerTapEnabled;
+    public bool RightClickZoneEnabled;
+    public bool MouseAccelSettingHonored;
+    public bool PanEnabled;
+    public bool ZoomEnabled;
+    public bool ScrollDirectionReversed;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
+    public bool[] Reserved2;
+
+    public TOUCHPAD_SENSITIVITY_LEVEL SensitivityLevel;
+    public uint CursorSpeed;
+    public uint FeedbackIntensity;
+    public uint ClickForceSensitivity;
+    public uint RightClickZoneWidth;
+    public uint RightClickZoneHeight;
+}
+</code></pre>
+<p>And likewise for the two enums <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ne-winuser-legacy_touchpad_features?WT.mc_id=DOP-MVP-5001655">LEGACY_TOUCHPAD_FEATURES enumeration</a> and <a href="https://learn.microsoft.com/windows/win32/api/winuser/ne-winuser-touchpad_sensitivity_level?WT.mc_id=DOP-MVP-5001655">TOUCHPAD_SENSITIVITY_LEVEL enumeration</a>.</p>
+<p>One thing you need to do is set the <code>VersionNumber</code> property to <code>TOUCHPAD_PARAMETERS_LATEST_VERSION</code>. Except I searched to find out what the value of that is, and no results. I ended up resorting to installing the Windows 11 SDK so I could locate WinUser.h and then I found this:</p>
+<pre><code>#define TOUCHPAD_PARAMETERS_LATEST_VERSION 1
+#define TOUCHPAD_PARAMETERS_VERSION_1 1
+</code></pre>
+<p>But then trying to call SystemParametersInfo was not working. That lead me down a bit of a rabbit hole to finally conclude that something is still wrong with the mapping in <code>TOUCHPAD_PARAMETERS</code>. The original structure in C++ is this:</p>
+<pre><code>typedef struct TOUCHPAD_PARAMETERS {
+  UINT                       versionNumber;
+  UINT                       maxSupportedContacts;
+  LEGACY_TOUCHPAD_FEATURES   legacyTouchpadFeatures;
+  BOOL                       touchpadPresent : 1;
+  BOOL                       legacyTouchpadPresent : 1;
+  BOOL                       externalMousePresent : 1;
+  BOOL                       touchpadEnabled : 1;
+  BOOL                       touchpadActive : 1;
+  BOOL                       feedbackSupported : 1;
+  BOOL                       clickForceSupported : 1;
+  BOOL                       Reserved1 : 25;
+  BOOL                       allowActiveWhenMousePresent : 1;
+  BOOL                       feedbackEnabled : 1;
+  BOOL                       tapEnabled : 1;
+  BOOL                       tapAndDragEnabled : 1;
+  BOOL                       twoFingerTapEnabled : 1;
+  BOOL                       rightClickZoneEnabled : 1;
+  BOOL                       mouseAccelSettingHonored : 1;
+  BOOL                       panEnabled : 1;
+  BOOL                       zoomEnabled : 1;
+  BOOL                       scrollDirectionReversed : 1;
+  BOOL                       Reserved2 : 22;
+  TOUCHPAD_SENSITIVITY_LEVEL sensitivityLevel;
+  UINT                       cursorSpeed;
+  UINT                       feedbackIntensity;
+  UINT                       clickForceSensitivity;
+  UINT                       rightClickZoneWidth;
+  UINT                       rightClickZoneHeight;
+} TOUCHPAD_PARAMETERS, *PTOUCH_PAD_PARAMETERS, TOUCHPAD_PARAMETERS_V1, *PTOUCHPAD_PARAMETERS_V1;
+</code></pre>
+<p>Notice all those numbers after many of the fields? Those indicate it is a <a href="https://learn.microsoft.com/en-us/cpp/c-language/c-bit-fields?view=msvc-170&amp;WT.mc_id=DOP-MVP-5001655">C bit field</a>. And guess what feature <a href="https://github.com/dotnet/csharplang/discussions/465">C# doesn't currently support</a>?</p>
+<p>In that discussion though <a href="https://github.com/dotnet/csharplang/discussions/465#discussioncomment-8399377">there is a suggestion</a> that you can use <a href="https://learn.microsoft.com/dotnet/api/system.collections.specialized.bitvector32?view=net-9.0&amp;WT.mc_id=DOP-MVP-5001655"><code>BitVector32</code></a> or <a href="https://learn.microsoft.com/dotnet/api/system.collections.bitarray?view=net-9.0&amp;WT.mc_id=DOP-MVP-5001655"><code>BitArray</code></a> as a workaround. For usability, we can add properties in to expose access to the individual bits in the <code>BitVector32</code> field. Also note that the values passed in via the <code>[]</code> is a bitmask, not an array index. (Yes, that tricked me the first time too!)</p>
+<pre><code>[StructLayout(LayoutKind.Sequential)]
+public struct TOUCHPAD_PARAMETERS
+{
+    public uint VersionNumber;
+    public uint MaxSupportedContacts;
+    public LEGACY_TOUCHPAD_FEATURES LegacyTouchpadFeatures;
+
+    private BitVector32 First;
+
+    public bool TouchpadPresent
+    {
+        get =&gt; First[1];
+        set =&gt; First[1] = value;
+    }
+
+    public bool LegacyTouchpadPresent
+    {
+        get =&gt; First[2];
+        set =&gt; First[2] = value;
+    }
+</code></pre>
+<p>With that done, we can now call <code>SystemParametersInfo</code> like this:</p>
+<pre><code>const uint SPI_GETTOUCHPADPARAMETERS = 0x00AE;
+
+unsafe
+{
+    TOUCHPAD_PARAMETERS param;
+    param.VersionNumber = 1;
+
+    var size = (uint)Marshal.SizeOf&lt;TOUCHPAD_PARAMETERS&gt;();
+    var result = PInvoke.SystemParametersInfo((SYSTEM_PARAMETERS_INFO_ACTION)SPI_GETTOUCHPADPARAMETERS,
+        size, &amp;param, 0);
+</code></pre>
+<p>And it works! Now curiously, the Windows Settings page doesn't update in real time, but if you go to a different page and then navigate back to the Touchpad page, the setting has updated!</p>
+<p>We can refactor the code slightly to put it into a helper static class, so it's easier to call from PowerShell. To make this easier I created a second Console application, but this time I didn't add any source generators, so I would be forced to ensure that all required code was available You can <a href="https://github.com/flcdrg/reinstall-windows/blob/main/StandaloneApp/Program.cs">view the source code here</a>.</p>
+<p>I could then copy the C# into a PowerShell script and use the <code>Add-Type</code> command to include it in the current PowerShell session. Note the use of <code>-CompilerOptions "/unsafe"</code>, which we need to specify as we're using the <code>unsafe</code> keyword in our C# code.</p>
+<pre><code>$source=@'
+using System;
+using System.Collections.Specialized;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+
+public static class SystemParametersInfoHelper
+{
+    [DllImport("USER32.dll", ExactSpelling = true, EntryPoint = "SystemParametersInfoW", SetLastError = true), DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    [SupportedOSPlatform("windows5.0")]
+    internal static extern unsafe bool SystemParametersInfo(uint uiAction, uint uiParam, [Optional] void* pvParam, uint fWinIni);
+
+    public static void DisableSingleTap()
+    {
+        const uint SPI_GETTOUCHPADPARAMETERS = 0x00AE;
+        const uint SPI_SETTOUCHPADPARAMETERS = 0x00AF;
+
+        unsafe
+        {
+            // Use a fixed buffer to handle the managed type issue  
+            TOUCHPAD_PARAMETERS param;
+            param.VersionNumber = 1;
+
+            var size = (uint)Marshal.SizeOf&lt;TOUCHPAD_PARAMETERS&gt;();
+            var result = SystemParametersInfo(SPI_GETTOUCHPADPARAMETERS, size, &amp;param, 0);
+
+            if (param.TapEnabled)
+            {
+                param.TapEnabled = false;
+
+                result = SystemParametersInfo(SPI_SETTOUCHPADPARAMETERS, size, &amp;param, 3);
+            }
+        }
+    }
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct TOUCHPAD_PARAMETERS
+{
+    ...
+'@
+
+Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerOptions "/unsafe" | Out-Null
+[SystemParametersInfoHelper]::DisableSingleTap()
+</code></pre>
+<p>The complete version of the script is <a href="https://github.com/flcdrg/reinstall-windows/blob/main/Set-Touchpad.ps1">available here</a>.</p>
+<p><img src="../../assets/2025/04/touchpad-settings-demo.webp" alt="Demo of script disabling touchpad's 'tap with single finger to single-click'" /></p>
+<p>That's one problem solved. Just a few more to go!</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/04/reinstalling-laptop</id>
+    <updated>2025-04-08T20:30:00.000+09:30</updated>
+    <title>Customising and optimising Windows 11 installation</title>
+    <link href="https://david.gardiner.net.au/2025/04/reinstalling-laptop" rel="alternate" type="text/html" title="Customising and optimising Windows 11 installation"/>
+    <category term="Hardware"/>
+    <category term="PowerShell"/>
+    <category term="Windows 11"/>
+    <published>2025-04-08T20:30:00.000+09:30</published>
+    <summary type="html">
+      <![CDATA[In theory, I'd like to reinstall my laptop regularly - say every couple of months? In practise, it's easy to keep putting it off. One of the detractions was not just the time to re-install Windows, but also to then install all the various device drivers. So time goes by and next you realise it's been a year or longer.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/04/reinstalling-laptop">
+      <![CDATA[<p>In theory, I'd like to reinstall my laptop regularly - say every couple of months? In practise, it's easy to keep putting it off. One of the detractions was not just the time to re-install Windows, but also to then install all the various device drivers. So time goes by and next you realise it's been a year or longer.</p>
+<p><img src="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy_2qAahY.webp" alt="Windows 11 logo" /></p>
+<p>If you use the built in <a href="https://support.microsoft.com/en-au/windows/reset-your-pc-0ef73740-b927-549b-b7c9-e6f2b48d275e">Windows Reset feature</a>, then it's been my observation that this seems to preserve not only any OEM drivers, but also any OEM bloatware too. I was interested in the idea of installing a 'vanilla' Windows OS, with just the OEM drivers, but no bloat. And while I'm at it, can I automate a few of the other installation steps?</p>
+<h3>Step 0. Partition your disk</h3>
+<p>If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.</p>
+<p>In my case, I partitioned my SSD to have D: as my <a href="https://learn.microsoft.com/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655">Dev Drive</a> (which uses the newer <a href="https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655">ReFS file system</a>).</p>
+<p>Having a full system backup is another great idea. Knowing that if something goes wrong and you have a way to restore your system back to how it was before you started it process is reassuring. I take advantage of <a href="https://www.synology.com/en-global/dsm/feature/active-backup-business/pc">Synology Active Backup for Business</a> to take full backups of my machines, as well as taking using OneDrive for storing other important files and documents.</p>
+<h3>Step 1. Create a bootable Windows USB drive</h3>
+<p>Head over to <a href="https://www.microsoft.com/en-au/software-download/windows11">https://www.microsoft.com/en-au/software-download/windows11</a> and follow the steps to download the Windows 11 ISO image.</p>
+<p>Next, get <a href="https://rufus.ie/en/">Rufus</a> and use that to create a bootable USB drive. You probably want to select NTFS for the format, as you will likely need to store more data than can fit in FAT32.</p>
+<p>Why do this instead of using Microsoft's Media Creator Tool? The results are similar, but the tool creates a <code>sources\install.esd</code> file. If you create a bootable USB from the ISO, then the file created is <code>sources\install.wim</code>. Yes, it is possible to convert an <code>.esd</code> to <code>.wim</code>, but this way you don't need to bother, and your USB is formatted in a way it can fit larger files.</p>
+<h3>Step 2. Create a working directory</h3>
+<pre><code>mkdir c:\MachineImaging
+cd c:\MachineImaging
+</code></pre>
+<h3>Step 3. Mount the .WIM file</h3>
+<p>The Windows Image .WIM file is a special file format that can contain one or more Windows images. There's a tool built in to Windows - <code>DISM.EXE</code> that is used for working with .WIM files. Conveniently, there's also a <a href="https://learn.microsoft.com/powershell/module/dism/?view=windowsserver2025-ps&amp;WT.mc_id=DOP-MVP-5001655">Dism PowerShell module</a> with equivalent cmdlets. I find these a bit friendlier to use, as you get parameter completion etc.</p>
+<p>We're going to copy the .WIM file from the ISO (or bootable USB we just created), but I'm also going to extract out just the particular image index I plan to use. This will make things simpler later on.</p>
+<p>We can list all the images included in a .WIM file like this:</p>
+<pre><code>Get-WindowsImage -ImagePath d:\sources\install.wim
+</code></pre>
+<pre><code>ImageIndex       : 1
+ImageName        : Windows 11 Home
+ImageDescription : Windows 11 Home
+ImageSize        : 18,727,965,088 bytes
+
+ImageIndex       : 2
+ImageName        : Windows 11 Home N
+ImageDescription : Windows 11 Home N
+ImageSize        : 18,190,503,625 bytes
+
+ImageIndex       : 3
+ImageName        : Windows 11 Home Single Language
+ImageDescription : Windows 11 Home Single Language
+ImageSize        : 18,725,453,549 bytes
+
+ImageIndex       : 4
+ImageName        : Windows 11 Education
+ImageDescription : Windows 11 Education
+ImageSize        : 19,230,378,207 bytes
+
+ImageIndex       : 5
+ImageName        : Windows 11 Education N
+ImageDescription : Windows 11 Education N
+ImageSize        : 18,698,289,981 bytes
+
+ImageIndex       : 6
+ImageName        : Windows 11 Pro
+ImageDescription : Windows 11 Pro
+ImageSize        : 19,250,929,144 bytes
+
+ImageIndex       : 7
+ImageName        : Windows 11 Pro N
+ImageDescription : Windows 11 Pro N
+ImageSize        : 18,700,496,532 bytes
+
+ImageIndex       : 8
+ImageName        : Windows 11 Pro Education
+ImageDescription : Windows 11 Pro Education
+ImageSize        : 19,230,428,845 bytes
+
+ImageIndex       : 9
+ImageName        : Windows 11 Pro Education N
+ImageDescription : Windows 11 Pro Education N
+ImageSize        : 18,698,315,750 bytes
+
+ImageIndex       : 10
+ImageName        : Windows 11 Pro for Workstations
+ImageDescription : Windows 11 Pro for Workstations
+ImageSize        : 19,230,479,483 bytes
+
+ImageIndex       : 11
+ImageName        : Windows 11 Pro N for Workstations
+ImageDescription : Windows 11 Pro N for Workstations
+ImageSize        : 18,698,341,519 bytes
+</code></pre>
+<p>"Windows 11 Pro" has ImageIndex 6. That's the one I'm interested in.</p>
+<p>Now we can export just that image:</p>
+<pre><code>Export-WindowsImage -SourceImagePath d:\sources\install.wim -SourceIndex 6 -DestinationImagePath install.wim -CompressionType max
+</code></pre>
+<p>For good measure, we'll keep a 'known good version' copy, so that if we discover our install has problems, we can roll back to the previous known good.</p>
+<pre><code>Copy-Item install.wim knowngood.wim
+</code></pre>
+<h3>Step 4. Add drivers</h3>
+<p>I should point out that I originally was following the instructions outlined in <a href="https://web.archive.org/web/20250423213648/https://www.tenforums.com/tutorials/95008-dism-add-remove-drivers-offline-image.html">this post</a>. Those instructions cover how to capture the currently installed drivers on a machine, exporting them out, and then adding them to an install image. I tried this but my install hung. I'm not really sure why - probably one of the drivers wasn't happy tring to install at OS install time? I'm not sure - it should work in theory.</p>
+<p>So instead I remembered that most OEM manufacturers not only make the latest device drivers available for their hardware, but often they also provide a 'bundle' download with all the current drivers in one .zip, intended for just this scenario.</p>
+<p>My current laptop is a Dell XPS 9530, and their Windows 11 Driver Pack is listed <a href="https://www.dell.com/support/kbdoc/en-au/000214839/xps-15-9530-windows-11-driver-pack">here</a> with a download link. It 2.8GB!</p>
+<p>Unzip that into a subdirectory (c:\MachineImaging\DeployDriverPack)</p>
+<p>Now we can add all the drivers in one go using this command</p>
+<pre><code>Add-WindowsDriver -Recurse -Path mount -Driver .\DeployDriverPack
+</code></pre>
+<p>If you're more conservative, you could add a single driver (by removing the <code>-Recurse</code> parameter and changing the path) or just the audio drivers, and test out the image before adding more.</p>
+<h3>Step 5. Enable or disable Windows optional features</h3>
+<p>You also have the ability to select which Windows features are enabled or disabled by default.</p>
+<p>You can query what features are available and their current status using:</p>
+<pre><code>Get-WindowsOptionalFeature -Path mount | Sort-Object -Property FeatureName
+</code></pre>
+<p>To enable a feature, do this:</p>
+<pre><code>Enable-WindowsOptionalFeature -Path mount -FeatureName VirtualMachinePlatform
+</code></pre>
+<p>(The <code>VirtualMachinePlatform</code> feature is used by WSL, so by ensuring it is enabled that should mean that WSL installs quicker later on)</p>
+<p>I also enabled <code>Telnet</code> and <code>NetFx4Extended-ASPNET45</code></p>
+<p>Likewise you can disable features that you don't anticipate needing using <code>Disable-WindowsOptionalFeature</code></p>
+<h3>Step 6. Copy the updated WIM back to your USB</h3>
+<p>First we need to unmount the image:</p>
+<pre><code>Dismount-WindowsImage -Path mount -Save
+</code></pre>
+<p>This will take a few minutes to complete. When it does, the <code>C:\MachineImaging\install.wim</code> file will have grown quite a bit.</p>
+<p>Now copy this file back to the USB (assuming your bootable Windows USB drive is <code>E:</code>)</p>
+<pre><code>Copy-Item install.wim E:\sources
+</code></pre>
+<h3>Step 7. Extra automation with an <code>autounattend.xml</code> file</h3>
+<p>The image we've got is a good start, but we're still going to be asked lots of questions during the install. Wouldn't it be nice to have most of those pre-answered? The way to do this is to create an <a href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/automate-windows-setup?view=windows-11&amp;WT.mc_id=DOP-MVP-5001655"><code>autounattend.xml</code> file</a>. There are Microsoft-provided tools to do this, which are included as part of the <a href="https://learn.microsoft.com/windows-hardware/get-started/adk-install?WT.mc_id=DOP-MVP-5001655">Windows ADK</a>, but that's really intended for folks running large Windows networks.</p>
+<p>An easier alternative is this very nifty <a href="https://schneegans.de/windows/unattend-generator/"><code>autounattend.xml</code> generator website</a>.</p>
+<p>I set the following settings:</p>
+<ul>
+<li>
+<p>Language - English (Australian)</p>
+</li>
+<li>
+<p>Home location - Australia</p>
+</li>
+<li>
+<p>Computer name</p>
+</li>
+<li>
+<p>Time zone - Adelaide</p>
+</li>
+<li>
+<p>Use custom diskpart to configure Windows partition. In my case I know that partition 3 of disk 0 is where I want Windows to be installed, and I also want to do a clean format of the partition</p>
+<pre><code>SELECT DISK=0
+SELECT PARTITION=3
+FORMAT QUICK FS=NTFS LABEL="Windows"
+</code></pre>
+</li>
+<li>
+<p>Use generic product key and install 'Pro'</p>
+</li>
+<li>
+<p>Always show file extensions</p>
+</li>
+<li>
+<p>Show End task command in the taskbar</p>
+</li>
+<li>
+<p>Configure icons in the taskbar to just show Windows Explorer and Windows Terminal (Ideally I'd pin a few other applications but they aren't installed until after the OS install so you can't use this for that)</p>
+<pre><code>&lt;LayoutModificationTemplate xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification" xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" Version="1"&gt;
+&lt;CustomTaskbarLayoutCollection PinListPlacement="Replace"&gt;
+    &lt;defaultlayout:TaskbarLayout&gt;
+    &lt;taskbar:TaskbarPinList&gt;
+        &lt;taskbar:DesktopApp DesktopApplicationID="Microsoft.Windows.Explorer" /&gt;
+        &lt;taskbar:UWA AppUserModelID="Microsoft.WindowsTerminal_8wekyb3d8bbwe!App" /&gt;        
+    &lt;/taskbar:TaskbarPinList&gt;
+    &lt;/defaultlayout:TaskbarLayout&gt;
+&lt;/CustomTaskbarLayoutCollection&gt;
+&lt;/LayoutModificationTemplate&gt;
+</code></pre>
+</li>
+<li>
+<p>Disable widgets</p>
+</li>
+<li>
+<p>Don't show Bing results</p>
+</li>
+<li>
+<p>Remove all pins in the start menu</p>
+</li>
+<li>
+<p>Enable long paths</p>
+</li>
+<li>
+<p>Allow execution of PowerShell scripts</p>
+</li>
+<li>
+<p>Hide Edge first run experience</p>
+</li>
+<li>
+<p>Delete empty c:\Windows.old folder</p>
+</li>
+<li>
+<p>Remove bloatware</p>
+<ul>
+<li>3D Viewer</li>
+<li>Bing search</li>
+<li>Clock</li>
+<li>Cortana</li>
+<li>Family</li>
+<li>Get Help</li>
+<li>Handwriting</li>
+<li>Mail and Calendar</li>
+<li>Maps</li>
+<li>Math input</li>
+<li>Mixed reality</li>
+<li>Movies and TV</li>
+<li>News</li>
+<li>Office 365</li>
+<li>Paint</li>
+<li>Paint 3D</li>
+<li>People</li>
+<li>Photos</li>
+<li>Power Automate</li>
+<li>PowerShell ISE</li>
+<li>Quick Assist</li>
+<li>Skype</li>
+<li>Solitaire</li>
+<li>Speech</li>
+<li>Sticky notes</li>
+<li>Teams</li>
+<li>Tips</li>
+<li>To do</li>
+<li>Voice recorder</li>
+<li>Wallet</li>
+<li>Weather</li>
+<li>Windows Fax and Scan</li>
+<li>Windows media player</li>
+<li>Wordpad</li>
+<li>XBox apps</li>
+<li>Your Phone</li>
+</ul>
+</li>
+<li>
+<p>Scripts to run when first user logs in after Windows has been installed (I'm installing <a href="https://chocolatey.org/">Chocolatey</a>, as I'll be using that almost immediately once I sign in the first time).</p>
+<pre><code>Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+</code></pre>
+<pre><code>choco feature enable -n=allowGlobalConfirmation
+choco feature enable -n=useRememberedArgumentsForUpgrades
+</code></pre>
+</li>
+</ul>
+<p>And then download the file and save it in the root of your bootable USB</p>
+<h3>Step 8. Try it out</h3>
+<p>You will need to restart your target machine and get it to boot off the USB drive. For my laptop, the easiest way to do that is to hit &lt;kbd&gt;F12&lt;/kbd&gt; when the Dell logo appears while powering up. You may also have to go into your BIOS/UEFI settings to disable secure boot mode and enable booting from USB. The Rufus instructions suggest that it may work without disabling secure boot mode, but I did it anyway.</p>
+<p>If all goes well, you'll see a few different Windows installation screens, but won't get prompted where to install, which keyboard or location to use.</p>
+<p>You will still get some UI prompts that can't be avoided (like entering your Microsoft Account details), but at the end after a few reboots you should be greeted by a clean install of Windows, and if you check the Windows Device Manager, there should not be any unknown devices. Likewise, looking in Settings | Apps, should show either no or the bare minimum of applications. No bloatware to be seen!</p>
+<p>You'll still need to allow the latest Windows cumulative updates to install (adding that to the WIM file is a task for another day), and there may still be some driver updates that Windows discovers that are newer, but not too many.</p>
+<p>I timed it and the entire OS install process (including unavoidable manual steps) took only 15 minutes!</p>
+<p>After that you're ready to install and run <a href="https://boxstarter.org/">Boxstarter</a> to install all your tools and other applications. You can see my Boxstarter scripts in this <a href="https://gist.github.com/flcdrg/87802af4c92527eb8a30">GitHub Gist</a>.</p>
+<h3>Future plans</h3>
+<p>It's worth thinking about what else could be include in the custom Windows image or the autounattend.xml file, to further streamline the installation process. For example, the latest cumulative updates?</p>
+<p>The other part that would be great to automate is all the numerous tasks you need to perform to finish setting up application software, signing into things, setting up your web browser, have Git configured correctly, OneDrive(s) and the list goes on. Some of these (especially the signing in/authenticating) ones may always require manual intervention, but the others may be able to be scripted, if not totally then at least partially.</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/04/azure-function-isolated</id>
+    <updated>2025-04-01T21:30:00.000+10:30</updated>
+    <title>ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .NET Azure Functions</title>
+    <link href="https://david.gardiner.net.au/2025/04/azure-function-isolated" rel="alternate" type="text/html" title="ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .NET Azure Functions"/>
+    <category term=".NET"/>
+    <category term="Azure Functions"/>
+    <published>2025-04-01T21:30:00.000+10:30</published>
+    <summary type="html">
+      <![CDATA[When you're creating a .NET Azure Function using the isolated worker model, the default template creates code that has the host builder configuration calling ConfigureFunctionsWorkerDefaults. But if you want to enable ASP.NET Core integration features (which you would do if you wanted to work directly with HttpRequest, HttpResponse, and IActionResult types in your functions), then the documentation suggests to instead call ConfigureFunctionsWebApplication. …]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/04/azure-function-isolated">
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX_WEWhQ.webp" alt="Azure Functions logo" /></p>
+<p>When you're creating a .NET Azure Function using the isolated worker model, the <a href="https://learn.microsoft.com/en-au/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#configuration">default template creates code</a> that has the host builder configuration calling <code>ConfigureFunctionsWorkerDefaults</code>.</p>
+<p>But if you want to <a href="https://learn.microsoft.com/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#aspnet-core-integration">enable ASP.NET Core integration</a> features (which you would do if you wanted to work directly with <code>HttpRequest</code>, <code>HttpResponse</code>, and <code>IActionResult</code> types in your functions), then the documentation <a href="https://learn.microsoft.com/en-au/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#aspnet-core-integration">suggests to instead call ConfigureFunctionsWebApplication</a>.</p>
+<p>Usefully, once you add a package reference to <a href="https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/">Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</a>, you'll also get a .NET code analyzer error <a href="https://dotnet-worker-rules.azurewebsites.net/rules?ruleid=AZFW0014">AZFW0014</a> if you're not calling <code>ConfigureFunctionsWebApplication</code>, so the compiler will ensure you're doing the right thing.</p>
+<p>But apart from the integration with ASP.NET Core, are there any other significant differences between calling the two methods?</p>
+<p>Because the code is hosted on GitHub, we can easily review the source code to find out.</p>
+<h3>ConfigureFunctionsWorkerDefaults</h3>
+<p><code>ConfigureFunctionsWorkerDefaults</code> is defined in the <a href="https://github.com/Azure/azure-functions-dotnet-worker/blob/main/src/DotNetWorker/Hosting/WorkerHostBuilderExtensions.cs">WorkerHostBuilderExtensions</a> class in the <a href="https://github.com/Azure/azure-functions-dotnet-worker">https://github.com/Azure/azure-functions-dotnet-worker</a> project. There are a number of overloads, but they all end up calling this implementation:</p>
+<pre><code>public static IHostBuilder ConfigureFunctionsWorkerDefaults(this IHostBuilder builder, Action&lt;HostBuilderContext, IFunctionsWorkerApplicationBuilder&gt; configure, Action&lt;WorkerOptions&gt;? configureOptions)
+{
+    builder
+        .ConfigureHostConfiguration(config =&gt;
+        {
+            // Add AZURE_FUNCTIONS_ prefixed environment variables
+            config.AddEnvironmentVariables("AZURE_FUNCTIONS_");
+        })
+        .ConfigureAppConfiguration(configBuilder =&gt;
+        {
+            configBuilder.AddEnvironmentVariables();
+
+            var cmdLine = Environment.GetCommandLineArgs();
+            RegisterCommandLine(configBuilder, cmdLine);
+        })
+        .ConfigureServices((context, services) =&gt;
+        {
+            IFunctionsWorkerApplicationBuilder appBuilder = services.AddFunctionsWorkerDefaults(configureOptions);
+
+            // Call the provided configuration prior to adding default middleware
+            configure(context, appBuilder);
+
+            static bool ShouldSkipDefaultWorkerMiddleware(IDictionary&lt;object, object&gt; props)
+            {
+                return props is not null &amp;&amp;
+                    props.TryGetValue(FunctionsApplicationBuilder.SkipDefaultWorkerMiddlewareKey, out var skipObj) &amp;&amp;
+                    skipObj is true;
+            }
+
+            if (!ShouldSkipDefaultWorkerMiddleware(context.Properties))
+            {
+                // Add default middleware
+                appBuilder.UseDefaultWorkerMiddleware();
+            }
+        });
+
+    // Invoke any extension methods auto generated by functions worker sdk.
+    builder.InvokeAutoGeneratedConfigureMethods();
+
+    return builder;
+}
+</code></pre>
+<h3>ConfigureFunctionsWebApplication</h3>
+<p><code>ConfigureFunctionsWebApplication</code> is defined in the <a href="https://github.com/Azure/azure-functions-dotnet-worker/blob/main/extensions/Worker.Extensions.Http.AspNetCore/src/FunctionsHostBuilderExtensions.cs">FunctionsHostBuilderExtensions</a> class. Whiles the source code is in the same GitHub project as <code>ConfigureFunctionsWorkerDefaults</code>, it ships as part of the <a href="https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/">Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</a> NuGet package.</p>
+<p>It too contains a number of overloads, but they all end up calling this implementation:</p>
+<pre><code>public static IHostBuilder ConfigureFunctionsWebApplication(this IHostBuilder builder, Action&lt;HostBuilderContext, IFunctionsWorkerApplicationBuilder&gt; configureWorker)
+{
+    builder.ConfigureFunctionsWorkerDefaults((hostBuilderContext, workerAppBuilder) =&gt;
+    {
+        workerAppBuilder.UseAspNetCoreIntegration();
+        configureWorker?.Invoke(hostBuilderContext, workerAppBuilder);
+    });
+
+    builder.ConfigureAspNetCoreIntegration();
+
+    return builder;
+}
+
+internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder builder)
+{
+    builder.ConfigureServices(services =&gt;
+    {
+        services.AddSingleton&lt;FunctionsEndpointDataSource&gt;();
+        services.AddSingleton&lt;ExtensionTrace&gt;();
+        services.Configure&lt;ForwardedHeadersOptions&gt;(options =&gt;
+        {
+            // By default, the X-Forwarded-For, X-Forwarded-Host, and X-Forwarded-Proto headers
+            // are sent by the host and will be processed by the worker.
+            options.ForwardedHeaders = ForwardedHeaders.All;
+        });
+    });
+
+    builder.ConfigureWebHostDefaults(webBuilder =&gt;
+    {
+        webBuilder.UseUrls(HttpUriProvider.HttpUriString);
+        webBuilder.Configure(b =&gt;
+        {
+            b.UseForwardedHeaders();
+            b.UseRouting();
+            b.UseMiddleware&lt;WorkerRequestServicesMiddleware&gt;();
+            b.UseEndpoints(endpoints =&gt;
+            {
+                var dataSource = endpoints.ServiceProvider.GetRequiredService&lt;FunctionsEndpointDataSource&gt;();
+                endpoints.DataSources.Add(dataSource);
+            });
+        });
+    });
+
+    return builder;
+}
+</code></pre>
+<p>So they're actually quite different!</p>
+<h3>Conclusion</h3>
+<p>I feel like the documentation suggesting using one or the other may be misleading. More likely you want to <strong>add</strong> a call to <code>ConfigureFunctionsWebApplication</code> but leave the call to <code>ConfigureFunctionsWorkerDefaults</code> (unless you really want to add in all your own calls to <code>ConfigureHostConfiguration</code> and <code>ConfigureAppConfiguration</code>)</p>
+<pre><code>var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureFunctionsWorkerDefaults()
+    .Build();
+</code></pre>
+<p>Looks like <a href="https://github.com/Azure/azure-functions-dotnet-worker/issues/3010">I'm not alone</a> with this either.</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/02/ddd-melbourne</id>
+    <updated>2025-02-24T20:30:00.000+10:30</updated>
+    <title>DDD Melbourne 2025</title>
+    <link href="https://david.gardiner.net.au/2025/02/ddd-melbourne" rel="alternate" type="text/html" title="DDD Melbourne 2025"/>
+    <category term="Conferences"/>
+    <published>2025-02-24T20:30:00.000+10:30</published>
+    <summary type="html">
+      <![CDATA[I last attended DDD Melbourne 9 years ago, back in 2016. In the intervening time, it has grown roughly twice the size and shifted from a uni campus to the Melbourne Town Hall. As such, I was really pleased to be able to combine a work trip to Melbourne with being able to attend DDD Melbourne 2025 this last Saturday.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/02/ddd-melbourne">
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co_Z1DoEKG.webp" alt="DDD Melbourne 2025 logo" /></p>
+<p>I last attended <a href="https://www.dddmelbourne.com">DDD Melbourne</a> 9 years ago, <a href="/2016/08/ddd-melbourne-2016">back in 2016</a>. In the intervening time, it has grown roughly twice the size and shifted from a uni campus to the Melbourne Town Hall. As such, I was really pleased to be able to combine a work trip to Melbourne with being able to attend DDD Melbourne 2025 this last Saturday.</p>
+<p>It was actually seeing what Melbourne had achieved back in 2015/2016 that inspired me to want to reboot DDD in Adelaide, and a few years later we did that with DDD Adelaide. Ironically, I learned a while ago that the original CodeCampSA/DDD Adelaide events were actually the inspiration for some of the other states to run their own events (figuring if Adelaide could do it, then they should too!). Now the inspiration flows back the other way😀</p>
+<p>For the first time in quite a while I was not speaking or volunteering, so this was a real chance just to enjoy the day, learn some new things, meet a bunch of people, and maybe pick up some ideas to take back to DDD Adelaide.</p>
+<p>The day kicked off with a keynote from <a href="https://www.suekeay.com/">Dr Sue Keay</a>, who is Founder and Chair of Robotics Australia Group and an Adjunct Professor at QUT Centre for Robotics (to name just a couple of her roles). She gave a thought provoking talk about how robots are being used today and what the future might hold.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-dr-sue-keay.D5yR1fU0_2qNAiJ.webp" alt="Dr Sue Keay" /></p>
+<p>After morning tea..
+<img src="https://david.gardiner.net.au/_astro/ddd-melbourne-food.PRtoB2gW_1GDjQn.webp" alt="People getting morning tea from tables" /></p>
+<p>I caught <a href="https://www.linkedin.com/in/trmpowell/">Tracy Bongiorno</a> presenting "Beyond Continuous Delivery - Our journey from Gitflow to Continuous Deployment"</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-tracy-bongiorno.B8Qq9kTu_Z1n7Qei.webp" alt="Tracy Bongiorno" /></p>
+<p>Then saw <a href="https://www.linkedin.com/in/brydenoliver/">Bryden Oliver's</a> "Top Database Performance Techniques". There were a couple of his tips that seemed a bit unusual to me. It would have been good if he'd pulled up some query plans to show what was going on for those.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-bryden-oliver.CQdJDhwk_1WxcJY.webp" alt="Bryden Oliver" /></p>
+<p>Then just a bit of time for <a href="https://www.linkedin.com/in/swapnilogale/">Swapnil Ogale</a> to deliver "The Lost Art of good README documentation". Some nice tips and an encouragement to spend that time to make sure READMEs are useful.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-swapnil-ogale.CdwRxt2X_Z16OwNK.webp" alt="Swapnil Ogale" /></p>
+<p>Over the lunch break I took the opportunity to check out the community room. As well as sponsor desks they'd allocated some space for a few groups to promote themselves.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-community.B8xFUgeH_Z1UwKfT.webp" alt="The community room" /></p>
+<p>After the lunch break, I saw <a href="https://www.linkedin.com/in/lachlanb/">Lachlan Barclay</a> deliver a fast-paced talk on "Performance, Profiling and Optimisation". It was great to catch up with Lachlan again.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-lachlan-barclay.URt3uDqy_Z2gwvkf.webp" alt="Lachlan Barclay" /></p>
+<p>Then staying in the same room for <a href="https://www.linkedin.com/in/falconmick/">Michael Crook</a> with "Unlocking Hidden Efficiency: Seamless Solutions with TDD You Didn't Know You Needed". I'm guessing Michael is new to presenting, but the content he covered was very interesting and left me with some homework to follow up on (in addition to learning about <a href="https://sli.dev/">https://sli.dev/</a> which he used to create really nice slides with animated code samples)</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-michael-crook.8Kdb-eIM_1vEsRb.webp" alt="Michael Crook" /></p>
+<p>Time for afternoon tea, then <a href="https://www.linkedin.com/in/kirstymcdonald/">Kirsty McDonald</a> with "Dungeons and...Developers? Building skills in tech teams with table top role playing games". I really liked the idea of using role-playing games to effectively fire-drill scenarios (but with made up characters). This was a fun talk and a great last regular session of the day.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-kirsty-mcdonald.68j6hvgu_ZsKeqw.webp" alt="Kirsty McDonald on stage with four seated volunteers" /></p>
+<p>The locknote was <a href="https://www.aaron-powell.com/">Aaron Powell</a>, with a trip down memory lane of how we developed web sites 20 years ago, back in 2005. It brought back a lot of memories for me. Though I was talking to a new graduate at the after party later and she didn't really get a lot of the things people were laughing at.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-aaron-powell.BqazOQae_Z2kzxfD.webp" alt="Aaron Powell" /></p>
+<p>It was then time to wrap up the conference with <a href="https://blog.angelwebdesigns.com.au/">Bron Thulke</a>, <a href="https://www.linkedin.com/in/lklint">Lars Klint</a> (the man of many colourful suits) and the team of volunteers who made the day run smoothly.</p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-team.xrjSFWpr_27AcrC.webp" alt="Bron Thulke" /></p>
+<p>With the conference done it was off to the after-party for a few hours to catch up with everyone over a lemon squash (well I had lemon squash - not sure what everyone else was drinking!).</p>
+<p>There's definitely some logistical challenges that Melbourne has with running such a large event compared to what we do in Adelaide. It's also interesting to see first hand how DDD runs in a commercial conference venue.</p>
+<p>Well done DDD Melbourne, you put on a great day. As someone who has a good idea what goes into doing that, I really appreciate all you did (both seen and unseen).</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/02/azure-sql-auditing</id>
+    <updated>2025-02-17T08:00:00.000+10:30</updated>
+    <title>Azure SQL and enabling auditing with Terraform</title>
+    <link href="https://david.gardiner.net.au/2025/02/azure-sql-auditing" rel="alternate" type="text/html" title="Azure SQL and enabling auditing with Terraform"/>
+    <category term="Azure"/>
+    <category term="SQL"/>
+    <category term="Terraform"/>
+    <published>2025-02-17T08:00:00.000+10:30</published>
+    <summary type="html">
+      <![CDATA[Sometimes when you're using Terraform for your Infrastructure as Code with Azure, it's a bit tricky to match up what you can see in the Azure Portal versus the Terraform resources in the AzureRM provider. Enabling auditing in Azure SQL is a great example.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/02/azure-sql-auditing">
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp_176n5G.webp" alt="Azure logo" /></p>
+<p>Sometimes when you're using Terraform for your Infrastructure as Code with Azure, it's a bit tricky to match up what you can see in the Azure Portal versus the Terraform resources in the AzureRM provider. Enabling auditing in Azure SQL is a great example.</p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-enabled-only.DmeJYD5Y_207fnn.webp" alt="Screenshot of Azure SQL Auditing portal page, showing auditing enabled, but no data stores selected" /></p>
+<p>In the Azure Portal, select your Azure SQL resource, then expand the <strong>Security</strong> menu and select <strong>Auditing</strong>. You can then choose to <strong>Enable Azure SQL Auditing</strong>, and upon doing this you can then choose to send auditing data to any or all of Azure Storage, Log Analytics and/or Event Hub.</p>
+<p>It's also worth highlighting that usually you'd <a href="https://learn.microsoft.com/azure/azure-sql/database/auditing-server-level-database-level?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655">enable auditing at the server level</a>, but it is also possible to enable it per database.</p>
+<p>The two Terraform resources you may have encountered to manage this are <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server_extended_auditing_policy"><code>mssql_server_extended_auditing_policy</code></a> and <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_database_extended_auditing_policy"><code>mssql_database_extended_auditing_policy</code></a>.</p>
+<p>It's useful to refer back to the <a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-setup?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655">Azure SQL documentation on setting up auditing</a> to understand how to use these.</p>
+<p>A couple of points that are worth highlighting:</p>
+<ol>
+<li>
+<p>If you don't use the <code>audit_actions_and_groups</code> property, the default groups of actions that will be audited are:</p>
+<p>BATCH_COMPLETED_GROUP
+SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP
+FAILED_DATABASE_AUTHENTICATION_GROUP</p>
+</li>
+<li>
+<p>If you do define auditing at the server level, the policy applies to all existing and newly created databases on the server. If you define auditing at the database level, the policy will apply in addition to any server level settings. So be careful you don't end up auditing the same thing twice unintentionally!</p>
+</li>
+</ol>
+<p>Sometimes it can also be useful to review equivalent the Bicep/ARM definitions <a href="https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/extendedauditingsettings?pivots=deployment-language-bicep&amp;WT.mc_id=DOP-MVP-5001655">Microsoft.Sql/servers/extendedAuditingSettings</a>, as sometimes they can clarify how to use various properties.</p>
+<p>You'll see both the Terraform and Bicep have properties to configure using a Storage Account, but while you can see Log Analytics and Event Hub in the Portal UI, it's not obvious how those set up.</p>
+<p>The simplest policy you can set is this:</p>
+<pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
+  server_id = azurerm_mssql_server.mssql.id
+}
+</code></pre>
+<p>This enables the server auditing policy, but the data isn't going anywhere yet!</p>
+<h3>Storage account</h3>
+<p>When you select an Azure Storage Account for storing auditing data, you will end up with a bunch <code>.xel</code> files created under a <strong>sqldbauditlogs</strong> blob container.</p>
+<p>There are a number of ways to view the <code>.xel</code> files, <a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-analyze-audit-logs?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655#analyze-logs-using-logs-in-an-azure-storage-account">documented here</a></p>
+<p>Using a storage account for storing auditing has a few variations, depending on how you want to authenticate to the Storage Account.</p>
+<h4>Access key</h4>
+<pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
+  server_id = azurerm_mssql_server.mssql.id
+
+  storage_endpoint                        = azurerm_storage_account.storage.primary_blob_endpoint
+  storage_account_access_key              = azurerm_storage_account.storage.primary_access_key
+  storage_account_access_key_is_secondary = false
+  retention_in_days                       = 6
+}
+</code></pre>
+<p>Normally <code>storage_account_access_key_is_secondary</code> would be set to <code>false</code>, but if you are rotating your storage access keys, then you may choose to switch to the secondary key while you're rotating the primary.</p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-storage-access-keys.oEcgse7T_Z2wqY7A.webp" alt="Azure Portal showing Azure Storage Account with access key authentication" /></p>
+<h4>Managed identity</h4>
+<p>You can also use managed identity to authenticate to the storage account. In this case you don't supply the access_key properties, but you will need to add a role assignment granting the <strong>Storage Blob Data Contributor</strong> role to the identity of your Azure SQL resource.</p>
+<pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
+  server_id = azurerm_mssql_server.mssql.id
+
+  storage_endpoint  = azurerm_storage_account.storage.primary_blob_endpoint
+  retention_in_days = 6
+}
+</code></pre>
+<h3>Log analytics workspaces</h3>
+<p>To send data to a Log Analytics Workspace, the <code>log_monitoring_enabled</code> property needs to be set to <code>true</code>. This is the default.</p>
+<p>But to tell it <em>which</em> workspace to send the data to, you need to add a <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting"><code>azurerm_monitor_diagnostic_setting</code></a> resource.</p>
+<pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_log_analytics" {
+  name                       = "example-diagnostic-setting"
+  target_resource_id         = "${azurerm_mssql_server.mssql.id}/databases/master"
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.la.id
+
+  enabled_log {
+    category = "SQLSecurityAuditEvents"
+  }
+}
+</code></pre>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-log-analytics.DD3OzwDe_D7vPW.webp" alt="Screenshot of Log Analytics destination from the Azure Portal" /></p>
+<p>Note that for the server policy, you set the <code>target_resource_id</code> to the master database of the server, not the resource id of the server itself.</p>
+<p>Here's what the auditing data looks like when viewed in Log Analytics:</p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-view-log-analytics.yKPixQWS_1BmDxq.webp" alt="Screenshot of viewing audit details in Log Analytics" /></p>
+<h3>Event Hub</h3>
+<p>Likewise, if you want data to go to an Event Hub, you need to use the <code>azurerm_monitor_diagnostic_setting</code> resource.</p>
+<pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_event_hub" {
+  name                           = "ds_mssql_event_hub"
+  target_resource_id             = "${azurerm_mssql_server.mssql.id}/databases/master"
+  eventhub_authorization_rule_id = azurerm_eventhub_namespace_authorization_rule.eh.id
+  eventhub_name                  = azurerm_eventhub.eh.name
+
+  enabled_log {
+    category = "SQLSecurityAuditEvents"
+  }
+}
+</code></pre>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-event-hub.BXc3xPm7_ZsrERj.webp" alt="Screenshot showing Event Hub destination in the Azure Portal" /></p>
+<h3>Multiple destinations</h3>
+<p>As is implied by the Azure Portal, you can have one, two or all three destinations enabled for auditing. But it isn't immediately obvious that you should only have one <code>azurerm_monitor_diagnostic_setting</code> for your server auditing - don't create separate <code>azurerm_monitor_diagnostic_setting</code> resources for each destination - Azure will not allow it.</p>
+<p>For example, if you're going to log to all three, you'd have a single diagnostic resource like this:</p>
+<pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server" {
+  name                           = "diagnostic_setting"
+  target_resource_id             = "${azurerm_mssql_server.mssql.id}/databases/master"
+  eventhub_authorization_rule_id = azurerm_eventhub_namespace_authorization_rule.eh.id
+  eventhub_name                  = azurerm_eventhub.eh.name
+
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.la.id
+  log_analytics_destination_type = "Dedicated"
+
+  enabled_log {
+    category = "SQLSecurityAuditEvents"
+  }
+</code></pre>
+<p>Note, this Terraform resource does have a <code>storage_account_id</code> property, but this doesn't seem to be necessary as storage is configured via the <code>azurerm_mssql_server_extended_auditing_policy</code> resource.</p>
+<p>You would need separate <code>azurerm_monitor_diagnostic_setting</code> resources if you were configuring auditing per database though.</p>
+<h2>Common problems</h2>
+<h3>The diagnostic setting can't find the master database</h3>
+<p>Error: creating Monitor Diagnostics Setting "diagnostic_setting" for Resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master": unexpected status 404 (404 Not Found) with error: ResourceNotFound: The Resource 'Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master' under resource group 'rg-terraform-sql-auditing-australiaeast' was not found. For more details please go to <a href="https://aka.ms/ARMResourceNotFoundFix">https://aka.ms/ARMResourceNotFoundFix</a></p>
+<p>It appears that <a href="https://github.com/hashicorp/terraform-provider-azurerm/issues/22226">sometimes the <code>azurerm_mssql_server</code> resource reports it is created, but the master database is not yet ready</a>. The workaround is to add a dependency on another database resource - as by definition the master database must exist before any other user databases can be created.</p>
+<h3>Diagnostic setting fails to update with 409 Conflict</h3>
+<p><a href="https://github.com/hashicorp/terraform-provider-azurerm/issues/21161">This error seems to happen to me when I try and set up Storage, Event Hubs and Log Analytics at the same time</a>.</p>
+<p>Error: creating Monitor Diagnostics Setting "diagnostic_setting" for Resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master": unexpected status 409 (409 Conflict) with response: {"code":"Conflict","message":"Data sink '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.EventHub/namespaces/evhns-terraform-sql-auditing-australiaeast/authorizationRules/evhar-terraform-sql-auditing-australiaeast' is already used in diagnostic setting 'SQLSecurityAuditEvents_3d229c42-c7e7-4c97-9a99-ec0d0d8b86c1' for category 'SQLSecurityAuditEvents'. Data sinks can't be reused in different settings on the same category for the same resource."}</p>
+<p>After a lot of trial and error, I've found the solution is to add a <code>depends_on</code> block in your <code>azurerm_mssql_server_extended_auditing_policy</code> resource, so that the <code>azurerm_monitor_diagnostic_setting</code> is created first. (This feels like a bug in the Terraform AzureRM provider)</p>
+<pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
+  server_id = azurerm_mssql_server.mssql.id
+
+  storage_endpoint  = azurerm_storage_account.storage.primary_blob_endpoint
+  retention_in_days = 6
+
+  depends_on = [azurerm_monitor_diagnostic_setting.mssql_server]
+}
+</code></pre>
+<h3>Switching from Storage access keys to managed identity has no effect</h3>
+<p>Removing the storage access key properties from <code>azurerm_mssql_server_extended_auditing_policy</code> doesn't currently switch the authentication to managed identity. The problem may relate to the <code>storage_account_subscription_id</code> property. This is an optional property and while you usually don't need to set it if the storage account is in the same subscription, it appears that the AzureRM provider is setting it on your behalf, such that when you remove the other access key properties it doesn't know to set this property to null.</p>
+<p>If you know ahead of time that you'll be transitioning from access keys to managed identity, it might be worth setting <code>storage_account_subscription_id</code> first. Then later on, when you remove that and the other access_key properties maybe Terraform will do the right thing?</p>
+<h3>Solution resource</h3>
+<p>If you ever hit the <strong>Save</strong> button on the Azure SQL <strong>Auditing</strong> page, you may end up with a Solution resource being created for your auditing. This is useful, though it can cause problems if you are trying to destroy your Terraform resources, as it can put locks on the resources and Terraform doesn't know to destroy the solution resource first.</p>
+<p>You could try to pre-emptively create the solution resource in Terraform. For example:</p>
+<pre><code>resource "azurerm_log_analytics_solution" "example" {
+  solution_name         = "SQLAuditing"
+  location              = data.azurerm_resource_group.rg.location
+  resource_group_name   = data.azurerm_resource_group.rg.name
+  workspace_resource_id = azurerm_log_analytics_workspace.la.id
+  workspace_name        = azurerm_log_analytics_workspace.la.name
+
+  plan {
+    publisher = "Microsoft"
+    product   = "SQLAuditing"
+  }
+
+  depends_on = [azurerm_monitor_diagnostic_setting.mssql_server]
+}
+</code></pre>
+<p>Though it seems that when you use Terraform to create this resource, it names it <code>SQLAuditing(log-terraform-sql-auditing-australiaeast)</code>, whereas if you use the portal, it is named <code>SQLAuditing[log-terraform-sql-auditing-australiaeast]</code>.</p>
+<p>So instead this looks like a good use for the AzApi provider and the <a href="https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource"><code>azapi_resource</code></a></p>
+<pre><code>resource "azapi_resource" "symbolicname" {
+  type      = "Microsoft.OperationsManagement/solutions@2015-11-01-preview"
+  name      = "SQLAuditing[${azurerm_log_analytics_workspace.la.name}]"
+  location  = data.azurerm_resource_group.rg.location
+  parent_id = data.azurerm_resource_group.rg.id
+
+  tags = {}
+  body = {
+    plan = {
+      name          = "SQLAuditing[${azurerm_log_analytics_workspace.la.name}]"
+      product       = "SQLAuditing"
+      promotionCode = ""
+      publisher     = "Microsoft"
+    }
+    properties = {
+      containedResources = [
+        "${azurerm_log_analytics_workspace.la.id}/views/SQLSecurityInsights",
+        "${azurerm_log_analytics_workspace.la.id}/views/SQLAccessToSensitiveData"
+      ]
+      referencedResources = []
+      workspaceResourceId = azurerm_log_analytics_workspace.la.id
+    }
+  }
+}
+</code></pre>
+<h2>Other troubleshooting tips</h2>
+<p>The Azure CLI can also be useful in checking what the current state of audit configuration is.</p>
+<p>Here's two examples showing auditing configured for all three destinations:</p>
+<pre><code>az monitor diagnostic-settings list --resource /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master
+</code></pre>
+<p>gives the following:</p>
+<pre><code>[
+  {
+    "eventHubAuthorizationRuleId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.EventHub/namespaces/evhns-terraform-sql-auditing-australiaeast/authorizationRules/evhar-terraform-sql-auditing-australiaeast",
+    "eventHubName": "evh-terraform-sql-auditing-australiaeast",
+    "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg-terraform-sql-auditing-australiaeast/providers/microsoft.sql/servers/sql-terraform-sql-auditing-australiaeast/databases/master/providers/microsoft.insights/diagnosticSettings/diagnostic_setting",
+    "logs": [
+      {
+        "category": "SQLSecurityAuditEvents",
+        "enabled": true,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "SQLInsights",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "AutomaticTuning",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "QueryStoreRuntimeStatistics",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "QueryStoreWaitStatistics",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "Errors",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "DatabaseWaitStatistics",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "Timeouts",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "Blocks",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "Deadlocks",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "DevOpsOperationsAudit",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "category": "Basic",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "InstanceAndAppAdvanced",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      },
+      {
+        "category": "WorkloadManagement",
+        "enabled": false,
+        "retentionPolicy": {
+          "days": 0,
+          "enabled": false
+        }
+      }
+    ],
+    "name": "diagnostic_setting",
+    "resourceGroup": "rg-terraform-sql-auditing-australiaeast",
+    "type": "Microsoft.Insights/diagnosticSettings",
+    "workspaceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.OperationalInsights/workspaces/log-terraform-sql-auditing-australiaeast"
+  }
+]
+</code></pre>
+<p>And the Azure SQL audit policy</p>
+<pre><code>az sql server audit-policy show -g rg-terraform-sql-auditing-australiaeast -n sql-terraform-sql-auditing-australiaeast
+</code></pre>
+<p>Gives</p>
+<pre><code>{
+  "auditActionsAndGroups": [
+    "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+    "FAILED_DATABASE_AUTHENTICATION_GROUP",
+    "BATCH_COMPLETED_GROUP"
+  ],
+  "blobStorageTargetState": "Enabled",
+  "eventHubAuthorizationRuleId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.EventHub/namespaces/evhns-terraform-sql-auditing-australiaeast/authorizationRules/evhar-terraform-sql-auditing-australiaeast",
+  "eventHubName": "evh-terraform-sql-auditing-australiaeast",
+  "eventHubTargetState": "Enabled",
+  "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.Sql/servers/sql-terraform-sql-auditing-australiaeast/auditingSettings/Default",
+  "isAzureMonitorTargetEnabled": true,
+  "isDevopsAuditEnabled": null,
+  "isManagedIdentityInUse": true,
+  "isStorageSecondaryKeyInUse": null,
+  "logAnalyticsTargetState": "Enabled",
+  "logAnalyticsWorkspaceResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-terraform-sql-auditing-australiaeast/providers/Microsoft.OperationalInsights/workspaces/log-terraform-sql-auditing-australiaeast",
+  "name": "Default",
+  "queueDelayMs": null,
+  "resourceGroup": "rg-terraform-sql-auditing-australiaeast",
+  "retentionDays": 6,
+  "state": "Enabled",
+  "storageAccountAccessKey": null,
+  "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000",
+  "storageEndpoint": "https://sttfsqlauditauew0o.blob.core.windows.net/",
+  "type": "Microsoft.Sql/servers/auditingSettings"
+}
+</code></pre>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/02/powershell-command-arguments</id>
+    <updated>2025-02-14T12:00:00.000+10:30</updated>
+    <title>Why is PowerShell not expanding variables for a command?</title>
+    <link href="https://david.gardiner.net.au/2025/02/powershell-command-arguments" rel="alternate" type="text/html" title="Why is PowerShell not expanding variables for a command?"/>
+    <category term="PowerShell"/>
+    <published>2025-02-14T12:00:00.000+10:30</published>
+    <summary type="html">
+      <![CDATA[This had me perplexed. I have a PowerShell script that calls Docker and passes in some build arguments like this: But it was failing with this error: It should be evaluating the $($env:USERPROFILE) expression to the current user's profile/home directory, but it isn't. Is there some recent breaking change in how PowerShell evaluates arguments to a native command? I skimmed the release notes but nothing jumped out.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/02/powershell-command-arguments">
+      <![CDATA[<p>This had me perplexed. I have a PowerShell script that calls Docker and passes in some build arguments like this:</p>
+<pre><code>docker build --secret id=npm,src=$($env:USERPROFILE)/.npmrc --progress=plain -t imagename .
+</code></pre>
+<p>But it was failing with this error:</p>
+<pre><code>ERROR: failed to stat $($env:USERPROFILE)/.npmrc: CreateFile $($env:USERPROFILE)/.npmrc: The filename, directory name, or volume label syntax is incorrect.
+</code></pre>
+<p>It should be evaluating the <code>$($env:USERPROFILE)</code> expression to the current user's profile/home directory, but it isn't.</p>
+<p>Is there some recent breaking change in how PowerShell evaluates arguments to a native command? I skimmed the release notes but nothing jumped out.</p>
+<p>I know you can use the <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&amp;WT.mc_id=DOP-MVP-5001655#the-stop-parsing-token">"stop-parsing token" <code>--%</code></a> to stop PowerShell from interpreting subsequent text on the line as commands or expressions, but I wasn't using that.</p>
+<p>In fact the whole <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&amp;WT.mc_id=DOP-MVP-5001655">about_Parsing</a> documentation is a good read to understand the different modes and how PowerShell passes arguments to native and PowerShell commands. But I still couldn't figure it out.</p>
+<p>So what's going on?</p>
+<p>Another tool I find useful when trying to diagnose issues with passing arguments is <a href="https://community.chocolatey.org/packages/echoargs">EchoArgs</a>. It too reported the argument was not being evaluated.</p>
+<p>But then I noticed something curious on the command line:</p>
+<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line.CQ6I5ZUF_22GV8J.webp" alt="Screenshot of echoargs command line with comma separating arguments in grey colour" /></p>
+<p>That comma is being rendered in my command line in grey, but the rest of the arguments are white (with the exception of the variable expression). Could that be the problem?</p>
+<p>Let's try enclosing the arguments in double quotes..</p>
+<pre><code>docker build --secret "id=npm,src=$($env:USERPROFILE)/.npmrc" --progress=plain -t imagename .
+</code></pre>
+<p>Notice the colours on the command line - the comma is not different now:</p>
+<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line2.Dq7CjtrV_ZemIRx.webp" alt="Screenshot of echo args command line, now with double quotes and the comma not in a different colour" /></p>
+<p>And the colouring on the command line also hints that it is not treating the comma as something special.</p>
+<p>And now our Docker command works!</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png"/>
+  </entry>
+  <entry>
+    <id>https://david.gardiner.net.au/2025/02/functions-serilog-appinsights</id>
+    <updated>2025-02-10T08:00:00.000+10:30</updated>
+    <title>.NET Azure Functions, Isolated worker model, Serilog to App Insights</title>
+    <link href="https://david.gardiner.net.au/2025/02/functions-serilog-appinsights" rel="alternate" type="text/html" title=".NET Azure Functions, Isolated worker model, Serilog to App Insights"/>
+    <category term=".NET"/>
+    <category term="Azure Functions"/>
+    <published>2025-02-10T08:00:00.000+10:30</published>
+    <summary type="html">
+      <![CDATA[There's already some good resources online about configuring .NET Azure Functions with Serilog. For example, Shazni gives a good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions, and Simon shows how to use Serilog with Azure Functions in isolated worker model, but neither cover using App Insights.]]>
+    </summary>
+    <content type="html" xml:base="https://david.gardiner.net.au/2025/02/functions-serilog-appinsights">
+      <![CDATA[<p>There's already some good resources online about configuring <a href="https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655">.NET Azure Functions</a> with <a href="https://serilog.net/">Serilog</a>. For example, Shazni gives a <a href="https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76">good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions</a>, and Simon shows <a href="https://simonholman.dev/configure-serilog-for-logging-in-azure-functions">how to use Serilog with Azure Functions in isolated worker model</a>, but neither cover using App Insights.</p>
+<p>It's important to note that the <a href="https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655">in-process model goes out of support (along with .NET 8) in November 2026</a>. Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)</p>
+<p><img src="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ__2l2OEh.webp" alt="Serilog logo" /></p>
+<p>The Serilog Sink package for logging data to Application Insights is <a href="https://www.nuget.org/packages/Serilog.Sinks.ApplicationInsights/">Serilog.Extensions.AppInsights</a>, and it has some useful code samples <a href="https://github.com/serilog-contrib/serilog-sinks-applicationinsights">in the README</a>, but they also lack mentioning the differences for isolated worker model.</p>
+<p>So my goal here is to demonstrate the following combination:</p>
+<ul>
+<li>A .NET Azure Function</li>
+<li>That is using isolated worker mode</li>
+<li>That logs to Azure App Insights</li>
+<li>Uses Serilog for structured logging</li>
+<li>Uses the Serilog 'bootstrapper' pattern to capture any errors during startup/configuration</li>
+</ul>
+<p>Note: There are full working samples for this post in <a href="https://github.com/flcdrg/azure-function-dotnet-isolated-logging">https://github.com/flcdrg/azure-function-dotnet-isolated-logging</a>.</p>
+<p>Our starting point is an Azure Function that has Application Insights enabled. We uncommented to the two lines in Program.cs and the two .csproj file from the default Functions project template.</p>
+<pre><code>using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+
+var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureServices(services =&gt; {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
+    })
+    .Build();
+
+host.Run();
+</code></pre>
+<p>One of the challenges with using the App Insights Serilog Sink, is that it needs to be configured with an existing <code>TelemetryConfiguration</code>. The old way of doing this was to reference <a href="https://learn.microsoft.com/dotnet/api/microsoft.applicationinsights.extensibility.telemetryconfiguration.active?view=azure-dotnet&amp;WT.mc_id=DOP-MVP-5001655"><code>TelemetryConfiguration.Active</code></a>, however using this property has been discouraged in .NET Core (aka modern .NET).</p>
+<p>Instead you're encouraged to retrieve a valid <code>TelemetryConfiguration</code> instance from the service provider, like this:</p>
+<pre><code>Log.Logger = new LoggerConfiguration()
+    .WriteTo.ApplicationInsights(
+        serviceProvider.GetRequiredService&lt;TelemetryConfiguration&gt;(),
+    TelemetryConverter.Traces)
+    .CreateLogger();
+</code></pre>
+<p>Except we have a problem. How can we reference the service provider? We need to move this under the <code>HostBuilder</code>, so we have access to a service provider.</p>
+<p>There's a couple of ways to do this. Traditionally we would use <code>UseSerilog</code> to register Serilog similar to this:</p>
+<pre><code>    var build = Host.CreateDefaultBuilder(args)
+        .UseSerilog((_, services, loggerConfiguration) =&gt; loggerConfiguration
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("ExtraInfo", "FuncWithSerilog")
+
+            .WriteTo.ApplicationInsights(
+                services.GetRequiredService&lt;TelemetryConfiguration&gt;(),
+                TelemetryConverter.Traces))
+</code></pre>
+<p>But <a href="https://nblumhardt.com/2024/04/serilog-net8-0-minimal/#comment-6496448401">as of relatively recently</a>, you can now also use <code>AddSerilog</code>, as it turns out under the covers, <code>UseSerilog</code> just calls <code>AddSerilog</code>.</p>
+<p>So this is the equivalent:</p>
+<pre><code>builder.Services
+    .AddSerilog((serviceProvider, loggerConfiguration) =&gt;
+    {
+        loggerConfiguration
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("ExtraInfo", "FuncWithSerilog")
+
+            .WriteTo.ApplicationInsights(
+                serviceProvider.GetRequiredService&lt;TelemetryConfiguration&gt;(),
+                TelemetryConverter.Traces);
+    })
+</code></pre>
+<p>There's also the 'bootstrap logging' pattern that was <a href="https://nblumhardt.com/2020/10/bootstrap-logger/">first outlined here</a>.</p>
+<p>This can be useful if you want to log any configuration errors at start up. The only issue here is it will be tricky to log those into App Insights as you won't have the main Serilog configuration (where you wire up App Insights integration) completed yet. You could log to another sink (<a href="https://github.com/serilog/serilog-sinks-console">Console</a>, or <a href="https://github.com/serilog/serilog-sinks-debug">Debug</a> if you're running locally).</p>
+<p>Here's an example that includes bootstrap logging.</p>
+<pre><code>using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.ApplicationInsights.Extensibility;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .CreateBootstrapLogger();
+
+try
+{
+    Log.Warning("Starting up.."); // Only logged to console
+
+    var build = Host.CreateDefaultBuilder(args)
+        .UseSerilog((_, services, loggerConfiguration) =&gt; loggerConfiguration
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("ExtraInfo", "FuncWithSerilog")
+
+            .WriteTo.ApplicationInsights(
+                services.GetRequiredService&lt;TelemetryConfiguration&gt;(),
+                TelemetryConverter.Traces))
+
+        .ConfigureFunctionsWebApplication()
+
+        .ConfigureServices(services =&gt; {
+            services.AddApplicationInsightsTelemetryWorkerService();
+            services.ConfigureFunctionsApplicationInsights();
+        })
+        .ConfigureLogging(logging =&gt;
+        {
+            // Remove the default Application Insights logger provider so that Information logs are sent
+            // https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Clinux&amp;WT.mc_id=DOP-MVP-5001655#managing-log-levels
+            logging.Services.Configure&lt;LoggerFilterOptions&gt;(options =&gt;
+            {
+                LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule =&gt; rule.ProviderName
+                    == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                if (defaultRule is not null)
+                {
+                    options.Rules.Remove(defaultRule);
+                }
+            });
+        })
+
+        .Build();
+
+    build.Run();
+    Log.Warning("After run");
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "An unhandled exception occurred during bootstrapping");
+}
+finally
+{
+    Log.Warning("Exiting application");
+    Log.CloseAndFlush();
+}
+</code></pre>
+<p>In my experimenting with this, when the Function is closed normally (eg. by being requested to stop in the Azure Portal / or pressing Ctrl-C in the console window when running locally) I was not able to get any logging working in the <code>finally</code> block. I think by then it's pretty much game over and the Function Host is keen to wrap things up.</p>
+<p>But what if the Function is running in Azure? The Debug or Console sinks won't be much use there. In ApplicationInsights sink docs, there's a section on <a href="https://github.com/serilog-contrib/serilog-sinks-applicationinsights#how-when-and-why-to-flush-messages-manually">how to flush messages manually</a>. The code sample shows creating a new instance of <code>TelemetryClient</code> so that you <em>can</em> use the ApplicationInsights sink in the bootstrap logger.</p>
+<pre><code>Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .WriteTo.ApplicationInsights(new TelemetryClient(new TelemetryConfiguration()), new TraceTelemetryConverter())
+    .CreateBootstrapLogger();
+</code></pre>
+<p>If I simulate a configuration error by throwing an exception inside the <code>ConfigureServices</code> call, then you do get data sent to App Insights. eg.</p>
+<pre><code>{
+    "name": "AppExceptions",
+    "time": "2025-02-08T06:32:25.4548247Z",
+    "tags": {
+        "ai.cloud.roleInstance": "Delphinium",
+        "ai.internal.sdkVersion": "dotnetc:2.22.0-997"
+    },
+    "data": {
+        "baseType": "ExceptionData",
+        "baseData": {
+            "ver": 2,
+            "exceptions": [
+                {
+                    "id": 59941933,
+                    "outerId": 0,
+                    "typeName": "System.InvalidOperationException",
+                    "message": "This is a test exception",
+                    "hasFullStack": true,
+                    "parsedStack": [
+                        {
+                            "level": 0,
+                            "method": "Program+&lt;&gt;c.&lt;&lt;Main&gt;$&gt;b__0_1",
+                            "assembly": "FuncWithSerilog, Version=1.2.6.0, Culture=neutral, PublicKeyToken=null",
+                            "fileName": "D:\\git\\azure-function-dotnet-isolated-logging\\net9\\FuncWithSerilog\\Program.cs",
+                            "line": 36
+                        },
+                        {
+                            "level": 1,
+                            "method": "Microsoft.Extensions.Hosting.HostBuilder.InitializeServiceProvider",
+                            "assembly": "Microsoft.Extensions.Hosting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60",
+                            "line": 0
+                        },
+                        {
+                            "level": 2,
+                            "method": "Microsoft.Extensions.Hosting.HostBuilder.Build",
+                            "assembly": "Microsoft.Extensions.Hosting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60",
+                            "line": 0
+                        },
+                        {
+                            "level": 3,
+                            "method": "Program.&lt;Main&gt;$",
+                            "assembly": "FuncWithSerilog, Version=1.2.6.0, Culture=neutral, PublicKeyToken=null",
+                            "fileName": "D:\\git\\azure-function-dotnet-isolated-logging\\net9\\FuncWithSerilog\\Program.cs",
+                            "line": 21
+                        }
+                    ]
+                }
+            ],
+            "severityLevel": "Critical",
+            "properties": {
+                "MessageTemplate": "An unhandled exception occurred during bootstrapping"
+            }
+        }
+    }
+}
+</code></pre>
+<p>So there you go!</p>
+<p>And this is all well and good, but it's important to mention that Microsoft are suggesting for new codebases <a href="https://learn.microsoft.com/azure/azure-monitor/app/worker-service?WT.mc_id=DOP-MVP-5001655">use OpenTelemetry instead of App Insights</a>! I'll have to check out how that works soon.</p>
+]]>
+    </content>
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png"/>
+    <media:content medium="image" xmlns:media="http://search.yahoo.com/mrss/" url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png"/>
+  </entry>
+</feed>
