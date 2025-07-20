@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Astro v5.12.0">
+    <link rel="canonical" href="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression">
+    <meta name="description" content="Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
+and see some common examples of their usage."><meta name="og:description" content="Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
+and see some common examples of their usage."><meta name="og:title" content="Azure Pipelines template expressions"><meta name="og:type" content="article"><meta name="og:url" content="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"><meta name="og:image" content="/_astro/azure-pipelines-logo.B45UakAg.png"><meta name="og:image:width" content="80"><meta name="og:image:height" content="80"><meta name="og:image:alt" content="Azure Pipelines logo"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"},"headline":"Azure Pipelines template expressions","description":"Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions\nand see some common examples of their usage.","image":"/_astro/azure-pipelines-logo.B45UakAg.png","author":{"@type":"Person","name":"David Gardiner","url":"https://david.gardiner.net.au/"},"datePublished":"2025-07-14T08:00:00.000+09:30"}</script>
+    <title>Azure Pipelines template expressions</title>
+    
+  <link rel="stylesheet" href="/_astro/_slug_.CT3ttAlr.css"></head>
+  <body>
+    <header>
+      <nav>
+        <div class="nav-container" data-astro-cid-pux6a34n>
+
+  <div class="profile" data-astro-cid-b3uuc2c6>
+  <a href="/" data-astro-cid-b3uuc2c6>
+    <img src="https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab" alt="Photo of David Gardiner" width="80" height="80" data-astro-cid-b3uuc2c6>
+  </a>
+  
+            <div class="site-title" data-astro-cid-idrpryed>
+  <div data-astro-cid-idrpryed>David Gardiner</div>
+  <div class="site-subtitle" data-astro-cid-idrpryed>
+    A blog of software development, .NET and other interesting things
+  </div>
+</div>
+          
+</div>
+  <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" data-astro-cid-3weo6hls>
+  <span class="hamburger-line" data-astro-cid-3weo6hls></span>
+  <span class="hamburger-line" data-astro-cid-3weo6hls></span>
+  <span class="hamburger-line" data-astro-cid-3weo6hls></span>
+</button>
+
+
+
+<script type="module">(function(){const e=document.querySelector(".hamburger"),t=document.querySelector(".nav-links");e&&t&&(e.addEventListener("click",function(a){a.preventDefault(),t.classList.toggle("active");const n=t.classList.contains("active");e.setAttribute("aria-expanded",n?"true":"false");const s=e.querySelectorAll(".hamburger-line");n?(s[0].style.transform="rotate(45deg) translate(5px, 5px)",s[1].style.opacity="0",s[2].style.transform="rotate(-45deg) translate(5px, -5px)"):(s[0].style.transform="none",s[1].style.opacity="1",s[2].style.transform="none")}),document.addEventListener("click",function(a){if(e&&!e.contains(a.target)&&!t.contains(a.target)&&t.classList.contains("active")){t.classList.remove("active"),e.setAttribute("aria-expanded","false");const n=e.querySelectorAll(".hamburger-line");n[0].style.transform="none",n[1].style.opacity="1",n[2].style.transform="none"}}))})();</script>
+
+  <div class="nav-links" data-astro-cid-pux6a34n>
+    <a href="/" data-astro-cid-pux6a34n>Home</a>
+    <a href="/tags/" data-astro-cid-pux6a34n>Tags</a>
+    <a href="/archive" data-astro-cid-pux6a34n>Archive</a>
+    <a href="/about" data-astro-cid-pux6a34n>About</a>
+    <a href="/speaking" data-astro-cid-pux6a34n>Speaking</a>
+    <button id="themeToggle" aria-label="Toggle theme" data-astro-cid-oemx5le4>
+    <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" data-astro-cid-oemx5le4>
+      <path class="sun" fill-rule="evenodd" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 1.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm12-7a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1 0-1.6h2.4a.8.8 0 0 1 .8.8zM4 12a.8.8 0 0 1-.8.8H.8a.8.8 0 0 1 0-1.6h2.5a.8.8 0 0 1 .8.8zm16.5-8.5a.8.8 0 0 1 0 1l-1.8 1.8a.8.8 0 0 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM6.3 17.7a.8.8 0 0 1 0 1l-1.7 1.8a.8.8 0 1 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM12 0a.8.8 0 0 1 .8.8v2.5a.8.8 0 0 1-1.6 0V.8A.8.8 0 0 1 12 0zm0 20a.8.8 0 0 1 .8.8v2.4a.8.8 0 0 1-1.6 0v-2.4a.8.8 0 0 1 .8-.8zM3.5 3.5a.8.8 0 0 1 1 0l1.8 1.8a.8.8 0 1 1-1 1L3.5 4.6a.8.8 0 0 1 0-1zm14.2 14.2a.8.8 0 0 1 1 0l1.8 1.7a.8.8 0 0 1-1 1l-1.8-1.7a.8.8 0 0 1 0-1z" data-astro-cid-oemx5le4></path>
+      <path class="moon" fill-rule="evenodd" d="M16.5 6A10.5 10.5 0 0 1 4.7 16.4 8.5 8.5 0 1 0 16.4 4.7l.1 1.3zm-1.7-2a9 9 0 0 1 .2 2 9 9 0 0 1-11 8.8 9.4 9.4 0 0 1-.8-.3c-.4 0-.8.3-.7.7a10 10 0 0 0 .3.8 10 10 0 0 0 9.2 6 10 10 0 0 0 4-19.2 9.7 9.7 0 0 0-.9-.3c-.3-.1-.7.3-.6.7a9 9 0 0 1 .3.8z" data-astro-cid-oemx5le4></path>
+    </svg>
+  </button>
+  
+  
+
+<script>
+    const theme = (() => {
+      const localStorageTheme = localStorage?.getItem("theme") ?? '';
+      if (['dark', 'light'].includes(localStorageTheme)) {
+        return localStorageTheme;
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+        return 'light';
+    })();
+  
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  
+    window.localStorage.setItem('theme', theme);
+  
+    const handleToggleClick = () => {
+      const element = document.documentElement;
+      element.classList.toggle("dark");
+  
+      const isDark = element.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    }
+  
+    document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
+  </script>
+  </div>
+</div>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+  <h1>Azure Pipelines template expressions</h1>
+
+  <p><time datetime="2025-07-14T08:00:00.000+09:30">14th July 2025</time></p>
+
+  <p><em>Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
+and see some common examples of their usage.</em></p>
+
+  <div class="tags">
+    <p class="tag">
+          <a href="/tags/Azure Pipelines">Azure Pipelines</a>
+        </p>
+  </div>
+
+  
+      <p>In my <a href="/2025/06/azure-pipeline-conditionals">last post</a> I wrote about using custom conditions in Azure Pipelines to evaluate whether to skip a step, job or stage at runtime.</p>
+<p>Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can’t do with runtime custom conditions).</p>
+<p>The important thing to remember is that template expression are a “compile time” feature. They can only operate on things that are available at compile time. <a href="https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Variables set by scripts</a>, and <a href="https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&#x26;tabs=yaml%2Cbatch&#x26;WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks">task output variables</a> are two examples of things that are not available at compile time.</p>
+<p>Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the ‘Publish Artifact’ step is executed or not. Notice the ‘Publish Artifact’ step is listed, but the icon shown is a white arrow (rather than green tick)
+<img alt="Job showing a step &amp;#x27;Publish Artifact&amp;#x27; that was conditionally not executed" loading="lazy" decoding="async" fetchpriority="auto" width="388" height="398" src="/_astro/azure-pipelines-custom-conditions.Be6IaBQz_101Uki.webp" ></p>
+<p>If we use a template expression, then if it evaluates to false then the step is not even included in the job!</p>
+<p><img alt="Job without a &amp;#x27;Publish Artifact&amp;#x27; step " loading="lazy" decoding="async" fetchpriority="auto" width="379" height="347" src="/_astro/azure-pipelines-template-expressions.kRV13og-_2f5chf.webp" ></p>
+<p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Template expressions</a> use the syntax <code>${{ }}</code></p>
+<p>You can reference <code>parameters</code> and <code>variables</code> in template expressions. The latter are only variables that are defined in the YAML file and most of the <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">predefined variables</a>. (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)</p>
+<p>You can’t reference variables that are created by scripts or anything else that is only available at runtime.</p>
+<p>You can use <a href="https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655#functions">general functions</a> (the same ones we used previously with runtime Custom Conditions) in template expressions, as well as two special <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655#template-expression-functions">Template expression functions</a>.</p>
+<h2 id="common-patterns">Common patterns</h2>
+<p>You can see a complete pipeline demonstrating all the following patterns at <a href="https://github.com/flcdrg/azure-pipelines-template-expressions/blob/main/azure-pipelines.yml">https://github.com/flcdrg/azure-pipelines-template-expressions/blob/main/azure-pipelines.yml</a>.</p>
+<h3 id="conditionally-include-stage-job-or-step">Conditionally include stage, job or step</h3>
+<p>The official documentation calls this <a href="https://learn.microsoft.com/en-au/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655#conditional-insertion">Conditional Insertion</a>.</p>
+<p>Here’s an example where we only want to publish build artifacts if we’re building the main branch:</p>
+<!-- snippet: TemplateExpression-conditional-step -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">publish</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">$(Build.ArtifactStagingDirectory)</span></span>
+<span class="line"><span style="color:#85E89D">      artifact</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">drop</span></span>
+<span class="line"><span style="color:#85E89D">      displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Publish Artifact"</span></span></code></pre>
+<!-- endSnippet -->
+<h3 id="conditionally-set-variable">Conditionally set variable</h3>
+<p>Using template expressions to conditionally set the values of variables is a common use case.</p>
+<!-- snippet: TemplateExpression-variables1 -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#85E89D">variables</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    Environment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Production"</span></span>
+<span class="line"><span style="color:#85E89D">  ${{ else }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    Environment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Not-Production"</span></span></code></pre>
+<!-- endSnippet -->
+<p>Note that YAML formatting rules apply - each property must be unique, so you can’t repeat the expression line more than once. Instead you would just group additional variable declarations together.</p>
+<h3 id="conditionally-set-stage-or-job-dependency">Conditionally set stage or job dependency</h3>
+<p>DependsOn applies to stages and jobs. We can conditionally include the entire dependency:</p>
+<!-- snippet: TemplateExpression-conditional-dependson -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#85E89D">${{ if ne(parameters.DependsOn, '') }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  dependsOn</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#9ECBFF">Version</span></span></code></pre>
+<!-- endSnippet -->
+<p>Or when we have multiple dependencies, we can conditionally include an additional dependency. Because dependsOn in this case is referring to an array, we need to use the array syntax for our template expression.</p>
+<!-- snippet: TemplateExpression-conditional-dependson-extra -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#85E89D">dependsOn</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#9ECBFF">Version</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">${{ if ne(parameters.DependsOn, '') }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">${{ parameters.DependsOn }}</span></span></code></pre>
+<!-- endSnippet -->
+<h3 id="looping">Looping</h3>
+<p>The official name for this in the documentation is <a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655#iterative-insertion">Iterative insertion</a>.
+Loop expressions are a powerful technique that can be used to reduce duplication in your pipelines.</p>
+<p>If you need to define an array, the only way I’m aware of doing that is by declaring a parameter, as one of the types supported by parameters is <code>object</code>. As an object, you can use YAML to define it as an array and add sub-properties etc to that as required.</p>
+<!-- snippet: TemplateExpression-parameters -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#85E89D">parameters</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Environments</span></span>
+<span class="line"><span style="color:#85E89D">    type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">object</span></span>
+<span class="line"><span style="color:#85E89D">    default</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Dev</span></span>
+<span class="line"><span style="color:#85E89D">        displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Development"</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Test</span></span>
+<span class="line"><span style="color:#85E89D">        displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Testing"</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Prod</span></span>
+<span class="line"><span style="color:#85E89D">        displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Production"</span></span></code></pre>
+<!-- endSnippet -->
+<p>I tend to add a <code>displayName</code> on those parameters just to make it clear they’re just there to store the array data (and you probably shouldn’t be altering the values in the Azure Pipelines web UI if you run the pipeline manually)</p>
+<!-- snippet: TemplateExpression-conditional-each -->
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yml"><code><span class="line"><span style="color:#E1E4E8">- </span><span style="color:#85E89D">${{ each env in parameters.Environments }}</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">stage</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">DeployTo${{ env.name }}</span></span>
+<span class="line"><span style="color:#85E89D">      jobs</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">job</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">DeployTo${{ env.name }}</span></span>
+<span class="line"><span style="color:#85E89D">          displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Deploy to ${{ env.name }}"</span></span>
+<span class="line"><span style="color:#85E89D">          steps</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">script</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">echo "Deploying to ${{ env.name }} environment..."</span></span>
+<span class="line"><span style="color:#85E89D">              displayName</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Deploy to ${{ env.name }}"</span></span></code></pre>
+<!-- endSnippet -->
+<h2 id="conclusion">Conclusion</h2>
+<p>Template expressions are a powerful feature. Curiously, despite GitHub Actions having many similarities to Azure Pipelines, this is one aspect that they didn’t port over.</p>
+<p>Often I see custom conditions being used where template expressions would be a better fit. It’s worth considering if using them more could simplify and improve your pipelines.</p>
+    
+
+  <div id="disqus_thread"></div>
+<script>(function(){const url = "https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression.html";
+const embed = "https://davidgardiner.disqus.com/embed.js";
+
+  if (url)
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = url;
+    };
+  if (!window.DisqusWidget) {
+    window.DisqusWidget = {
+      overwriteGlobalSelectors: function () {
+        window.$disqus = document.querySelector("#disqus_thread");
+      },
+      init: function () {
+        this.overwriteGlobalSelectors();
+        this.addListeners();
+        this.initDisqus();
+      },
+      addListeners: function () {
+        document.addEventListener("astro:page-load", () => {
+          console.log("astro:page-load");
+          this.overwriteGlobalSelectors();
+          this.initDisqus();
+        });
+      },
+      initDisqus: () => {
+        if (window.$disqus === null) {
+          return;
+        }
+
+        if (window.DISQUS) {
+          window.DISQUS.reset({
+            reload: true,
+          });
+          return;
+        }
+
+        (function () {
+          const d = document,
+            s = d.createElement("script");
+          s.src = embed;
+          s.setAttribute("data-timestamp", String(+new Date()));
+          (d.head || d.body).appendChild(s);
+        })();
+      },
+    };
+
+    window.DisqusWidget.init();
+  }
+})();</script>
+
+    </main>
+    <footer data-astro-cid-sz7xmlte>
+    <ul class="social-media-list" data-astro-cid-sz7xmlte>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://feeds.feedburner.com/DavesDaydreams" title="RSS Feed" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="square-rss" class="svg-inline--fa fa-square-rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM96 136c0-13.3 10.7-24 24-24c137 0 248 111 248 248c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-110.5-89.5-200-200-200c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24c83.9 0 152 68.1 152 152c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-57.4-46.6-104-104-104c-13.3 0-24-10.7-24-24zm0 120a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg></a></li>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://github.com/flcdrg" title="GitHub" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github" class="svg-inline--fa fa-github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg></a></li>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://www.linkedin.com/in/davidrgardiner/" title="LinkedIn. Do not try to connect with me if I don't know you" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="linkedin" class="svg-inline--fa fa-linkedin" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg></a></li>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://stackoverflow.com/users/25702/david-gardiner" title="Stack Overflow" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="stack-overflow" class="svg-inline--fa fa-stack-overflow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path></svg></a></li>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://mastodon.online/@DavidRGardiner" title="Mastodon" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="mastodon" class="svg-inline--fa fa-mastodon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"></path></svg></a></li>
+      <li data-astro-cid-sz7xmlte><a rel="me" href="https://bsky.app/profile/david.gardiner.net.au" title="Bluesky" data-astro-cid-sz7xmlte><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="bluesky" class="svg-inline--fa fa-bluesky" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M111.8 62.2C170.2 105.9 233 194.7 256 242.4c23-47.6 85.8-136.4 144.2-180.2c42.1-31.6 110.3-56 110.3 21.8c0 15.5-8.9 130.5-14.1 149.2C478.2 298 412 314.6 353.1 304.5c102.9 17.5 129.1 75.5 72.5 133.5c-107.4 110.2-154.3-27.6-166.3-62.9l0 0c-1.7-4.9-2.6-7.8-3.3-7.8s-1.6 3-3.3 7.8l0 0c-12 35.3-59 173.1-166.3 62.9c-56.5-58-30.4-116 72.5-133.5C100 314.6 33.8 298 15.7 233.1C10.4 214.4 1.5 99.4 1.5 83.9c0-77.8 68.2-53.4 110.3-21.8z"></path></svg></a></li>
+    </ul>
+
+    <div class="centered-content" data-astro-cid-sz7xmlte>
+      <div class="mvp-logo" data-astro-cid-sz7xmlte>
+        <a href="https://mvp.microsoft.com/en-US/MVP/profile/04080298-ff57-e511-8102-fc15b4282e38" data-astro-cid-sz7xmlte><picture data-astro-cid-sz7xmlte="true">
+	<source srcset="/_astro/MVP_Logo_Horizontal_Preferred_Cyan300_RGB_300ppi.a-4xiaYx_ZAfPxg.webp" type="image/webp">
+	
+	<img src="/_astro/MVP_Logo_Horizontal_Preferred_Cyan300_RGB_300ppi.a-4xiaYx_2bYEEr.png" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" fetchpriority="auto" width="300" height="121">
+</picture></a>
+      </div>
+
+      <div id="copyright" data-astro-cid-sz7xmlte>
+        <p xmlns:cc='http://creativecommons.org/ns#' xmlns:dct='http://purl.org/dc/terms/'>&copy; David Gardiner. <a property='dct:title' rel='cc:attributionURL' href='https://david.gardiner.net.au'>This blog</a> by <a rel='cc:attributionURL dct:creator' property='cc:attributionName' href='https://david.gardiner.net.au/about'>David Gardiner</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1' target='_blank' rel='license noopener noreferrer' style='display:inline-block;'>CC BY-NC-SA 4.0<img style='height:22px!important;margin-left:3px;vertical-align:text-bottom;' src='https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1' alt='' height="22" width="22"><img style='height:22px!important;margin-left:3px;vertical-align:text-bottom;' src='https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1' alt='' height="22" width="22"><img style='height:22px!important;margin-left:3px;vertical-align:text-bottom;' src='https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1' alt='' height="22" width="22"><img style='height:22px!important;margin-left:3px;vertical-align:text-bottom;' src='https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1' alt='' height="22" width="22"></a></p>  
+      </div>
+    </div>
+</footer>
+  </body></html>
