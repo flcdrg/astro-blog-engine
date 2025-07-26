@@ -8,10 +8,10 @@
     <link rel="canonical" href="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression">
     <meta name="description" content="Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
 and see some common examples of their usage."><meta name="og:description" content="Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
-and see some common examples of their usage."><meta name="og:title" content="Azure Pipelines template expressions"><meta name="og:type" content="article"><meta name="og:url" content="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"><meta name="og:image" content="/_astro/azure-pipelines-logo.B45UakAg.png"><meta name="og:image:width" content="80"><meta name="og:image:height" content="80"><meta name="og:image:alt" content="Azure Pipelines logo"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"},"headline":"Azure Pipelines template expressions","description":"Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions\nand see some common examples of their usage.","image":"/_astro/azure-pipelines-logo.B45UakAg.png","author":{"@type":"Person","name":"David Gardiner","url":"https://david.gardiner.net.au/"},"datePublished":"2025-07-14T08:00:00.000+09:30"}</script>
+and see some common examples of their usage."><meta name="og:title" content="Azure Pipelines template expressions"><meta name="og:type" content="article"><meta name="og:url" content="https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"><meta name="og:image" content="STRING_0"><meta name="og:image:width" content="80"><meta name="og:image:height" content="80"><meta name="og:image:alt" content="Azure Pipelines logo"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression"},"headline":"Azure Pipelines template expressions","description":"Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions\nand see some common examples of their usage.","image":"STRING_0","author":{"@type":"Person","name":"David Gardiner","url":"https://david.gardiner.net.au/"},"datePublished":"2025-07-14T08:00:00.000+09:30"}</script>
     <title>Azure Pipelines template expressions</title>
     
-  <link rel="stylesheet" href="/_astro/_slug_.CT3ttAlr.css"></head>
+  <link rel="stylesheet" href="STRING_1"></head>
   <body>
     <header>
       <nav>
@@ -110,12 +110,13 @@ and see some common examples of their usage.</em></p>
 
   
       <p>In my <a href="/2025/06/azure-pipeline-conditionals">last post</a> I wrote about using custom conditions in Azure Pipelines to evaluate whether to skip a step, job or stage at runtime.</p>
+<p><img alt="Azure Pipelines logo" loading="lazy" decoding="async" fetchpriority="auto" width="80" height="80" src="STRING_2" ></p>
 <p>Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can’t do with runtime custom conditions).</p>
 <p>The important thing to remember is that template expression are a “compile time” feature. They can only operate on things that are available at compile time. <a href="https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Variables set by scripts</a>, and <a href="https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&#x26;tabs=yaml%2Cbatch&#x26;WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks">task output variables</a> are two examples of things that are not available at compile time.</p>
 <p>Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the ‘Publish Artifact’ step is executed or not. Notice the ‘Publish Artifact’ step is listed, but the icon shown is a white arrow (rather than green tick)
-<img alt="Job showing a step &amp;#x27;Publish Artifact&amp;#x27; that was conditionally not executed" loading="lazy" decoding="async" fetchpriority="auto" width="388" height="398" src="/_astro/azure-pipelines-custom-conditions.Be6IaBQz_101Uki.webp" ></p>
+<img alt="Job showing a step &amp;#x27;Publish Artifact&amp;#x27; that was conditionally not executed" loading="lazy" decoding="async" fetchpriority="auto" width="388" height="398" src="STRING_3" ></p>
 <p>If we use a template expression, then if it evaluates to false then the step is not even included in the job!</p>
-<p><img alt="Job without a &amp;#x27;Publish Artifact&amp;#x27; step " loading="lazy" decoding="async" fetchpriority="auto" width="379" height="347" src="/_astro/azure-pipelines-template-expressions.kRV13og-_2f5chf.webp" ></p>
+<p><img alt="Job without a &amp;#x27;Publish Artifact&amp;#x27; step " loading="lazy" decoding="async" fetchpriority="auto" width="379" height="347" src="STRING_4" ></p>
 <p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Template expressions</a> use the syntax <code>${{ }}</code></p>
 <p>You can reference <code>parameters</code> and <code>variables</code> in template expressions. The latter are only variables that are defined in the YAML file and most of the <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">predefined variables</a>. (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)</p>
 <p>You can’t reference variables that are created by scripts or anything else that is only available at runtime.</p>
@@ -253,9 +254,9 @@ const embed = "https://davidgardiner.disqus.com/embed.js";
     <div class="centered-content" data-astro-cid-sz7xmlte>
       <div class="mvp-logo" data-astro-cid-sz7xmlte>
         <a href="https://mvp.microsoft.com/en-US/MVP/profile/04080298-ff57-e511-8102-fc15b4282e38" data-astro-cid-sz7xmlte><picture data-astro-cid-sz7xmlte="true">
-	<source srcset="/_astro/MVP_Logo_Horizontal_Preferred_Cyan300_RGB_300ppi.a-4xiaYx_ZAfPxg.webp" type="image/webp">
+	<source srcset="STRING_5" type="image/webp">
 	
-	<img src="/_astro/MVP_Logo_Horizontal_Preferred_Cyan300_RGB_300ppi.a-4xiaYx_2bYEEr.png" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" fetchpriority="auto" width="300" height="121">
+	<img src="STRING_6" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" fetchpriority="auto" width="300" height="121">
 </picture></a>
       </div>
 
