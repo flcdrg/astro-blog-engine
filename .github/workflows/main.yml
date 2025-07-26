@@ -116,7 +116,7 @@ jobs:
       - name: Diff post if error
         if: failure()
         run: |
-          diff -u dist/2025/07/azure-pipeline-template-expression.html verified/azure-pipeline-template-expression.html.verified.html
+          diff -u verified/azure-pipeline-template-expression.html.received.html verified/azure-pipeline-template-expression.html.verified.html
 
       # dist as artifact
       - name: Upload dist as artifact
