@@ -110,13 +110,12 @@ and see some common examples of their usage.</em></p>
 
   
       <p>In my <a href="/2025/06/azure-pipeline-conditionals">last post</a> I wrote about using custom conditions in Azure Pipelines to evaluate whether to skip a step, job or stage at runtime.</p>
-<p><img alt="Azure Pipelines logo" loading="lazy" decoding="async" fetchpriority="auto" width="80" height="80" src="STRING_2" ></p>
 <p>Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can’t do with runtime custom conditions).</p>
 <p>The important thing to remember is that template expression are a “compile time” feature. They can only operate on things that are available at compile time. <a href="https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Variables set by scripts</a>, and <a href="https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&#x26;tabs=yaml%2Cbatch&#x26;WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks">task output variables</a> are two examples of things that are not available at compile time.</p>
 <p>Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the ‘Publish Artifact’ step is executed or not. Notice the ‘Publish Artifact’ step is listed, but the icon shown is a white arrow (rather than green tick)
-<img alt="Job showing a step &amp;#x27;Publish Artifact&amp;#x27; that was conditionally not executed" loading="lazy" decoding="async" fetchpriority="auto" width="388" height="398" src="STRING_3" ></p>
+<img alt="Job showing a step &amp;#x27;Publish Artifact&amp;#x27; that was conditionally not executed" loading="lazy" decoding="async" fetchpriority="auto" width="388" height="398" src="STRING_2" ></p>
 <p>If we use a template expression, then if it evaluates to false then the step is not even included in the job!</p>
-<p><img alt="Job without a &amp;#x27;Publish Artifact&amp;#x27; step " loading="lazy" decoding="async" fetchpriority="auto" width="379" height="347" src="STRING_4" ></p>
+<p><img alt="Job without a &amp;#x27;Publish Artifact&amp;#x27; step " loading="lazy" decoding="async" fetchpriority="auto" width="379" height="347" src="STRING_3" ></p>
 <p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">Template expressions</a> use the syntax <code>${{ }}</code></p>
 <p>You can reference <code>parameters</code> and <code>variables</code> in template expressions. The latter are only variables that are defined in the YAML file and most of the <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&#x26;WT.mc_id=DOP-MVP-5001655">predefined variables</a>. (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)</p>
 <p>You can’t reference variables that are created by scripts or anything else that is only available at runtime.</p>
@@ -254,9 +253,9 @@ const embed = "https://davidgardiner.disqus.com/embed.js";
     <div class="centered-content" data-astro-cid-sz7xmlte>
       <div class="mvp-logo" data-astro-cid-sz7xmlte>
         <a href="https://mvp.microsoft.com/en-US/MVP/profile/04080298-ff57-e511-8102-fc15b4282e38" data-astro-cid-sz7xmlte><picture data-astro-cid-sz7xmlte="true">
-	<source srcset="STRING_5" type="image/webp">
+	<source srcset="STRING_4" type="image/webp">
 	
-	<img src="STRING_6" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" fetchpriority="auto" width="300" height="121">
+	<img src="STRING_5" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" fetchpriority="auto" width="300" height="121">
 </picture></a>
       </div>
 
