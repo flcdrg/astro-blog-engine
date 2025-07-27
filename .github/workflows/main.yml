@@ -111,7 +111,7 @@ jobs:
           diff -u dist/feed.xml verified/feed.xml.verified.xml
 
       - name: Verify post
-        run: verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")'
+        run: verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"'
 
       - name: Diff post if error
         if: failure()
