@@ -93,6 +93,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: pnpm build
 
+      # snippet: verify-cli-use-with-dotnet-tool
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -104,14 +105,17 @@ jobs:
       - name: Verify
         run: |
           verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
-
+      # endSnippet
+      # snippet: verify-cli-diff-in-ci
       - name: Diff files if error
         if: failure()
         run: |
           diff -u dist/feed.xml verified/feed.xml.verified.xml
-
+      # endSnippet
+      # snippet: verify-cli-use-with-docker
       - name: Verify post
-        run: verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"'
+        run: docker run --rm -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --verbosity detailed
+      # endSnippet
 
       - name: Diff post if error
         if: failure()
