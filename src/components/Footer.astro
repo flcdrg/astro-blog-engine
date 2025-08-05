@@ -3,16 +3,16 @@
 // Font Awesome
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
 import { faStackOverflow, faGithub, faLinkedin, faMastodon, faBluesky } from "@fortawesome/free-brands-svg-icons";
-import { faRssSquare } from "@fortawesome/free-solid-svg-icons";
+import { faSquareRss } from "@fortawesome/free-solid-svg-icons";
 import { Picture } from "astro:assets";
 
 import MVPLogo from "../assets/MVP_Logo_Horizontal_Preferred_Cyan300_RGB_300ppi.png";
 
 // Declare all the icons you plan on using
-library.add(faRssSquare, faStackOverflow, faGithub, faLinkedin, faMastodon, faBluesky);
+library.add(faSquareRss, faStackOverflow, faGithub, faLinkedin, faMastodon, faBluesky);
 
 // Instantiate the icon with the icon function
-const rssIcon = icon({ prefix: "fas", iconName: faRssSquare.iconName });
+const rssIcon = icon({ prefix: "fas", iconName: faSquareRss.iconName });
 const stackOverflowIcon = icon({ prefix: "fab", iconName: faStackOverflow.iconName });
 const githubIcon = icon({ prefix: "fab", iconName: faGithub.iconName });
 const linkedinIcon = icon({ prefix: "fab", iconName: faLinkedin.iconName });
