@@ -120,6 +120,8 @@ jobs:
       - name: Diff post if error
         if: failure()
         run: |
+          ls -al verified/
+          echo ""
           diff -u verified/azure-pipeline-template-expression.html.received.html verified/azure-pipeline-template-expression.html.verified.html
 
       # dist as artifact
