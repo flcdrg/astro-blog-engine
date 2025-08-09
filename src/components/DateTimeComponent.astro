@@ -29,7 +29,8 @@ const locale = "en-AU",
     `${withOrdinal(date.day)} ${date.toLocaleString(newLocal)}`;
 
 const dateTime = DateTime.fromISO(date, { zone: "Australia/Adelaide" });
+const titleText = dateTime.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
+
 ---
 
-<time class={className} datetime={dateTime.toISO()}>{formatDate(dateTime)}</time
->
+<time class={className} datetime={dateTime.toISO()} title={titleText}>{formatDate(dateTime)}</time>
