@@ -114,7 +114,7 @@ jobs:
       # end-snippet
       # begin-snippet: verify-cli-use-with-docker
       - name: Verify post
-        run: docker run --rm -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --verbosity detailed
+        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --verbosity detailed
       # end-snippet
 
       - name: Diff post if error
