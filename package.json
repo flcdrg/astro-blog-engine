@@ -20,7 +20,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@types/luxon": "^3.7.1",
-    "astro": "^5.12.8",
+    "astro": "^5.12.9",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^1.0.48",
     "luxon": "^3.7.1",
