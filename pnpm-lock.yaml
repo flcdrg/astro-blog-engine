@@ -16,7 +16,7 @@ importers:
         version: 0.9.4(typescript@5.9.2)
       '@astrojs/mdx':
         specifier: ^4.3.3
-        version: 4.3.3(astro@5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1))
+        version: 4.3.3(astro@5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1))
       '@astrojs/rss':
         specifier: ^4.0.12
         version: 4.0.12
@@ -36,8 +36,8 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       astro:
-        specifier: ^5.12.8
-        version: 5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
+        specifier: ^5.12.9
+        version: 5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
       astro-disqus:
         specifier: ^1.0.1
         version: 1.0.1
@@ -875,8 +875,8 @@ packages:
   astro-disqus@1.0.1:
     resolution: {integrity: sha512-x0VAc/f8zzt09RBef4ffmqaVBEL8tS1qZBUPvuFygGkrlkz/QV1tld0oLSl+/SwgNOYOMfuXJerKiMLC1+n3WQ==}
 
-  astro@5.12.8:
-    resolution: {integrity: sha512-KkJ7FR+c2SyZYlpakm48XBiuQcRsrVtdjG5LN5an0givI/tLik+ePJ4/g3qrAVhYMjJOxBA2YgFQxANPiWB+Mw==}
+  astro@5.12.9:
+    resolution: {integrity: sha512-cZ7kZ61jyE5nwSrFKSRyf5Gds+uJELqQxJFqMkcgiWQvhWZJUSShn8Uz3yc9WLyLw5Kim5P5un9SkJSGogfEZQ==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -1876,8 +1876,8 @@ packages:
     resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
     engines: {node: '>=14.16'}
 
-  smol-toml@1.4.1:
-    resolution: {integrity: sha512-CxdwHXyYTONGHThDbq5XdwbFsuY4wlClRGejfE2NtwUtiHYsP1QtNsHb/hnj31jKYSchztJsaA8pSQoVzkfCFg==}
+  smol-toml@1.4.2:
+    resolution: {integrity: sha512-rInDH6lCNiEyn3+hH8KVGFdbjc099j47+OSgbMrfDYX1CmXLfdKd7qi6IfcWj2wFxvSVkuI46M+wPGYfEOEj6g==}
     engines: {node: '>= 18'}
 
   source-map-js@1.2.1:
@@ -2395,7 +2395,7 @@ snapshots:
       remark-rehype: 11.1.2
       remark-smartypants: 3.0.2
       shiki: 3.9.2
-      smol-toml: 1.4.1
+      smol-toml: 1.4.2
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.0.0
@@ -2404,12 +2404,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@4.3.3(astro@5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1))':
+  '@astrojs/mdx@4.3.3(astro@5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.5
       '@mdx-js/mdx': 3.1.0(acorn@8.15.0)
       acorn: 8.15.0
-      astro: 5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
+      astro: 5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
       es-module-lexer: 1.7.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -3069,7 +3069,7 @@ snapshots:
 
   astro-disqus@1.0.1: {}
 
-  astro@5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1):
+  astro@5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1):
     dependencies:
       '@astrojs/compiler': 2.12.2
       '@astrojs/internal-helpers': 0.7.1
@@ -3116,7 +3116,7 @@ snapshots:
       rehype: 13.0.2
       semver: 7.7.2
       shiki: 3.9.2
-      smol-toml: 1.4.1
+      smol-toml: 1.4.2
       tinyexec: 0.3.2
       tinyglobby: 0.2.14
       tsconfck: 3.1.6(typescript@5.9.2)
@@ -3172,7 +3172,7 @@ snapshots:
 
   astrojs-atom@1.0.48(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1):
     dependencies:
-      astro: 5.12.8(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
+      astro: 5.12.9(@netlify/blobs@8.2.0)(@types/node@24.2.1)(jiti@2.4.2)(rollup@4.46.2)(typescript@5.9.2)(yaml@2.8.1)
       fast-xml-parser: 5.2.5
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -4713,7 +4713,7 @@ snapshots:
 
   slash@5.1.0: {}
 
-  smol-toml@1.4.1: {}
+  smol-toml@1.4.2: {}
 
   source-map-js@1.2.1: {}
 
