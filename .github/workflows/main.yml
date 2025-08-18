@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
@@ -51,7 +51,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm cache
         uses: actions/cache@v4
@@ -259,7 +259,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
@@ -365,7 +365,7 @@ jobs:
     name: Link Checker
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Cache lychee results (e.g. to avoid hitting rate limits)
       - name: Restore lychee cache
