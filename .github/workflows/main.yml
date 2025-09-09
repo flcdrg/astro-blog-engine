@@ -38,6 +38,9 @@ jobs:
         with:
           node-version: 22.x
 
+      - run: pnpm install
+        name: Install dependencies
+
       - run: pnpm run validate-frontmatter
         name: Check front matter
 
