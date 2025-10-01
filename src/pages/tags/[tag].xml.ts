@@ -3,8 +3,8 @@ import type { AtomEntry } from "astrojs-atom";
 import { getCollection } from "astro:content";
 import sanitizeHtml from "sanitize-html";
 import type { APIContext } from "astro";
-import getExcerpt from "../../../scripts/getExcerpt";
-import onlyCurrent from "../../../scripts/filters";
+import getExcerpt from "../../scripts/getExcerpt";
+import onlyCurrent from "../../scripts/filters";
 import { parse as htmlParser } from "node-html-parser";
 import { getImage } from "astro:assets";
 import { marked } from "marked";
@@ -59,7 +59,7 @@ export async function GET(context: APIContext) {
     const body = await marked.parse(post.body!);
 
     // convert html string to DOM-like structure
-    const html = htmlParser.parse(body, { comment: false});
+    const html = htmlParser.parse(body, { comment: false });
     // hold all img tags in variable images
     const images = html.querySelectorAll("img");
 
@@ -132,7 +132,7 @@ export async function GET(context: APIContext) {
     });
   }
 
-  const atomFeedUrl = `${siteUrl}tags/${tag}/feed.xml`;
+  const atomFeedUrl = `${siteUrl}${tag}.xml`;
 
   return atom({
     id: atomFeedUrl,

@@ -38,20 +38,22 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { tag } = Astro.params as Params;
 const { posts } = Astro.props as Props;
 
-const feedUrl = `/tags/${tag}/feed.xml`;
+const feedUrl = `/tags/${tag}.xml`;
 ---
 
 <BaseLayout pageTitle={tag}>
-  <link rel="alternate" type="application/atom+xml" title={`RSS Feed for posts tagged '${tag}'`} href={feedUrl} slot="head" />
-  
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title={`RSS Feed for posts tagged '${tag}'`}
+    href={feedUrl}
+    slot="head"
+  />
+
   <h1>{tag}</h1>
 
   <p>Posts tagged with '{tag}'</p>
-  
-  <p>
-    <a href={feedUrl} title={`RSS Feed for posts tagged '${tag}'`}>RSS Feed</a> to subscribe to blog posts with this tag
-  </p>
-  
+
   <ul>
     {
       posts.map((post: any) => (
@@ -62,4 +64,11 @@ const feedUrl = `/tags/${tag}/feed.xml`;
       ))
     }
   </ul>
+
+  <p>
+    Subscribe to blog posts tagged with '{tag}' using <a
+      href={feedUrl}
+      title={`RSS Feed for posts tagged '${tag}'`}>this RSS Feed</a
+    >
+  </p>
 </BaseLayout>
