@@ -24,7 +24,7 @@
     "@types/luxon": "^3.7.1",
     "astro": "^5.14.3",
     "astro-disqus": "^1.0.1",
-    "astrojs-atom": "^1.0.48",
+    "astrojs-atom": "^1.0.128",
     "luxon": "^3.7.2",
     "marked": "^16.3.0",
     "node-html-parser": "^7.0.1",
