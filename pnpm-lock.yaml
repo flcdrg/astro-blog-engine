@@ -43,8 +43,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       astrojs-atom:
-        specifier: ^1.0.48
-        version: 1.0.48(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
+        specifier: ^1.0.128
+        version: 1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -806,8 +806,8 @@ packages:
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
-  astrojs-atom@1.0.48:
-    resolution: {integrity: sha512-Vz4OOnLq44FF2IOHLy+MkB4zx9eakqbSQf3Y8Oo9yuRaXS3cfSkNjgyJi+kR4scf/k23eIu5m4FuwNbb/mYZ2Q==}
+  astrojs-atom@1.0.128:
+    resolution: {integrity: sha512-RoPrbl1C0l4ALMegBrHifP6ieXfesj860PWSckGluUqvVI6pN4nDP31Zs6RjPp7whKQC+BBhaqoMlk8cmZhnkw==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -1081,6 +1081,10 @@ packages:
 
   fast-xml-parser@5.2.5:
     resolution: {integrity: sha512-pfX9uG9Ki0yekDHx2SiuRIyFdyAr1kMIMitPvb0YBo8SUfKvia7w7FIyd/l6av85pFYRhZscS75MwMnbvY+hcQ==}
+    hasBin: true
+
+  fast-xml-parser@5.3.0:
+    resolution: {integrity: sha512-gkWGshjYcQCF+6qtlrqBqELqNqnt4CxruY6UVAWWnqb3DQ6qaNFEIKqzYep1XzHLM/QtrHVCxyPOtTk4LTQ7Aw==}
     hasBin: true
 
   fastq@1.19.1:
@@ -3034,10 +3038,10 @@ snapshots:
       - uploadthing
       - yaml
 
-  astrojs-atom@1.0.48(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
+  astrojs-atom@1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
     dependencies:
       astro: 5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
-      fast-xml-parser: 5.2.5
+      fast-xml-parser: 5.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -3343,6 +3347,10 @@ snapshots:
   fast-uri@3.0.6: {}
 
   fast-xml-parser@5.2.5:
+    dependencies:
+      strnum: 2.1.1
+
+  fast-xml-parser@5.3.0:
     dependencies:
       strnum: 2.1.1
 
