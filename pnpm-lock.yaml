@@ -17,7 +17,7 @@ importers:
         version: 0.9.4(typescript@5.9.3)
       '@astrojs/mdx':
         specifier: ^4.3.6
-        version: 4.3.6(astro@5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))
+        version: 4.3.6(astro@5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))
       '@astrojs/rss':
         specifier: ^4.0.12
         version: 4.0.12
@@ -37,14 +37,14 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       astro:
-        specifier: ^5.14.3
-        version: 5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
+        specifier: ^5.14.4
+        version: 5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
       astro-disqus:
         specifier: ^1.0.1
         version: 1.0.1
       astrojs-atom:
         specifier: ^1.0.128
-        version: 1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
+        version: 1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -701,8 +701,8 @@ packages:
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
 
-  '@types/node@24.7.1':
-    resolution: {integrity: sha512-CmyhGZanP88uuC5GpWU9q+fI61j2SkhO3UGMUdfYRE6Bcy0ccyzn1Rqj9YAB/ZY4kOXmNf0ocah5GtphmLMP6Q==}
+  '@types/node@24.7.2':
+    resolution: {integrity: sha512-/NbVmcGTP+lj5oa4yiYxxeBjRivKQ5Ns1eSZeB99ExsEQ6rX5XYU1Zy/gGxY/ilqtD4Etx9mKyrPxZRetiahhA==}
 
   '@types/sanitize-html@2.16.0':
     resolution: {integrity: sha512-l6rX1MUXje5ztPT0cAFtUayXF06DqPhRyfVXareEN5gGCFaP/iwsxIyKODr9XDhfxPpN6vXUFNfo5kZMXCxBtw==}
@@ -801,8 +801,8 @@ packages:
   astro-disqus@1.0.1:
     resolution: {integrity: sha512-x0VAc/f8zzt09RBef4ffmqaVBEL8tS1qZBUPvuFygGkrlkz/QV1tld0oLSl+/SwgNOYOMfuXJerKiMLC1+n3WQ==}
 
-  astro@5.14.3:
-    resolution: {integrity: sha512-iRvl3eEYYdSYA195eNREjh43hqMMwKY1uoHYiKfLCB9G+bjFtaBtDe8R0ip7AbTD69wyOKgUCOtMad+lkOnT/w==}
+  astro@5.14.4:
+    resolution: {integrity: sha512-yqgMAO2Whi9GmZkByyiPcG7CiiPr0Me0iBSorMa6M0g+wQk/ewnIqUyr7T/uFCPTQndoKwucnYFTrf0yfb0urw==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -2337,12 +2337,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@4.3.6(astro@5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))':
+  '@astrojs/mdx@4.3.6(astro@5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.7
       '@mdx-js/mdx': 3.1.1
       acorn: 8.15.0
-      astro: 5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
+      astro: 5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
       es-module-lexer: 1.7.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -2788,7 +2788,7 @@ snapshots:
 
   '@types/fontkit@2.0.8':
     dependencies:
-      '@types/node': 24.7.1
+      '@types/node': 24.7.2
 
   '@types/hast@3.0.4':
     dependencies:
@@ -2825,7 +2825,7 @@ snapshots:
     dependencies:
       undici-types: 7.12.0
 
-  '@types/node@24.7.1':
+  '@types/node@24.7.2':
     dependencies:
       undici-types: 7.14.0
 
@@ -2937,7 +2937,7 @@ snapshots:
 
   astro-disqus@1.0.1: {}
 
-  astro@5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
+  astro@5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
     dependencies:
       '@astrojs/compiler': 2.13.0
       '@astrojs/internal-helpers': 0.7.4
@@ -2993,8 +2993,8 @@ snapshots:
       unist-util-visit: 5.0.0
       unstorage: 1.17.1(@netlify/blobs@8.2.0)
       vfile: 6.0.3
-      vite: 6.3.6(@types/node@24.7.1)(jiti@2.4.2)(yaml@2.8.1)
-      vitefu: 1.1.1(vite@6.3.6(@types/node@24.7.1)(jiti@2.4.2)(yaml@2.8.1))
+      vite: 6.3.6(@types/node@24.7.2)(jiti@2.4.2)(yaml@2.8.1)
+      vitefu: 1.1.1(vite@6.3.6(@types/node@24.7.2)(jiti@2.4.2)(yaml@2.8.1))
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
       yocto-spinner: 0.2.3
@@ -3038,9 +3038,9 @@ snapshots:
       - uploadthing
       - yaml
 
-  astrojs-atom@1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
+  astrojs-atom@1.0.128(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1):
     dependencies:
-      astro: 5.14.3(@netlify/blobs@8.2.0)(@types/node@24.7.1)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
+      astro: 5.14.4(@netlify/blobs@8.2.0)(@types/node@24.7.2)(jiti@2.4.2)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1)
       fast-xml-parser: 5.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -4728,7 +4728,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@6.3.6(@types/node@24.7.1)(jiti@2.4.2)(yaml@2.8.1):
+  vite@6.3.6(@types/node@24.7.2)(jiti@2.4.2)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.10
       fdir: 6.5.0(picomatch@4.0.3)
@@ -4737,14 +4737,14 @@ snapshots:
       rollup: 4.52.4
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.7.1
+      '@types/node': 24.7.2
       fsevents: 2.3.3
       jiti: 2.4.2
       yaml: 2.8.1
 
-  vitefu@1.1.1(vite@6.3.6(@types/node@24.7.1)(jiti@2.4.2)(yaml@2.8.1)):
+  vitefu@1.1.1(vite@6.3.6(@types/node@24.7.2)(jiti@2.4.2)(yaml@2.8.1)):
     optionalDependencies:
-      vite: 6.3.6(@types/node@24.7.1)(jiti@2.4.2)(yaml@2.8.1)
+      vite: 6.3.6(@types/node@24.7.2)(jiti@2.4.2)(yaml@2.8.1)
 
   volar-service-css@0.0.62(@volar/language-service@2.4.22):
     dependencies:
