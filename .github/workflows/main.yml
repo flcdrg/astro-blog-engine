@@ -129,14 +129,14 @@ jobs:
 
       # dist as artifact
       - name: Upload dist as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist
           path: dist
           include-hidden-files: true # otherwise .NET.html doesn't get included!
 
       - name: Upload wrangler.jsonc
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: wrangler.jsonc
           path: wrangler.jsonc
@@ -414,7 +414,7 @@ jobs:
         shell: pwsh
 
       - name: Publish results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: link-checker-results
           path: output.*
