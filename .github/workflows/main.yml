@@ -163,13 +163,13 @@ jobs:
           version: 10.x
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
 
       - name: Download wrangler.jsonc
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: wrangler.jsonc
           path: .
@@ -206,13 +206,13 @@ jobs:
           version: 10.x
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
 
       - name: Download wrangler.jsonc
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: wrangler.jsonc
           path: .
@@ -272,7 +272,7 @@ jobs:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
@@ -387,7 +387,7 @@ jobs:
           restore-keys: cache-lychee-
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dist
           path: dist
