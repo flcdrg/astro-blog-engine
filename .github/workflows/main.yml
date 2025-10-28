@@ -182,7 +182,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: 4.43.0 # https://github.com/cloudflare/workers-sdk/releases
+          wranglerVersion: 4.45.0 # https://github.com/cloudflare/workers-sdk/releases
 
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
@@ -225,7 +225,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: 4.43.0
+          wranglerVersion: 4.45.0
 
       - name: Output variables
         run: echo $OUTPUTS
