@@ -14,7 +14,7 @@
     "lint:fix": "markdownlint-cli2 --fix"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "^4.3.9",
     "@astrojs/sitemap": "3.6.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
