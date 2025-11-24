@@ -14,7 +14,7 @@ jobs:
     name: Generate Wayback Links PR
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Download Latest Artifact
         uses: dawidd6/action-download-artifact@v11
