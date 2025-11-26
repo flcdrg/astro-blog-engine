@@ -5,7 +5,7 @@ tags:
 - Blogging
 ---
 
-Next month will mark the 20th year that I've been blogging. I started off in 2005 using Blogger, then in [2019 I migrated to Jekyll on GitHub Pages](/2019/2019-06-11-migrating-from-blogger).
+Next month will mark the 20th year that I've been blogging. I started off in 2005 using Blogger, then in [2019 I migrated to Jekyll on GitHub Pages](/2019/06/migrating-from-blogger).
 I gained a lot more control over how how my blog is rendered to HTML, but one thing has always bothered me - I really don't understand [Jekyll](https://jekyllrb.com/)/Liquid/Ruby as well as I'd like, to be able to make customisations confidently.
 
 Adopting a blog engine that uses a programming language that I have more experience with would go a long way to solving that. And that effectively narrows things down to C# and JavaScript/TypeScript.
