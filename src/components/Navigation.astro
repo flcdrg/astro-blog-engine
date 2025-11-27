@@ -74,9 +74,13 @@ import SiteTitle from "./SiteTitle.astro";
       width: 100%;
       margin-top: 1rem;
       padding: 1rem 0;
-      background-color: var(--bg-color, #fff);
+      background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    :global(.dark) .nav-links {
+      background-color: #1a1a1a;
     }
 
     /* Show nav links when active class is present */

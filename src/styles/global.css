@@ -185,7 +185,7 @@ p {
 .dark .tag {
   background-color: #1a1a1a; /* Dark mode tag background color */
   border-color: #5a5959; /* Dark mode tag border color */
-  color: #e8e8e8; /* Dark mode tag text color */
+  color: #f0f0f0; /* Dark mode tag text color - improved contrast */
 }
 
 .dark .site-subtitle {
