@@ -10,7 +10,7 @@ _Part 4 in a series on new language features in C# 12._
 
 ![C# logo](../../assets/2024/03/logo_csharp.png)
 
-### Default lambda parameters
+## Default lambda parameters
 
 A pretty simple addition to the language - you can now provide default values for lambda expression parameters.
 
@@ -22,10 +22,10 @@ In the lambda defined above, if you don't supply the `increment` parameter, it d
 
 Again, interesting, but I've not come across a need to use this yet.
 
-#### Further reading
+### Further reading
 
 [https://learn.microsoft.com/dotnet/csharp/language-reference/operators/lambda-expressions?WT.mc_id=DOP-MVP-5001655#input-parameters-of-a-lambda-expression](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/lambda-expressions?WT.mc_id=DOP-MVP-5001655#input-parameters-of-a-lambda-expression)
 
-#### Example source
+### Example source
 
 [https://github.com/flcdrg/csharp-12/blob/main/04-optional-params-lambda/LambdaParameters.cs](https://github.com/flcdrg/csharp-12/blob/main/04-optional-params-lambda/LambdaParameters.cs)

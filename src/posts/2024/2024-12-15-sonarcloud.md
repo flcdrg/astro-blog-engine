@@ -16,7 +16,7 @@ This process is quite similar if you're using the self-hosted SonarQube Server p
 
 A sample project can be found at [https://dev.azure.com/gardiner/SonarCloudDemo](https://dev.azure.com/gardiner/SonarCloudDemo)
 
-### Prerequisites
+## Prerequisites
 
 - You have a SonarQube Cloud account.
 - You've configured it to be integrated with your Azure DevOps organisation.
@@ -71,7 +71,7 @@ In the pipeline task, you can let SonarQube know where the file is by setting `s
 
 ```
 
-### SonarQube and Azure Pipelines coverage
+## SonarQube and Azure Pipelines coverage
 
 So now we've solved the problem of where the coverage file will be saved. Can we also deliver the coverage data to both SonarQube *and* Azure Pipelines?
 

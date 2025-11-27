@@ -15,7 +15,7 @@ In theory, I'd like to reinstall my laptop regularly - say every couple of month
 
 If you use the built in [Windows Reset feature](https://support.microsoft.com/en-au/windows/reset-your-pc-0ef73740-b927-549b-b7c9-e6f2b48d275e), then it's been my observation that this seems to preserve not only any OEM drivers, but also any OEM bloatware too. I was interested in the idea of installing a 'vanilla' Windows OS, with just the OEM drivers, but no bloat. And while I'm at it, can I automate a few of the other installation steps?
 
-### Step 0. Partition your disk
+## Step 0. Partition your disk
 
 If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.
 
@@ -23,7 +23,7 @@ In my case, I partitioned my SSD to have D: as my [Dev Drive](https://learn.micr
 
 Having a full system backup is another great idea. Knowing that if something goes wrong and you have a way to restore your system back to how it was before you started it process is reassuring. I take advantage of [Synology Active Backup for Business](https://www.synology.com/en-global/dsm/feature/active-backup-business/pc) to take full backups of my machines, as well as taking using OneDrive for storing other important files and documents.
 
-### Step 1. Create a bootable Windows USB drive
+## Step 1. Create a bootable Windows USB drive
 
 Head over to <https://www.microsoft.com/en-au/software-download/windows11> and follow the steps to download the Windows 11 ISO image.
 
@@ -31,14 +31,14 @@ Next, get [Rufus](https://rufus.ie/en/) and use that to create a bootable USB dr
 
 Why do this instead of using Microsoft's Media Creator Tool? The results are similar, but the tool creates a `sources\install.esd` file. If you create a bootable USB from the ISO, then the file created is `sources\install.wim`. Yes, it is possible to convert an `.esd` to `.wim`, but this way you don't need to bother, and your USB is formatted in a way it can fit larger files.
 
-### Step 2. Create a working directory
+## Step 2. Create a working directory
 
 ```powershell
 mkdir c:\MachineImaging
 cd c:\MachineImaging
 ```
 
-### Step 3. Mount the .WIM file
+## Step 3. Mount the .WIM file
 
 The Windows Image .WIM file is a special file format that can contain one or more Windows images. There's a tool built in to Windows - `DISM.EXE` that is used for working with .WIM files. Conveniently, there's also a [Dism PowerShell module](https://learn.microsoft.com/powershell/module/dism/?view=windowsserver2025-ps&WT.mc_id=DOP-MVP-5001655) with equivalent cmdlets. I find these a bit friendlier to use, as you get parameter completion etc.
 
@@ -121,7 +121,7 @@ For good measure, we'll keep a 'known good version' copy, so that if we discover
 Copy-Item install.wim knowngood.wim
 ```
 
-### Step 4. Add drivers
+## Step 4. Add drivers
 
 I should point out that I originally was following the instructions outlined in [this post](https://web.archive.org/web/20250423213648/https://www.tenforums.com/tutorials/95008-dism-add-remove-drivers-offline-image.html). Those instructions cover how to capture the currently installed drivers on a machine, exporting them out, and then adding them to an install image. I tried this but my install hung. I'm not really sure why - probably one of the drivers wasn't happy tring to install at OS install time? I'm not sure - it should work in theory.
 
@@ -139,7 +139,7 @@ Add-WindowsDriver -Recurse -Path mount -Driver .\DeployDriverPack
 
 If you're more conservative, you could add a single driver (by removing the `-Recurse` parameter and changing the path) or just the audio drivers, and test out the image before adding more.
 
-### Step 5. Enable or disable Windows optional features
+## Step 5. Enable or disable Windows optional features
 
 You also have the ability to select which Windows features are enabled or disabled by default.
 
@@ -161,7 +161,7 @@ I also enabled `Telnet` and `NetFx4Extended-ASPNET45`
 
 Likewise you can disable features that you don't anticipate needing using `Disable-WindowsOptionalFeature`
 
-### Step 6. Copy the updated WIM back to your USB
+## Step 6. Copy the updated WIM back to your USB
 
 First we need to unmount the image:
 
@@ -177,7 +177,7 @@ Now copy this file back to the USB (assuming your bootable Windows USB drive is 
 Copy-Item install.wim E:\sources
 ```
 
-### Step 7. Extra automation with an `autounattend.xml` file
+## Step 7. Extra automation with an `autounattend.xml` file
 
 The image we've got is a good start, but we're still going to be asked lots of questions during the install. Wouldn't it be nice to have most of those pre-answered? The way to do this is to create an [`autounattend.xml` file](https://learn.microsoft.com/windows-hardware/manufacture/desktop/automate-windows-setup?view=windows-11&WT.mc_id=DOP-MVP-5001655). There are Microsoft-provided tools to do this, which are included as part of the [Windows ADK](https://learn.microsoft.com/windows-hardware/get-started/adk-install?WT.mc_id=DOP-MVP-5001655), but that's really intended for folks running large Windows networks.
 
@@ -272,7 +272,7 @@ I set the following settings:
 
 And then download the file and save it in the root of your bootable USB
 
-### Step 8. Try it out
+## Step 8. Try it out
 
 You will need to restart your target machine and get it to boot off the USB drive. For my laptop, the easiest way to do that is to hit <kbd>F12</kbd> when the Dell logo appears while powering up. You may also have to go into your BIOS/UEFI settings to disable secure boot mode and enable booting from USB. The Rufus instructions suggest that it may work without disabling secure boot mode, but I did it anyway.
 
@@ -286,7 +286,7 @@ I timed it and the entire OS install process (including unavoidable manual steps
 
 After that you're ready to install and run [Boxstarter](https://boxstarter.org/) to install all your tools and other applications. You can see my Boxstarter scripts in this [GitHub Gist](https://gist.github.com/flcdrg/87802af4c92527eb8a30).
 
-### Future plans
+## Future plans
 
 It's worth thinking about what else could be include in the custom Windows image or the autounattend.xml file, to further streamline the installation process. For example, the latest cumulative updates?
 

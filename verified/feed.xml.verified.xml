@@ -132,7 +132,7 @@ Loop expressions are a powerful technique that can be used to reduce duplication
 <li>Use conditional insertion with template expressions.</li>
 </ol>
 <p>In this post we'll look at custom conditions.</p>
-<h3>Custom conditions</h3>
+<h2>Custom conditions</h2>
 <p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/conditions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Custom conditions</a> are evaluated at runtime.</p>
 <p>Here's an example of a step with a custom condition which causes it to be skipped if the pipeline runs on a branch other than 'main':</p>
 <pre><code>- script: echo "hello world"
@@ -504,19 +504,19 @@ Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerOptions "/u
       <![CDATA[<p>In theory, I'd like to reinstall my laptop regularly - say every couple of months? In practise, it's easy to keep putting it off. One of the detractions was not just the time to re-install Windows, but also to then install all the various device drivers. So time goes by and next you realise it's been a year or longer.</p>
 <p><img src="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy_2qAahY.webp" alt="Windows 11 logo" /></p>
 <p>If you use the built in <a href="https://support.microsoft.com/en-au/windows/reset-your-pc-0ef73740-b927-549b-b7c9-e6f2b48d275e">Windows Reset feature</a>, then it's been my observation that this seems to preserve not only any OEM drivers, but also any OEM bloatware too. I was interested in the idea of installing a 'vanilla' Windows OS, with just the OEM drivers, but no bloat. And while I'm at it, can I automate a few of the other installation steps?</p>
-<h3>Step 0. Partition your disk</h3>
+<h2>Step 0. Partition your disk</h2>
 <p>If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.</p>
 <p>In my case, I partitioned my SSD to have D: as my <a href="https://learn.microsoft.com/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655">Dev Drive</a> (which uses the newer <a href="https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655">ReFS file system</a>).</p>
 <p>Having a full system backup is another great idea. Knowing that if something goes wrong and you have a way to restore your system back to how it was before you started it process is reassuring. I take advantage of <a href="https://www.synology.com/en-global/dsm/feature/active-backup-business/pc">Synology Active Backup for Business</a> to take full backups of my machines, as well as taking using OneDrive for storing other important files and documents.</p>
-<h3>Step 1. Create a bootable Windows USB drive</h3>
+<h2>Step 1. Create a bootable Windows USB drive</h2>
 <p>Head over to <a href="https://www.microsoft.com/en-au/software-download/windows11">https://www.microsoft.com/en-au/software-download/windows11</a> and follow the steps to download the Windows 11 ISO image.</p>
 <p>Next, get <a href="https://rufus.ie/en/">Rufus</a> and use that to create a bootable USB drive. You probably want to select NTFS for the format, as you will likely need to store more data than can fit in FAT32.</p>
 <p>Why do this instead of using Microsoft's Media Creator Tool? The results are similar, but the tool creates a <code>sources\install.esd</code> file. If you create a bootable USB from the ISO, then the file created is <code>sources\install.wim</code>. Yes, it is possible to convert an <code>.esd</code> to <code>.wim</code>, but this way you don't need to bother, and your USB is formatted in a way it can fit larger files.</p>
-<h3>Step 2. Create a working directory</h3>
+<h2>Step 2. Create a working directory</h2>
 <pre><code>mkdir c:\MachineImaging
 cd c:\MachineImaging
 </code></pre>
-<h3>Step 3. Mount the .WIM file</h3>
+<h2>Step 3. Mount the .WIM file</h2>
 <p>The Windows Image .WIM file is a special file format that can contain one or more Windows images. There's a tool built in to Windows - <code>DISM.EXE</code> that is used for working with .WIM files. Conveniently, there's also a <a href="https://learn.microsoft.com/powershell/module/dism/?view=windowsserver2025-ps&amp;WT.mc_id=DOP-MVP-5001655">Dism PowerShell module</a> with equivalent cmdlets. I find these a bit friendlier to use, as you get parameter completion etc.</p>
 <p>We're going to copy the .WIM file from the ISO (or bootable USB we just created), but I'm also going to extract out just the particular image index I plan to use. This will make things simpler later on.</p>
 <p>We can list all the images included in a .WIM file like this:</p>
@@ -584,7 +584,7 @@ ImageSize        : 18,698,341,519 bytes
 <p>For good measure, we'll keep a 'known good version' copy, so that if we discover our install has problems, we can roll back to the previous known good.</p>
 <pre><code>Copy-Item install.wim knowngood.wim
 </code></pre>
-<h3>Step 4. Add drivers</h3>
+<h2>Step 4. Add drivers</h2>
 <p>I should point out that I originally was following the instructions outlined in <a href="https://web.archive.org/web/20250423213648/https://www.tenforums.com/tutorials/95008-dism-add-remove-drivers-offline-image.html">this post</a>. Those instructions cover how to capture the currently installed drivers on a machine, exporting them out, and then adding them to an install image. I tried this but my install hung. I'm not really sure why - probably one of the drivers wasn't happy tring to install at OS install time? I'm not sure - it should work in theory.</p>
 <p>So instead I remembered that most OEM manufacturers not only make the latest device drivers available for their hardware, but often they also provide a 'bundle' download with all the current drivers in one .zip, intended for just this scenario.</p>
 <p>My current laptop is a Dell XPS 9530, and their Windows 11 Driver Pack is listed <a href="https://www.dell.com/support/kbdoc/en-au/000214839/xps-15-9530-windows-11-driver-pack">here</a> with a download link. It 2.8GB!</p>
@@ -593,7 +593,7 @@ ImageSize        : 18,698,341,519 bytes
 <pre><code>Add-WindowsDriver -Recurse -Path mount -Driver .\DeployDriverPack
 </code></pre>
 <p>If you're more conservative, you could add a single driver (by removing the <code>-Recurse</code> parameter and changing the path) or just the audio drivers, and test out the image before adding more.</p>
-<h3>Step 5. Enable or disable Windows optional features</h3>
+<h2>Step 5. Enable or disable Windows optional features</h2>
 <p>You also have the ability to select which Windows features are enabled or disabled by default.</p>
 <p>You can query what features are available and their current status using:</p>
 <pre><code>Get-WindowsOptionalFeature -Path mount | Sort-Object -Property FeatureName
@@ -604,7 +604,7 @@ ImageSize        : 18,698,341,519 bytes
 <p>(The <code>VirtualMachinePlatform</code> feature is used by WSL, so by ensuring it is enabled that should mean that WSL installs quicker later on)</p>
 <p>I also enabled <code>Telnet</code> and <code>NetFx4Extended-ASPNET45</code></p>
 <p>Likewise you can disable features that you don't anticipate needing using <code>Disable-WindowsOptionalFeature</code></p>
-<h3>Step 6. Copy the updated WIM back to your USB</h3>
+<h2>Step 6. Copy the updated WIM back to your USB</h2>
 <p>First we need to unmount the image:</p>
 <pre><code>Dismount-WindowsImage -Path mount -Save
 </code></pre>
@@ -612,7 +612,7 @@ ImageSize        : 18,698,341,519 bytes
 <p>Now copy this file back to the USB (assuming your bootable Windows USB drive is <code>E:</code>)</p>
 <pre><code>Copy-Item install.wim E:\sources
 </code></pre>
-<h3>Step 7. Extra automation with an <code>autounattend.xml</code> file</h3>
+<h2>Step 7. Extra automation with an <code>autounattend.xml</code> file</h2>
 <p>The image we've got is a good start, but we're still going to be asked lots of questions during the install. Wouldn't it be nice to have most of those pre-answered? The way to do this is to create an <a href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/automate-windows-setup?view=windows-11&amp;WT.mc_id=DOP-MVP-5001655"><code>autounattend.xml</code> file</a>. There are Microsoft-provided tools to do this, which are included as part of the <a href="https://learn.microsoft.com/windows-hardware/get-started/adk-install?WT.mc_id=DOP-MVP-5001655">Windows ADK</a>, but that's really intended for folks running large Windows networks.</p>
 <p>An easier alternative is this very nifty <a href="https://schneegans.de/windows/unattend-generator/"><code>autounattend.xml</code> generator website</a>.</p>
 <p>I set the following settings:</p>
@@ -713,14 +713,14 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
 </li>
 </ul>
 <p>And then download the file and save it in the root of your bootable USB</p>
-<h3>Step 8. Try it out</h3>
+<h2>Step 8. Try it out</h2>
 <p>You will need to restart your target machine and get it to boot off the USB drive. For my laptop, the easiest way to do that is to hit <kbd>F12</kbd> when the Dell logo appears while powering up. You may also have to go into your BIOS/UEFI settings to disable secure boot mode and enable booting from USB. The Rufus instructions suggest that it may work without disabling secure boot mode, but I did it anyway.</p>
 <p>If all goes well, you'll see a few different Windows installation screens, but won't get prompted where to install, which keyboard or location to use.</p>
 <p>You will still get some UI prompts that can't be avoided (like entering your Microsoft Account details), but at the end after a few reboots you should be greeted by a clean install of Windows, and if you check the Windows Device Manager, there should not be any unknown devices. Likewise, looking in Settings | Apps, should show either no or the bare minimum of applications. No bloatware to be seen!</p>
 <p>You'll still need to allow the latest Windows cumulative updates to install (adding that to the WIM file is a task for another day), and there may still be some driver updates that Windows discovers that are newer, but not too many.</p>
 <p>I timed it and the entire OS install process (including unavoidable manual steps) took only 15 minutes!</p>
 <p>After that you're ready to install and run <a href="https://boxstarter.org/">Boxstarter</a> to install all your tools and other applications. You can see my Boxstarter scripts in this <a href="https://gist.github.com/flcdrg/87802af4c92527eb8a30">GitHub Gist</a>.</p>
-<h3>Future plans</h3>
+<h2>Future plans</h2>
 <p>It's worth thinking about what else could be include in the custom Windows image or the autounattend.xml file, to further streamline the installation process. For example, the latest cumulative updates?</p>
 <p>The other part that would be great to automate is all the numerous tasks you need to perform to finish setting up application software, signing into things, setting up your web browser, have Git configured correctly, OneDrive(s) and the list goes on. Some of these (especially the signing in/authenticating) ones may always require manual intervention, but the others may be able to be scripted, if not totally then at least partially.</p>
 ]]>
@@ -746,7 +746,7 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
 <p>Usefully, once you add a package reference to <a href="https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/">Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</a>, you'll also get a .NET code analyzer error <a href="https://dotnet-worker-rules.azurewebsites.net/rules?ruleid=AZFW0014">AZFW0014</a> if you're not calling <code>ConfigureFunctionsWebApplication</code>, so the compiler will ensure you're doing the right thing.</p>
 <p>But apart from the integration with ASP.NET Core, are there any other significant differences between calling the two methods?</p>
 <p>Because the code is hosted on GitHub, we can easily review the source code to find out.</p>
-<h3>ConfigureFunctionsWorkerDefaults</h3>
+<h2>ConfigureFunctionsWorkerDefaults</h2>
 <p><code>ConfigureFunctionsWorkerDefaults</code> is defined in the <a href="https://github.com/Azure/azure-functions-dotnet-worker/blob/main/src/DotNetWorker/Hosting/WorkerHostBuilderExtensions.cs">WorkerHostBuilderExtensions</a> class in the <a href="https://github.com/Azure/azure-functions-dotnet-worker">https://github.com/Azure/azure-functions-dotnet-worker</a> project. There are a number of overloads, but they all end up calling this implementation:</p>
 <pre><code>public static IHostBuilder ConfigureFunctionsWorkerDefaults(this IHostBuilder builder, Action&lt;HostBuilderContext, IFunctionsWorkerApplicationBuilder&gt; configure, Action&lt;WorkerOptions&gt;? configureOptions)
 {
@@ -790,7 +790,7 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
     return builder;
 }
 </code></pre>
-<h3>ConfigureFunctionsWebApplication</h3>
+<h2>ConfigureFunctionsWebApplication</h2>
 <p><code>ConfigureFunctionsWebApplication</code> is defined in the <a href="https://github.com/Azure/azure-functions-dotnet-worker/blob/main/extensions/Worker.Extensions.Http.AspNetCore/src/FunctionsHostBuilderExtensions.cs">FunctionsHostBuilderExtensions</a> class. Whiles the source code is in the same GitHub project as <code>ConfigureFunctionsWorkerDefaults</code>, it ships as part of the <a href="https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/">Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</a> NuGet package.</p>
 <p>It too contains a number of overloads, but they all end up calling this implementation:</p>
 <pre><code>public static IHostBuilder ConfigureFunctionsWebApplication(this IHostBuilder builder, Action&lt;HostBuilderContext, IFunctionsWorkerApplicationBuilder&gt; configureWorker)
@@ -840,7 +840,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 }
 </code></pre>
 <p>So they're actually quite different!</p>
-<h3>Conclusion</h3>
+<h2>Conclusion</h2>
 <p>I feel like the documentation suggesting using one or the other may be misleading. More likely you want to <strong>add</strong> a call to <code>ConfigureFunctionsWebApplication</code> but leave the call to <code>ConfigureFunctionsWorkerDefaults</code> (unless you really want to add in all your own calls to <code>ConfigureHostConfiguration</code> and <code>ConfigureAppConfiguration</code>)</p>
 <pre><code>var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -936,11 +936,11 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 }
 </code></pre>
 <p>This enables the server auditing policy, but the data isn't going anywhere yet!</p>
-<h3>Storage account</h3>
+<h2>Storage account</h2>
 <p>When you select an Azure Storage Account for storing auditing data, you will end up with a bunch <code>.xel</code> files created under a <strong>sqldbauditlogs</strong> blob container.</p>
 <p>There are a number of ways to view the <code>.xel</code> files, <a href="https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-analyze-audit-logs?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655#analyze-logs-using-logs-in-an-azure-storage-account">documented here</a></p>
 <p>Using a storage account for storing auditing has a few variations, depending on how you want to authenticate to the Storage Account.</p>
-<h4>Access key</h4>
+<h3>Access key</h3>
 <pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
   server_id = azurerm_mssql_server.mssql.id
 
@@ -952,7 +952,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 </code></pre>
 <p>Normally <code>storage_account_access_key_is_secondary</code> would be set to <code>false</code>, but if you are rotating your storage access keys, then you may choose to switch to the secondary key while you're rotating the primary.</p>
 <p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-storage-access-keys.oEcgse7T_Z2wqY7A.webp" alt="Azure Portal showing Azure Storage Account with access key authentication" /></p>
-<h4>Managed identity</h4>
+<h3>Managed identity</h3>
 <p>You can also use managed identity to authenticate to the storage account. In this case you don't supply the access_key properties, but you will need to add a role assignment granting the <strong>Storage Blob Data Contributor</strong> role to the identity of your Azure SQL resource.</p>
 <pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
   server_id = azurerm_mssql_server.mssql.id
@@ -961,7 +961,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
   retention_in_days = 6
 }
 </code></pre>
-<h3>Log analytics workspaces</h3>
+<h2>Log analytics workspaces</h2>
 <p>To send data to a Log Analytics Workspace, the <code>log_monitoring_enabled</code> property needs to be set to <code>true</code>. This is the default.</p>
 <p>But to tell it <em>which</em> workspace to send the data to, you need to add a <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting"><code>azurerm_monitor_diagnostic_setting</code></a> resource.</p>
 <pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_log_analytics" {
@@ -978,7 +978,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 <p>Note that for the server policy, you set the <code>target_resource_id</code> to the master database of the server, not the resource id of the server itself.</p>
 <p>Here's what the auditing data looks like when viewed in Log Analytics:</p>
 <p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-view-log-analytics.yKPixQWS_1BmDxq.webp" alt="Screenshot of viewing audit details in Log Analytics" /></p>
-<h3>Event Hub</h3>
+<h2>Event Hub</h2>
 <p>Likewise, if you want data to go to an Event Hub, you need to use the <code>azurerm_monitor_diagnostic_setting</code> resource.</p>
 <pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_event_hub" {
   name                           = "ds_mssql_event_hub"
@@ -992,7 +992,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 }
 </code></pre>
 <p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-event-hub.BXc3xPm7_ZsrERj.webp" alt="Screenshot showing Event Hub destination in the Azure Portal" /></p>
-<h3>Multiple destinations</h3>
+<h2>Multiple destinations</h2>
 <p>As is implied by the Azure Portal, you can have one, two or all three destinations enabled for auditing. But it isn't immediately obvious that you should only have one <code>azurerm_monitor_diagnostic_setting</code> for your server auditing - don't create separate <code>azurerm_monitor_diagnostic_setting</code> resources for each destination - Azure will not allow it.</p>
 <p>For example, if you're going to log to all three, you'd have a single diagnostic resource like this:</p>
 <pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server" {

@@ -10,7 +10,7 @@ Last month, we had a [".NET 8 Lightning talks" theme for the Adelaide .NET User 
 
 ![C# logo](../../assets/2024/03/logo_csharp.png)
 
-### Primary constructors
+## Primary constructors
 
 C# has had primary constructors for records, but now we can use them for classes and structs!
 
@@ -34,10 +34,10 @@ public class PrimaryConstructorClass(string name)
 
 I've made regular use of these whenever I've been working on a .NET 8 project. I've found them very useful.
 
-#### Further reading
+### Further reading
 
 [https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/instance-constructors?WT.mc_id=DOP-MVP-5001655#primary-constructors](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/instance-constructors?WT.mc_id=DOP-MVP-5001655#primary-constructors)
 
-#### Example source
+### Example source
 
 [https://github.com/flcdrg/csharp-12/tree/main/01-primary-constructors](https://github.com/flcdrg/csharp-12/tree/main/01-primary-constructors)

@@ -47,7 +47,7 @@ resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
 
 This enables the server auditing policy, but the data isn't going anywhere yet!
 
-### Storage account
+## Storage account
 
 When you select an Azure Storage Account for storing auditing data, you will end up with a bunch `.xel` files created under a **sqldbauditlogs** blob container.
 
@@ -55,7 +55,7 @@ There are a number of ways to view the `.xel` files, [documented here](https://l
 
 Using a storage account for storing auditing has a few variations, depending on how you want to authenticate to the Storage Account.
 
-#### Access key
+### Access key
 
 ```hcl
 resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
@@ -72,7 +72,7 @@ Normally `storage_account_access_key_is_secondary` would be set to `false`, but 
 
 ![Azure Portal showing Azure Storage Account with access key authentication](../../assets/2025/02/azure-sql-auditing-storage-access-keys.png)
 
-#### Managed identity
+### Managed identity
 
 You can also use managed identity to authenticate to the storage account. In this case you don't supply the access_key properties, but you will need to add a role assignment granting the **Storage Blob Data Contributor** role to the identity of your Azure SQL resource.
 
@@ -85,7 +85,7 @@ resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
 }
 ```
 
-### Log analytics workspaces
+## Log analytics workspaces
 
 To send data to a Log Analytics Workspace, the `log_monitoring_enabled` property needs to be set to `true`. This is the default.
 
@@ -111,7 +111,7 @@ Here's what the auditing data looks like when viewed in Log Analytics:
 
 ![Screenshot of viewing audit details in Log Analytics](../../assets/2025/02/azure-sql-auditing-view-log-analytics.png)
 
-### Event Hub
+## Event Hub
 
 Likewise, if you want data to go to an Event Hub, you need to use the `azurerm_monitor_diagnostic_setting` resource.
 
@@ -130,7 +130,7 @@ resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_event_hub" {
 
 ![Screenshot showing Event Hub destination in the Azure Portal](../../assets/2025/02/azure-sql-auditing-event-hub.png)
 
-### Multiple destinations
+## Multiple destinations
 
 As is implied by the Azure Portal, you can have one, two or all three destinations enabled for auditing. But it isn't immediately obvious that you should only have one `azurerm_monitor_diagnostic_setting` for your server auditing - don't create separate `azurerm_monitor_diagnostic_setting` resources for each destination - Azure will not allow it.
 

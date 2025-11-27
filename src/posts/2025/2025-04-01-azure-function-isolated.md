@@ -20,7 +20,7 @@ But apart from the integration with ASP.NET Core, are there any other significan
 
 Because the code is hosted on GitHub, we can easily review the source code to find out.
 
-### ConfigureFunctionsWorkerDefaults
+## ConfigureFunctionsWorkerDefaults
 
 `ConfigureFunctionsWorkerDefaults` is defined in the [WorkerHostBuilderExtensions](https://github.com/Azure/azure-functions-dotnet-worker/blob/main/src/DotNetWorker/Hosting/WorkerHostBuilderExtensions.cs) class in the <https://github.com/Azure/azure-functions-dotnet-worker> project. There are a number of overloads, but they all end up calling this implementation:
 
@@ -68,7 +68,7 @@ public static IHostBuilder ConfigureFunctionsWorkerDefaults(this IHostBuilder bu
 }
 ```
 
-### ConfigureFunctionsWebApplication
+## ConfigureFunctionsWebApplication
 
 `ConfigureFunctionsWebApplication` is defined in the [FunctionsHostBuilderExtensions](https://github.com/Azure/azure-functions-dotnet-worker/blob/main/extensions/Worker.Extensions.Http.AspNetCore/src/FunctionsHostBuilderExtensions.cs) class. Whiles the source code is in the same GitHub project as `ConfigureFunctionsWorkerDefaults`, it ships as part of the [Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore](https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/) NuGet package.
 
@@ -124,7 +124,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 
 So they're actually quite different!
 
-### Conclusion
+## Conclusion
 
 I feel like the documentation suggesting using one or the other may be misleading. More likely you want to **add** a call to `ConfigureFunctionsWebApplication` but leave the call to `ConfigureFunctionsWorkerDefaults` (unless you really want to add in all your own calls to `ConfigureHostConfiguration` and `ConfigureAppConfiguration`)
 

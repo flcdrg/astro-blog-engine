@@ -11,7 +11,7 @@ It's the last day of 2024, and tomorrow (no surprise) is the first day of 2025. 
 
 This year has been quite an interesting mix.
 
-### Work things
+## Work things
 
 Working remotely from home is such a wonderful thing and I don't take it for granted. Even more so when I read about other companies now reversing their flexible work arrangements. Unfortunately I think that's largely driven by old-fashioned senior managers who either think you're only productive if you're all colocated in an office, or that they're worried about all the lease/asset costs of empty office buildings.
 
@@ -23,7 +23,7 @@ Working remotely makes it all the more sweeter when I did get to catch up with m
 
 I've been focusing a lot on "DevOps" kinds of things lately. I honestly prefer not use "DevOps" in a job title, but I think I'm probably fighting a losing battle. Most people know what you mean when you describe managing build and deployment pipelines and infrastructure as code as "DevOps stuff".
 
-### Professional things
+## Professional things
 
 I was able to [attend the Microsoft MVP Summit](/2024/03/mvp-summit-2024) in person over in Redmond for the first time since the pandemic. A definite privilege to be there, and I still get a huge kick out of visiting a different culture (and while there are similarities, there's also enough differences between Australia and the USA to be interesting).
 
@@ -37,7 +37,7 @@ I am thinking of changing the blog engine I use. Currently using Jekyll, but I'd
 
 I left X/Twitter. I'd stopped using it for quite a few months and didn't really miss it, but decided enough was enough with the antics of the current owner. Account deleted. I'm now on [Mastodon](https://mastodon.online/@DavidRGardiner) and [Bluesky](https://bsky.app/profile/david.gardiner.net.au).
 
-### Technology things
+## Technology things
 
 That [Apple TV I got the family for Christmas 2023](/2023/12/apple-tv-4k) turned out to be quite a hit. I think at first there was a bit of "what's the point of this?" but it has just become the most common way we watch TV now by all members of the family.
 
@@ -47,7 +47,7 @@ I think we've finally found a working combination of bits to enable us to [recor
 
 My laptop has been behaving itself since those [overheating issues](/2024/02/hot-laptop) earlier in the year. I've been pretty loyal to Dell in the past, but those kind of reliability issues have raised some questions in my mind. I'll be taking a very close look at the [Framework](https://frame.work/au/en) for my next hardware refresh to see how it compares.
 
-### Personal things
+## Personal things
 
 Probably the biggest highlight of 2024 would have to be my son getting married. He and his fiancee decided they'd prefer an shorter engagement, so getting everything organised for the big day was challenging, but it came off. We're especially grateful for their friends who put in so much effort to ensure the church and reception were all ready to go. The day was wonderful, everyone had a great time, and it's a really special event we'll always remember.
 

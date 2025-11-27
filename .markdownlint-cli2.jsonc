@@ -1,5 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json",
+    
     "config": {
         "line-length": false,
         "descriptive-link-text": false,
@@ -15,7 +16,7 @@
         "no-emphasis-as-heading": false
     },
     "globs": [
-        "**/*.md",
+        "**/*.md", // We don't include .mdx files as you can't ignore via HTML comments
         "!**/node_modules/**",
         "!**/dist/**"
     ]

@@ -19,13 +19,13 @@ I had some funds put aside for the user group as well as a generous donation, so
 
 Both of these are well-regarded brands so I felt confident that I had selected reliable products to use. If only that was the case.
 
-### First attempt
+## First attempt
 
 I did some testing at home and everything seemed to work ok and headed off to our April meeting. Having the two wireless mics would be handy as we had a presentation planned with two speakers.
 
 I had brought two laptops - one to manage the stream and the other to present the introductory slides. But the Rode mics just refused to work. They were turned on, and the status on the receiver showed levels from the two transmitters, but nothing was showing up on the computer. A lot of fiddling, and rebooting to no avail. In the end, I had to resort to using the MXL boundary microphone. Unfortunately it didn't work as well for picking up the presenters and people on the stream were having real trouble hearing.
 
-### Next month
+## Next month
 
 The following month I'd done some further testing. I discovered that the Rode mics worked with my older laptop, but not the newer one. Not sure why, but I suspect there might be something a little odd with the USB audio on that device.
 
@@ -37,7 +37,7 @@ We've had issues with this display in the past, even before we tried streaming. 
 
 I ended up removing the capture device and not streaming that month.
 
-### And then
+## And then
 
 In the months that followed we tried various combinations and managed to get the stream to work, but there was always the uncertainty of not knowing until the last minute whether it was going to work correctly or not.
 
@@ -51,7 +51,7 @@ Working on the theory that the video signal strength might be the problem, I won
 
 So we had something that worked, but it could be better.
 
-### Next steps
+## Next steps
 
 Late last year I happened to be watching the live stream from [Brisbane .NET User Group's](https://www.meetup.com/en-AU/brisbane-dotnet-user-group/) meeting and was able to ask them how they manage their broadcast. From memory, they just had a large-screen TV in the room, so didn't have the challenges we experienced with room display. But also differently, rather than trying to capture video with a passthrough device like the Elgato, they use a video splitter to send the signal to both the TV and a separate capture device. The capture device they use is similar to this [HDMI to USB-C Type-C Video Capture Card](https://www.amazon.com.au/dp/B09GK7H1B5?&linkCode=ll1&tag=flcdrg07-22&linkId=72377d213818001ae42012f58a7a5805&language=en_AU&ref_=as_li_ss_tl).
 
@@ -69,7 +69,7 @@ The fallback option is to drive the multi-screen display from the streaming lapt
 
 As an aside, one other positive is that my [latest laptop](/2023/04/new-laptop) does work correctly with the Rode mics.
 
-### Future thoughts
+## Future thoughts
 
 One challenge that remains is having to switch between different scenes in OBS Studio and also muting and unmuting the mics. Something like an [Elgato Stream deck](https://www.amazon.com.au/Elgato-Stream-Deck-MK-2-Controller/dp/B09738CV2G?th=1&linkCode=ll1&tag=flcdrg07-22&linkId=58ea4a33106107c2dff78ac6cfae404b&language=en_AU&ref_=as_li_ss_tl) might make that easier (instead of needing to alt-tab between OBS and Rode Connect applications).
 
