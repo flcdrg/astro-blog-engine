@@ -25,11 +25,11 @@ Eleventy v3 was released late last year after I'd done my test run, so it could 
 
 Lastly, I wondered whether it was worth trying to do it all myself. I started to prototype out what this might look like at [https://github.com/flcdrg/DaydreamEngine](https://github.com/flcdrg/DaydreamEngine). I could potentially use ASP.NET Core's Razor components for managing layout with the [ability to render them even when you're not running a web server](https://learn.microsoft.com/aspnet/core/blazor/components/render-components-outside-of-aspnetcore?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655).
 
-### Blog structure
+## Blog structure
 
 One of the challenges I hit was thinking about the structure that is being generated, and trying to see how that would fit into the way the above blog engines seem to work.
 
-#### Blogger
+### Blogger
 
 The old Blogger structure looked like this (Screenshot from [Internet Archive's Wayback Machine](https://web.archive.org/web/20170219235104/https://david.gardiner.net.au/)):
 
@@ -53,7 +53,7 @@ Individual posts are referenced using the following address format:
 /2018/08/create-temporary-file-with-custom.html
 ```
 
-#### Jekyll
+### Jekyll
 
 ![Screenshot of current Jekyll-based blog](../../assets/2025/01/blog-screenshot-2025.jpg)
 
@@ -67,7 +67,7 @@ Home page
 
 Individual posts use same address format as Blogger.
 
-#### Future
+### Future
 
 Closer to the Blogger layout.
 Home page

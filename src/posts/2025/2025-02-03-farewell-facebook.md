@@ -20,19 +20,19 @@ I have now [downloaded all my available data from Facebook](https://www.facebook
 
 I am not leaving social media completely. I'm still on the following:
 
-### The Fediverse/Mastdodon
+## The Fediverse/Mastdodon
 
 [https://mastodon.online/@DavidRGardiner](https://mastodon.online/@DavidRGardiner)
 
 This is probably my favourite, and I like the 'federated' way it works. So there's not just a single site/server, but you can choose one but still connect with folks on others. Think of it a bit like email - you can have your email hosted on Gmail but still correspond with someone who is using Hotmail.
 
-### Bluesky
+## Bluesky
 
 [https://bsky.app/profile/david.gardiner.net.au](https://bsky.app/profile/david.gardiner.net.au)
 
 The newer kid on the block. An alternative to the Fediverse, and probably because the UI looks so close to old Twitter, a lot of folks who are leaving Twitter are ending up here.
 
-### LinkedIn
+## LinkedIn
 
 [https://www.linkedin.com/in/davidrgardiner/](https://www.linkedin.com/in/davidrgardiner/)
 
@@ -40,18 +40,18 @@ This is for work and professional content sharing and connections.
 
 Be aware - I'm fussy about who I connect with on LinkedIn. If I haven't ever met you first or know who you are, I'm almost certainly going to decline your invitation.
 
-### Signal
+## Signal
 
 A free and privacy focused instance messaging system. I am here, but tend to keep it private. I will suggest using this to the few people I have chatting with Messenger or WhatsApp.
 
-### Email
+## Email
 
 It's still a great way to keep in touch. Replace the first dot in my blog's address and you've figured out my email address! On the other hand, if you're a nasty spammer then ignore that suggestion.
 
-### Blogging
+## Blogging
 
 I've been blogging here for almost 20 years! I don't plan to stop, so if you want to keep up with what's got my attention (mostly technical, but sometimes less so) feel free to check back here regularly.
 
-### Real life
+## Real life
 
 So catch up with me online using one of those methods, or go 'old school' and the next time you bump into me in real life, we'll have lots to talk about 😀

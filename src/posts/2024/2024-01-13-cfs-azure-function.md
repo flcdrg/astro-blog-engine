@@ -41,7 +41,7 @@ So we're out of luck using the simple option. My next thought was whether there 
 
 Maybe I can write some code to do the job instead. Hosting it in an Azure Function should work, and ideally would be free (or really cheap).
 
-### An Azure Function
+## An Azure Function
 
 I ended up writing a relatively simple Azure Function in C# that polls the RSS feed every 15 minutes (as that's the value of the `ttl` element). It then posts any new items to Mastodon. Here's the code ([Link to GitHub repo](https://github.com/flcdrg/cfsalerts-mastodon/blob/be9f1ddde2e121e047d9d6ed45a141263d05db58/src/CfsAlerts/CfsFunction.cs)):
 
@@ -139,7 +139,7 @@ The Durable Function infrastructure handles serialising and deserialising the li
 
 One thing about this pattern is you need some way of kickstarting the process. The way I chose was to add a HTTP trigger function that calls the orchestration function. The release pipeline makes a call to the HTTP trigger endpoint after it publishes the function.
 
-### Durable + .NET 8 + isolated
+## Durable + .NET 8 + isolated
 
 The Durable Function targets .NET 8 and uses the isolated model. It was a little challenging figuring out how to get this combination to work, as most of the documentation is either for the in-process model or for earlier versions of .NET. Ensuring that the appropriate NuGet packages were being referenced was tricky, as there are often different packages to use depending on the model and version of .NET. I ended up using the following packages:
 
@@ -154,7 +154,7 @@ The Durable Function targets .NET 8 and uses the isolated model. It was a little
 
 ```
 
-### Costs
+## Costs
 
 To keep costs to a minimum, the Azure Function is running on a consumption plan. The intention is to keep it close to or under the [free threshold](https://azure.microsoft.com/en-au/pricing/details/functions/).
 
@@ -164,7 +164,7 @@ As it turns out, so far the Function is not costing very much at all. It's actua
 
 To see the latest posts from the Azure Function, you can go to [https://mastodon.online/@CFSAlerts](https://mastodon.online/@CFSAlerts) (and if you're on Mastodon, feel free to follow the account!)
 
-### Future enhancements
+## Future enhancements
 
 Apart from seeing if I can reduce the cost even more, the other thing that would be useful is to also track the daily fire bans. This data is [published as an XML file](https://data.eso.sa.gov.au/prod/cfs/criimson/fireDangerRating.xml), so parsing that once a day should be pretty straightforward.
 

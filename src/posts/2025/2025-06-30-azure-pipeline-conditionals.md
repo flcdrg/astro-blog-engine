@@ -16,7 +16,7 @@ There are two main ways to make parts of your Azure Pipeline conditional:
 
 In this post we'll look at custom conditions.
 
-### Custom conditions
+## Custom conditions
 
 [Custom conditions](https://learn.microsoft.com/azure/devops/pipelines/process/conditions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) are evaluated at runtime.
 

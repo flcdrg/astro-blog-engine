@@ -10,7 +10,7 @@ _Part 7 in a series on new language features in C# 12._
 
 ![C# logo](../../assets/2024/03/logo_csharp.png)
 
-### Experimental attribute
+## Experimental attribute
 
 Mark a type, method, or assembly with the `ExperimentalAttribute` and the compiler will generate a warning. You will need to explicitly suppress this warning to consume the experimental code.
 
@@ -27,10 +27,10 @@ public class ExperimentalClass
 
 In some ways, this feels to me like the opposite of the `ObsoleteAttribute`.
 
-#### Further reading
+### Further reading
 
 [https://learn.microsoft.com/dotnet/csharp/language-reference/attributes/general?WT.mc_id=DOP-MVP-5001655#experimental-attribute](https://learn.microsoft.com/dotnet/csharp/language-reference/attributes/general?WT.mc_id=DOP-MVP-5001655#experimental-attribute)
 
-#### Example source
+### Example source
 
 [https://github.com/flcdrg/csharp-12/blob/main/07-experimental/ExperimentalClass.cs](https://github.com/flcdrg/csharp-12/blob/main/07-experimental/ExperimentalClass.cs)

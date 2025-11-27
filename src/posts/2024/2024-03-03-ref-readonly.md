@@ -10,7 +10,7 @@ _Part 3 in a series on new language features in C# 12._
 
 ![C# logo](../../assets/2024/03/logo_csharp.png)
 
-### `ref readonly` modifier
+## `ref readonly` modifier
 
 A bit more of a niche feature - if you have code that is passing structs by `ref`, but you don't need to (or want to) allow modification of the parameter, you can now indicate it is readonly.
 
@@ -27,10 +27,10 @@ In the code sample above, `Point` is a struct or record type. If you uncommented
 
 Interesting, but I've not come across a need to use this yet.
 
-#### Further reading
+### Further reading
 
 [https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/method-parameters?WT.mc_id=DOP-MVP-5001655#ref-readonly-modifier](https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/method-parameters?WT.mc_id=DOP-MVP-5001655#ref-readonly-modifier)
 
-#### Example source
+### Example source
 
 [https://github.com/flcdrg/csharp-12/blob/main/02-collection-expressions/CollectionExpressions.cs](https://github.com/flcdrg/csharp-12/blob/main/02-collection-expressions/CollectionExpressions.cs)

@@ -32,19 +32,19 @@ if (!app.Environment.IsDevelopment())
 
 Almost always these examples are for code that should only be executed in the local development environment - for example when you're debugging the application.
 
-### So how do we avoid this confusion between local development and a development deployment environment?
+## So how do we avoid this confusion between local development and a development deployment environment?
 
-#### Define a custom environment name for local development
+### Define a custom environment name for local development
 
 You might settle on something like 'localdev' or 'dev' and update all your `launchSettings.json` files to use that (if you use Visual Studio).
 
 The risk with this approach is if you ever have code that uses the `Environment.IsDevelopment()` conditional, that will now return false. If you had code that should only run when you're running/debugging locally you'll need to use a different comparison. Also, watch out if you're using 3rd party libraries that also include similar conditional logic and are making assumptions about what `IsDevelopment()` means.
 
-#### Don't use different environments for configuration
+### Don't use different environments for configuration
 
 Avoids the problem entirely, but you might discover you're missing out on being able to customise your local development experience.
 
-#### Only use 'Development' for local development
+### Only use 'Development' for local development
 
 This feels the safest to me. The default when you create a new ASP.NET project is that the `launchSettings.json` file sets `ASPNETCORE_ENVIRONMENT` equal to 'Development' so you won't need to change that.
 
