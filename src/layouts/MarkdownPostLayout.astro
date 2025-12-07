@@ -38,14 +38,30 @@ const blogJsonLd = {
   },
   headline: title,
   description: description,
-  image: image?.src,
+  image: image?.src ? {
+    "@type": "ImageObject",
+    url: image.src,
+    width: image.width,
+    height: image.height,
+    caption: frontmatter.imageAlt,
+  } : undefined,
   author: {
     "@type": "Person",
     name: "David Gardiner",
     url: Astro.site?.toString(),
   },
+  publisher: {
+    "@type": "Organization",
+    name: "David Gardiner",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab",
+    },
+  },
   datePublished: frontmatter.date,
   // dateModified: modDatetime?.toISOString(),
+  keywords: frontmatter.tags?.join(", "),
+  inLanguage: "en-AU",
 };
 
 ---
