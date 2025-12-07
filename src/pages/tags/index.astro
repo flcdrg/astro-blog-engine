@@ -16,9 +16,23 @@ const tagCounts = allPosts
 const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)
 );
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Blog Tags",
+  description: "Browse blog posts by tag",
+  url: canonicalURL,
+};
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <script slot="head" is:raw is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(collectionJsonLd)}
+  />
   <h1>Tags</h1>
 
   <p>Find posts categorized by tags:</p>

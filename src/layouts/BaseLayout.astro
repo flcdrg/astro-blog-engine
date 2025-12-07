@@ -13,6 +13,40 @@ interface Props {
 }
 
 const { pageTitle, frontmatter } = Astro.props;
+
+// Site-wide JSON-LD structured data
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${Astro.site}#organization`,
+      name: "David Gardiner",
+      url: Astro.site,
+      logo: "https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab",
+      sameAs: [
+        "https://github.com/flcdrg",
+        "https://www.linkedin.com/in/davidrgardiner/",
+        "https://mastodon.online/@DavidRGardiner",
+        "https://stackoverflow.com/users/25702/david-gardiner",
+        "https://bsky.app/profile/david.gardiner.net.au"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${Astro.site}#website`,
+      url: Astro.site,
+      name: "Dave's Daydreams",
+      description: "Blog by David Gardiner",
+      publisher: { "@id": `${Astro.site}#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${Astro.site}tags/{search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+};
 ---
 
 <html lang="en">
@@ -33,6 +67,10 @@ const { pageTitle, frontmatter } = Astro.props;
       )
     }
     <!-- Cloudflare Web Analytics --><script is:inline is:raw defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a5756d0460ba41beba515f2b7666093d"}'></script><!-- End Cloudflare Web Analytics -->
+    <script is:raw is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(siteJsonLd)}
+    />
   </head>
   <body>
     <header>

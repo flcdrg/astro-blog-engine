@@ -8,9 +8,23 @@ import onlyCurrent from "../scripts/filters";
 const pageTitle = "Archive";
 
 const posts = (await getCollection("blog")).filter(onlyCurrent);
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Blog Archive",
+  description: "Archive of blog posts by year",
+  url: canonicalURL,
+};
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <script slot="head" is:raw is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(collectionJsonLd)}
+  />
   <h1>Posts by year</h1>
   <ul>
     {
