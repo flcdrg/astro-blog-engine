@@ -67,7 +67,7 @@ jobs:
           path: ./artifacts/output.json
 
       - name: Wayback Machine Query
-        uses: flcdrg/wayback-machine-query-action@v4
+        uses: flcdrg/wayback-machine-query-action@v5
         id: wayback
         with:
           source-path: ./artifacts/output.json
