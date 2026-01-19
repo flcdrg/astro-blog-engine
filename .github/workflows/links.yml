@@ -79,7 +79,7 @@ jobs:
           path: ./wayback/replacements.json
 
       - name: Replacements
-        uses: flcdrg/replace-multiple-action@v2
+        uses: flcdrg/replace-multiple-action@v3
         with:
           files: "src/posts/**/*.md"
           find: ${{ steps.wayback.outputs.replacements }}
