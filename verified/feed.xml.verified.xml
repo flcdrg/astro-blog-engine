@@ -26,9 +26,9 @@ and see some common examples of their usage.]]>
 <p>Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can't do with runtime custom conditions).</p>
 <p>The important thing to remember is that template expression are a "compile time" feature. They can only operate on things that are available at compile time. <a href="https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Variables set by scripts</a>, and <a href="https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&amp;tabs=yaml%2Cbatch&amp;WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks">task output variables</a> are two examples of things that are not available at compile time.</p>
 <p>Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the 'Publish Artifact' step is executed or not. Notice the 'Publish Artifact' step is listed, but the icon shown is a white arrow (rather than green tick)
-<img src="https://david.gardiner.net.au/_astro/azure-pipelines-custom-conditions.Be6IaBQz_101Uki.webp" alt="Job showing a step 'Publish Artifact' that was conditionally not executed" /></p>
+<img src="https://david.gardiner.net.au/_astro/azure-pipelines-custom-conditions.Be6IaBQz_Z12HnJL.webp" alt="Job showing a step 'Publish Artifact' that was conditionally not executed" /></p>
 <p>If we use a template expression, then if it evaluates to false then the step is not even included in the job!</p>
-<p><img src="https://david.gardiner.net.au/_astro/azure-pipelines-template-expressions.kRV13og-_2f5chf.webp" alt="Job without a 'Publish Artifact' step " /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-pipelines-template-expressions.kRV13og-_1Lroaa.webp" alt="Job without a 'Publish Artifact' step " /></p>
 <p><a href="https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">Template expressions</a> use the syntax <code>${{ }}</code></p>
 <p>You can reference <code>parameters</code> and <code>variables</code> in template expressions. The latter are only variables that are defined in the YAML file and most of the <a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;WT.mc_id=DOP-MVP-5001655">predefined variables</a>. (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)</p>
 <p>You can't reference variables that are created by scripts or anything else that is only available at runtime.</p>
@@ -228,7 +228,7 @@ Loop expressions are a powerful technique that can be used to reduce duplication
 </code></pre>
 <p>Take a look at the pipelines defined in my <a href="https://github.com/flcdrg/azure-pipelines-variables">azure-pipelines-variables GitHub repository</a> for more examples of these.</p>
 <p>Here's an example of a pipeline run with custom conditions similar to the code excerpts above:</p>
-<p><img src="https://david.gardiner.net.au/_astro/azure-pipeline-custom-conditions.B1_FfUuy_2rbVXE.webp" alt="Screenshot of pipeline run with custom conditions. A conditional step in the first job has been executed. Stage shows that it was not executed as the condition evaluated to false" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-pipeline-custom-conditions.B1_FfUuy_4xYdP.webp" alt="Screenshot of pipeline run with custom conditions. A conditional step in the first job has been executed. Stage shows that it was not executed as the condition evaluated to false" /></p>
 <p>For activities that were skipped, when you select the specific task, job or stage, you can view the conditional expression and the actual parameters that were used in its evaluation to understand why it resulted in a <code>False</code> value. In the screenshot above, notice that while the <code>succeeded()</code> function evaluated to <code>True</code>, the <code>ne()</code> function did not, and because those two were combined with an <code>and()</code> then the final result was also <code>False</code>.</p>
 <p>In the next post we'll look at conditional insertion with template expressions and discuss when you'd use that approach over custom conditions.</p>
 ]]>
@@ -262,13 +262,13 @@ Powered Studio Monitor speakers.]]>
 <p>I then decided to give the Edifier speakers a try. My colleague <a href="https://becdetat.com/">Rebecca</a> had a positive experience with these, so I was hopeful.</p>
 <p>They're actually just speakers - no Bluetooth or USB inputs, which was actually my preference. Do one thing and hopefully it will do it well! They arrived and I plugged them into my laptop, and they sounded really nice.</p>
 <p>I'm relatively tall, so I have my monitors raised up on monitor stands, which means the speakers just sit nicely in the gap underneath.</p>
-<p><img src="https://david.gardiner.net.au/_astro/desk-with-speakers.BhW-UfYf_aBR9q.webp" alt="Speakers on David's desk, with laptop and three monitors" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/desk-with-speakers.BhW-UfYf_2scXbU.webp" alt="Speakers on David's desk, with laptop and three monitors" /></p>
 <p>While my laptop does have an audio jack, I realised that my Dell WD19TB Dock also has one, and figured that would be a better option to use long-term. Then I just need to unplug the one Thunderbolt cable for those times I want to take my laptop to the sofa while watching TV.</p>
 <p>But to my surprise, the audio quality went really bad - a lot like the Creative speaker. A bit of online searching and I found a comment that said to set <strong>Audio enhancements</strong> to <strong>Off</strong> in the device properties. That fixed the problem! (I'm now wondering if that might have been the cause of the poor experience with the Creative Soundbar?)</p>
-<p><img src="https://david.gardiner.net.au/_astro/audio-device-settings.muhWzkxA_vkw1C.webp" alt="Windows Settings, showing audio enhancements set to 'off' for audio device" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/audio-device-settings.muhWzkxA_1kfEQ1.webp" alt="Windows Settings, showing audio enhancements set to 'off' for audio device" /></p>
 <p>I also made use of the <strong>Rename</strong> option to rename the device so I can tell them apart from the other audio devices on the machine. It's a pity you can't change the icon from headphones to desk speakers, but that's not a big deal.</p>
 <p>The speakers have RCA and TRS inputs on the rear. There's also an Aux input and headphone output jack on the front of the right speaker. I used the supplied RCA to 3.5mm cable to connect to my laptop/dock. My limited understanding is that the TRS jack is intended for connecting to a 'balanced' device like an audio mixer, not a computer. There's more technical data about the speakers on the <a href="https://edifier.com.au/products/edifier-mr4-p-au">Edifier site</a>.</p>
-<p><img src="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg_17QqVV.webp" alt="Rear view of speaker showing input jacks and bass/treble knobs" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg_ZAHboD.webp" alt="Rear view of speaker showing input jacks and bass/treble knobs" /></p>
 <p>One thing to be aware of if you regularly turn off the power to your devices when you're not using them (like I do to save power) - when mains power is restored they default to 'off' mode. So you need to press the power button on the front of the speakers to turn them on.</p>
 <p>So thanks Rebecca, those were a good recommendation. I'm enjoying them a lot!</p>
 ]]>
@@ -291,9 +291,9 @@ Powered Studio Monitor speakers.]]>
     <content type="html" xml:base="https://david.gardiner.net.au/2025/04/touchpad-settings">
       <![CDATA[<p>Now that I've got <a href="/2025/04/reinstalling-laptop">a reliable process for reinstalling Windows</a>, I do have a list of things that I'd like to automate to get it configured "just right". As such, I've created a new repository on GitHub and <a href="https://github.com/flcdrg/reinstall-windows/issues">added issues to track each one of these</a>. While my <a href="https://gist.github.com/flcdrg/87802af4c92527eb8a30">Boxstarter scripts</a> will remain for now as GitHub Gists, I think it's going to be easier to manage all of these things together in the one <a href="https://github.com/flcdrg/reinstall-windows">Git repository</a>.</p>
 <p>One customisation I like to make to Windows is to disable the 'Tap with a single finger to single-click' for the touchpad. I find I'm less likely to accidentally click on something when I was just tapping the touch pad to move the cursor if I turn this off.</p>
-<p><img src="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok_Z1Xdsmm.webp" alt="Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok_1np360.webp" alt="Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked" /></p>
 <p>I found some <a href="https://learn.microsoft.com/answers/questions/1258054/how-to-turn-off-touch-gestures-in-windows-10-11-%28d?WT.mc_id=DOP-MVP-5001655">online articles</a> that suggested this was managed by the Registry setting <code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad</code>. Experimenting with this seems to be partly true. I can see the Registry value <code>TapsEnabled</code> is updated when I enable or disable the checkbox in Windows Settings. But the reverse did not seem to be true - if I modified the Registry key, Windows Settings doesn't change, nor does the touchpad behaviour.</p>
-<p><img src="https://david.gardiner.net.au/_astro/registry-editor.DJW3oChB_ZYv0KS.webp" alt="Windows Registry Editor showing keys for PrecisionTouchPad" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/registry-editor.DJW3oChB_AQFGB.webp" alt="Windows Registry Editor showing keys for PrecisionTouchPad" /></p>
 <p>Further searching lead me to the <a href="https://learn.microsoft.com/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655">Tuning Guidelines</a> page of the Windows Hardware Precision Touchpad Implementation Guide. I'm no hardware manufacturer, but this does document the <a href="https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655#tap-with-a-single-finger-to-single-click"><code>TapsEnabled</code></a> setting. Interestinly, down the bottom of that page it does also mention:</p>
 <blockquote>
 <p>As of Windows 11, build 26027, the user's touchpad settings can be queried and modified dynamically via the SystemParametersInfo API</p>
@@ -308,7 +308,7 @@ Powered Studio Monitor speakers.]]>
 </code></pre>
 <p>Then created a <code>NativeMethods.txt</code> file and added <code>SystemParametersInfo</code> to it.</p>
 <p>I then edited <code>Program.cs</code> and tried to use my new method:</p>
-<p><img src="https://david.gardiner.net.au/_astro/visual-studio-missing-enum.B4AvDanC_W2Avs.webp" alt="Screenshot of editing Program.cs in Visual Studio" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/visual-studio-missing-enum.B4AvDanC_2jLSIq.webp" alt="Screenshot of editing Program.cs in Visual Studio" /></p>
 <p>Except <code>SPI_GETTOUCHPADPARAMETERS</code> isn't available!</p>
 <p>The documentation suggested you can get newer metadata for the source generator to use by adding a reference to the latest prerelease <code>Microsoft.Windows.SDK.Win32Metadata</code> package. I tried that, but still no joy. I've <a href="https://github.com/microsoft/win32metadata/issues/2079">raised an issue</a> in the <a href="https://github.com/microsoft/win32metadata">microsoft/win32metadata</a> repo, but for now it looks like I'll need to hand-roll a few of the types myself.</p>
 <p>The docs for SPI_GETTOUCHPADPARAMETERS say the following:</p>
@@ -502,7 +502,7 @@ Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerOptions "/u
     </summary>
     <content type="html" xml:base="https://david.gardiner.net.au/2025/04/reinstalling-laptop">
       <![CDATA[<p>In theory, I'd like to reinstall my laptop regularly - say every couple of months? In practise, it's easy to keep putting it off. One of the detractions was not just the time to re-install Windows, but also to then install all the various device drivers. So time goes by and next you realise it's been a year or longer.</p>
-<p><img src="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy_2qAahY.webp" alt="Windows 11 logo" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy_Z1gQFiY.webp" alt="Windows 11 logo" /></p>
 <p>If you use the built in <a href="https://support.microsoft.com/en-au/windows/reset-your-pc-0ef73740-b927-549b-b7c9-e6f2b48d275e">Windows Reset feature</a>, then it's been my observation that this seems to preserve not only any OEM drivers, but also any OEM bloatware too. I was interested in the idea of installing a 'vanilla' Windows OS, with just the OEM drivers, but no bloat. And while I'm at it, can I automate a few of the other installation steps?</p>
 <h2>Step 0. Partition your disk</h2>
 <p>If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.</p>
@@ -740,7 +740,7 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
       <![CDATA[When you're creating a .NET Azure Function using the isolated worker model, the default template creates code that has the host builder configuration calling ConfigureFunctionsWorkerDefaults. But if you want to enable ASP.NET Core integration features (which you would do if you wanted to work directly with HttpRequest, HttpResponse, and IActionResult types in your functions), then the documentation suggests to instead call ConfigureFunctionsWebApplication. …]]>
     </summary>
     <content type="html" xml:base="https://david.gardiner.net.au/2025/04/azure-function-isolated">
-      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX_WEWhQ.webp" alt="Azure Functions logo" /></p>
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX_2tR59E.webp" alt="Azure Functions logo" /></p>
 <p>When you're creating a .NET Azure Function using the isolated worker model, the <a href="https://learn.microsoft.com/en-au/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#configuration">default template creates code</a> that has the host builder configuration calling <code>ConfigureFunctionsWorkerDefaults</code>.</p>
 <p>But if you want to <a href="https://learn.microsoft.com/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#aspnet-core-integration">enable ASP.NET Core integration</a> features (which you would do if you wanted to work directly with <code>HttpRequest</code>, <code>HttpResponse</code>, and <code>IActionResult</code> types in your functions), then the documentation <a href="https://learn.microsoft.com/en-au/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows&amp;WT.mc_id=DOP-MVP-5001655#aspnet-core-integration">suggests to instead call ConfigureFunctionsWebApplication</a>.</p>
 <p>Usefully, once you add a package reference to <a href="https://www.nuget.org/packages/Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore/">Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</a>, you'll also get a .NET code analyzer error <a href="https://dotnet-worker-rules.azurewebsites.net/rules?ruleid=AZFW0014">AZFW0014</a> if you're not calling <code>ConfigureFunctionsWebApplication</code>, so the compiler will ensure you're doing the right thing.</p>
@@ -864,32 +864,32 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
       <![CDATA[I last attended DDD Melbourne 9 years ago, back in 2016. In the intervening time, it has grown roughly twice the size and shifted from a uni campus to the Melbourne Town Hall. As such, I was really pleased to be able to combine a work trip to Melbourne with being able to attend DDD Melbourne 2025 this last Saturday.]]>
     </summary>
     <content type="html" xml:base="https://david.gardiner.net.au/2025/02/ddd-melbourne">
-      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co_Z1DoEKG.webp" alt="DDD Melbourne 2025 logo" /></p>
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co_Z1SPBWw.webp" alt="DDD Melbourne 2025 logo" /></p>
 <p>I last attended <a href="https://www.dddmelbourne.com">DDD Melbourne</a> 9 years ago, <a href="/2016/08/ddd-melbourne-2016">back in 2016</a>. In the intervening time, it has grown roughly twice the size and shifted from a uni campus to the Melbourne Town Hall. As such, I was really pleased to be able to combine a work trip to Melbourne with being able to attend DDD Melbourne 2025 this last Saturday.</p>
 <p>It was actually seeing what Melbourne had achieved back in 2015/2016 that inspired me to want to reboot DDD in Adelaide, and a few years later we did that with DDD Adelaide. Ironically, I learned a while ago that the original CodeCampSA/DDD Adelaide events were actually the inspiration for some of the other states to run their own events (figuring if Adelaide could do it, then they should too!). Now the inspiration flows back the other way😀</p>
 <p>For the first time in quite a while I was not speaking or volunteering, so this was a real chance just to enjoy the day, learn some new things, meet a bunch of people, and maybe pick up some ideas to take back to DDD Adelaide.</p>
 <p>The day kicked off with a keynote from <a href="https://www.suekeay.com/">Dr Sue Keay</a>, who is Founder and Chair of Robotics Australia Group and an Adjunct Professor at QUT Centre for Robotics (to name just a couple of her roles). She gave a thought provoking talk about how robots are being used today and what the future might hold.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-dr-sue-keay.D5yR1fU0_2qNAiJ.webp" alt="Dr Sue Keay" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-dr-sue-keay.D5yR1fU0_ZKWrsG.webp" alt="Dr Sue Keay" /></p>
 <p>After morning tea..
-<img src="https://david.gardiner.net.au/_astro/ddd-melbourne-food.PRtoB2gW_1GDjQn.webp" alt="People getting morning tea from tables" /></p>
+<img src="https://david.gardiner.net.au/_astro/ddd-melbourne-food.PRtoB2gW_Z13Q6kB.webp" alt="People getting morning tea from tables" /></p>
 <p>I caught <a href="https://www.linkedin.com/in/trmpowell/">Tracy Bongiorno</a> presenting "Beyond Continuous Delivery - Our journey from Gitflow to Continuous Deployment"</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-tracy-bongiorno.B8Qq9kTu_Z1n7Qei.webp" alt="Tracy Bongiorno" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-tracy-bongiorno.B8Qq9kTu_ZdSkQJ.webp" alt="Tracy Bongiorno" /></p>
 <p>Then saw <a href="https://www.linkedin.com/in/brydenoliver/">Bryden Oliver's</a> "Top Database Performance Techniques". There were a couple of his tips that seemed a bit unusual to me. It would have been good if he'd pulled up some query plans to show what was going on for those.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-bryden-oliver.CQdJDhwk_1WxcJY.webp" alt="Bryden Oliver" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-bryden-oliver.CQdJDhwk_Z1fdP1r.webp" alt="Bryden Oliver" /></p>
 <p>Then just a bit of time for <a href="https://www.linkedin.com/in/swapnilogale/">Swapnil Ogale</a> to deliver "The Lost Art of good README documentation". Some nice tips and an encouragement to spend that time to make sure READMEs are useful.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-swapnil-ogale.CdwRxt2X_Z16OwNK.webp" alt="Swapnil Ogale" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-swapnil-ogale.CdwRxt2X_1pQrTP.webp" alt="Swapnil Ogale" /></p>
 <p>Over the lunch break I took the opportunity to check out the community room. As well as sponsor desks they'd allocated some space for a few groups to promote themselves.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-community.B8xFUgeH_Z1UwKfT.webp" alt="The community room" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-community.B8xFUgeH_ff7dk.webp" alt="The community room" /></p>
 <p>After the lunch break, I saw <a href="https://www.linkedin.com/in/lachlanb/">Lachlan Barclay</a> deliver a fast-paced talk on "Performance, Profiling and Optimisation". It was great to catch up with Lachlan again.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-lachlan-barclay.URt3uDqy_Z2gwvkf.webp" alt="Lachlan Barclay" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-lachlan-barclay.URt3uDqy_g9tol.webp" alt="Lachlan Barclay" /></p>
 <p>Then staying in the same room for <a href="https://www.linkedin.com/in/falconmick/">Michael Crook</a> with "Unlocking Hidden Efficiency: Seamless Solutions with TDD You Didn't Know You Needed". I'm guessing Michael is new to presenting, but the content he covered was very interesting and left me with some homework to follow up on (in addition to learning about <a href="https://sli.dev/">https://sli.dev/</a> which he used to create really nice slides with animated code samples)</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-michael-crook.8Kdb-eIM_1vEsRb.webp" alt="Michael Crook" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-michael-crook.8Kdb-eIM_Z11PFda.webp" alt="Michael Crook" /></p>
 <p>Time for afternoon tea, then <a href="https://www.linkedin.com/in/kirstymcdonald/">Kirsty McDonald</a> with "Dungeons and...Developers? Building skills in tech teams with table top role playing games". I really liked the idea of using role-playing games to effectively fire-drill scenarios (but with made up characters). This was a fun talk and a great last regular session of the day.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-kirsty-mcdonald.68j6hvgu_ZsKeqw.webp" alt="Kirsty McDonald on stage with four seated volunteers" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-kirsty-mcdonald.68j6hvgu_FtgV2.webp" alt="Kirsty McDonald on stage with four seated volunteers" /></p>
 <p>The locknote was <a href="https://www.aaron-powell.com/">Aaron Powell</a>, with a trip down memory lane of how we developed web sites 20 years ago, back in 2005. It brought back a lot of memories for me. Though I was talking to a new graduate at the after party later and she didn't really get a lot of the things people were laughing at.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-aaron-powell.BqazOQae_Z2kzxfD.webp" alt="Aaron Powell" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-aaron-powell.BqazOQae_Z7v3Ya.webp" alt="Aaron Powell" /></p>
 <p>It was then time to wrap up the conference with <a href="https://blog.angelwebdesigns.com.au/">Bron Thulke</a>, <a href="https://www.linkedin.com/in/lklint">Lars Klint</a> (the man of many colourful suits) and the team of volunteers who made the day run smoothly.</p>
-<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-team.xrjSFWpr_27AcrC.webp" alt="Bron Thulke" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/ddd-melbourne-team.xrjSFWpr_ZCTdJm.webp" alt="Bron Thulke" /></p>
 <p>With the conference done it was off to the after-party for a few hours to catch up with everyone over a lemon squash (well I had lemon squash - not sure what everyone else was drinking!).</p>
 <p>There's definitely some logistical challenges that Melbourne has with running such a large event compared to what we do in Adelaide. It's also interesting to see first hand how DDD runs in a commercial conference venue.</p>
 <p>Well done DDD Melbourne, you put on a great day. As someone who has a good idea what goes into doing that, I really appreciate all you did (both seen and unseen).</p>
@@ -911,9 +911,9 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
       <![CDATA[Sometimes when you're using Terraform for your Infrastructure as Code with Azure, it's a bit tricky to match up what you can see in the Azure Portal versus the Terraform resources in the AzureRM provider. Enabling auditing in Azure SQL is a great example.]]>
     </summary>
     <content type="html" xml:base="https://david.gardiner.net.au/2025/02/azure-sql-auditing">
-      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp_176n5G.webp" alt="Azure logo" /></p>
+      <![CDATA[<p><img src="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp_16YqLd.webp" alt="Azure logo" /></p>
 <p>Sometimes when you're using Terraform for your Infrastructure as Code with Azure, it's a bit tricky to match up what you can see in the Azure Portal versus the Terraform resources in the AzureRM provider. Enabling auditing in Azure SQL is a great example.</p>
-<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-enabled-only.DmeJYD5Y_207fnn.webp" alt="Screenshot of Azure SQL Auditing portal page, showing auditing enabled, but no data stores selected" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-enabled-only.DmeJYD5Y_Z1UPn40.webp" alt="Screenshot of Azure SQL Auditing portal page, showing auditing enabled, but no data stores selected" /></p>
 <p>In the Azure Portal, select your Azure SQL resource, then expand the <strong>Security</strong> menu and select <strong>Auditing</strong>. You can then choose to <strong>Enable Azure SQL Auditing</strong>, and upon doing this you can then choose to send auditing data to any or all of Azure Storage, Log Analytics and/or Event Hub.</p>
 <p>It's also worth highlighting that usually you'd <a href="https://learn.microsoft.com/azure/azure-sql/database/auditing-server-level-database-level?view=azuresql&amp;WT.mc_id=DOP-MVP-5001655">enable auditing at the server level</a>, but it is also possible to enable it per database.</p>
 <p>The two Terraform resources you may have encountered to manage this are <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server_extended_auditing_policy"><code>mssql_server_extended_auditing_policy</code></a> and <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_database_extended_auditing_policy"><code>mssql_database_extended_auditing_policy</code></a>.</p>
@@ -951,7 +951,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 }
 </code></pre>
 <p>Normally <code>storage_account_access_key_is_secondary</code> would be set to <code>false</code>, but if you are rotating your storage access keys, then you may choose to switch to the secondary key while you're rotating the primary.</p>
-<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-storage-access-keys.oEcgse7T_Z2wqY7A.webp" alt="Azure Portal showing Azure Storage Account with access key authentication" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-storage-access-keys.oEcgse7T_Z153SPc.webp" alt="Azure Portal showing Azure Storage Account with access key authentication" /></p>
 <h3>Managed identity</h3>
 <p>You can also use managed identity to authenticate to the storage account. In this case you don't supply the access_key properties, but you will need to add a role assignment granting the <strong>Storage Blob Data Contributor</strong> role to the identity of your Azure SQL resource.</p>
 <pre><code>resource "azurerm_mssql_server_extended_auditing_policy" "auditing" {
@@ -974,10 +974,10 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
   }
 }
 </code></pre>
-<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-log-analytics.DD3OzwDe_D7vPW.webp" alt="Screenshot of Log Analytics destination from the Azure Portal" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-log-analytics.DD3OzwDe_J6rzG.webp" alt="Screenshot of Log Analytics destination from the Azure Portal" /></p>
 <p>Note that for the server policy, you set the <code>target_resource_id</code> to the master database of the server, not the resource id of the server itself.</p>
 <p>Here's what the auditing data looks like when viewed in Log Analytics:</p>
-<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-view-log-analytics.yKPixQWS_1BmDxq.webp" alt="Screenshot of viewing audit details in Log Analytics" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-view-log-analytics.yKPixQWS_Kj21d.webp" alt="Screenshot of viewing audit details in Log Analytics" /></p>
 <h2>Event Hub</h2>
 <p>Likewise, if you want data to go to an Event Hub, you need to use the <code>azurerm_monitor_diagnostic_setting</code> resource.</p>
 <pre><code>resource "azurerm_monitor_diagnostic_setting" "mssql_server_to_event_hub" {
@@ -991,7 +991,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
   }
 }
 </code></pre>
-<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-event-hub.BXc3xPm7_ZsrERj.webp" alt="Screenshot showing Event Hub destination in the Azure Portal" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/azure-sql-auditing-event-hub.BXc3xPm7_1JBNoa.webp" alt="Screenshot showing Event Hub destination in the Azure Portal" /></p>
 <h2>Multiple destinations</h2>
 <p>As is implied by the Azure Portal, you can have one, two or all three destinations enabled for auditing. But it isn't immediately obvious that you should only have one <code>azurerm_monitor_diagnostic_setting</code> for your server auditing - don't create separate <code>azurerm_monitor_diagnostic_setting</code> resources for each destination - Azure will not allow it.</p>
 <p>For example, if you're going to log to all three, you'd have a single diagnostic resource like this:</p>
@@ -1270,13 +1270,13 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 <p>So what's going on?</p>
 <p>Another tool I find useful when trying to diagnose issues with passing arguments is <a href="https://community.chocolatey.org/packages/echoargs">EchoArgs</a>. It too reported the argument was not being evaluated.</p>
 <p>But then I noticed something curious on the command line:</p>
-<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line.CQ6I5ZUF_22GV8J.webp" alt="Screenshot of echoargs command line with comma separating arguments in grey colour" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line.CQ6I5ZUF_1MfXVT.webp" alt="Screenshot of echoargs command line with comma separating arguments in grey colour" /></p>
 <p>That comma is being rendered in my command line in grey, but the rest of the arguments are white (with the exception of the variable expression). Could that be the problem?</p>
 <p>Let's try enclosing the arguments in double quotes..</p>
 <pre><code>docker build --secret "id=npm,src=$($env:USERPROFILE)/.npmrc" --progress=plain -t imagename .
 </code></pre>
 <p>Notice the colours on the command line - the comma is not different now:</p>
-<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line2.Dq7CjtrV_ZemIRx.webp" alt="Screenshot of echo args command line, now with double quotes and the comma not in a different colour" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/echoargs-command-line2.Dq7CjtrV_25jXJp.webp" alt="Screenshot of echo args command line, now with double quotes and the comma not in a different colour" /></p>
 <p>And the colouring on the command line also hints that it is not treating the comma as something special.</p>
 <p>And now our Docker command works!</p>
 ]]>
@@ -1298,7 +1298,7 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
     <content type="html" xml:base="https://david.gardiner.net.au/2025/02/functions-serilog-appinsights">
       <![CDATA[<p>There's already some good resources online about configuring <a href="https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655">.NET Azure Functions</a> with <a href="https://serilog.net/">Serilog</a>. For example, Shazni gives a <a href="https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76">good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions</a>, and Simon shows <a href="https://simonholman.dev/configure-serilog-for-logging-in-azure-functions">how to use Serilog with Azure Functions in isolated worker model</a>, but neither cover using App Insights.</p>
 <p>It's important to note that the <a href="https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655">in-process model goes out of support (along with .NET 8) in November 2026</a>. Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)</p>
-<p><img src="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ__2l2OEh.webp" alt="Serilog logo" /></p>
+<p><img src="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ__ZFlgFy.webp" alt="Serilog logo" /></p>
 <p>The Serilog Sink package for logging data to Application Insights is <a href="https://www.nuget.org/packages/Serilog.Sinks.ApplicationInsights/">Serilog.Extensions.AppInsights</a>, and it has some useful code samples <a href="https://github.com/serilog-contrib/serilog-sinks-applicationinsights">in the README</a>, but they also lack mentioning the differences for isolated worker model.</p>
 <p>So my goal here is to demonstrate the following combination:</p>
 <ul>
