@@ -25,7 +25,7 @@
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^1.0.218",
     "luxon": "^3.7.2",
-    "marked": "^17.0.1",
+    "marked": "^17.0.2",
     "node-html-parser": "^7.0.2",
     "sanitize-html": "^2.17.0",
     "sharp": "^0.34.5",
