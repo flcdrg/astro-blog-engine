@@ -19,7 +19,7 @@
     "@astrojs/sitemap": "3.7.0",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
-    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@types/luxon": "^3.7.1",
     "astro": "^5.17.2",
     "astro-disqus": "^1.0.1",
