@@ -240,7 +240,7 @@ jobs:
 
     steps:
       - name: Workflow Dispatch
-        uses: benc-uk/workflow-dispatch@v1.2.4
+        uses: benc-uk/workflow-dispatch@v1.3.1
         with:
           workflow: Update
           ref: ${{ github.event.ref }}
