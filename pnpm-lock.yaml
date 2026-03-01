@@ -42,8 +42,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       astrojs-atom:
-        specifier: ^1.0.218
-        version: 1.0.218(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2)
+        specifier: ^1.0.234
+        version: 1.0.234(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -1009,8 +1009,8 @@ packages:
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
-  astrojs-atom@1.0.218:
-    resolution: {integrity: sha512-UTNtBIhxg9r9UQLzWR1tR5lkgo7BPlY6M//UNJbvvNpm3jruQCFpppgBVosnKtobd5wrJvnd3V4+JhHPZ8bpxw==}
+  astrojs-atom@1.0.234:
+    resolution: {integrity: sha512-QoIZNnP2G29bg7ROw5s+J6fNKSKTrYMx4namjURoPZXM6yDeAic5En01fLULCMHOnYlpkFRKrRgrCUciJIJWYQ==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -3304,7 +3304,7 @@ snapshots:
       - uploadthing
       - yaml
 
-  astrojs-atom@1.0.218(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2):
+  astrojs-atom@1.0.234(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2):
     dependencies:
       astro: 5.17.3(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2)
       fast-xml-parser: 5.3.7
