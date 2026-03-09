@@ -48,8 +48,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       marked:
-        specifier: ^17.0.3
-        version: 17.0.3
+        specifier: ^17.0.4
+        version: 17.0.4
       node-html-parser:
         specifier: ^7.0.2
         version: 7.0.2
@@ -1551,8 +1551,8 @@ packages:
     resolution: {integrity: sha512-UKybllYNheWac61Ia7T6fzuQNDZimFIpCg2w6hHjgV1Qu0w1TV0LlSgryUGzM0bkKQCBhy2FDhEELB73Kb0kAg==}
     engines: {node: '>=20'}
 
-  marked@17.0.3:
-    resolution: {integrity: sha512-jt1v2ObpyOKR8p4XaUJVk3YWRJ5n+i4+rjQopxvV32rSndTJXvIzuUdWWIy/1pFQMkQmvTXawzDNqOH/CUmx6A==}
+  marked@17.0.4:
+    resolution: {integrity: sha512-NOmVMM+KAokHMvjWmC5N/ZOvgmSWuqJB8FoYI019j4ogb/PeRMKoKIjReZ2w3376kkA8dSJIP8uD993Kxc0iRQ==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -4000,7 +4000,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  marked@17.0.3: {}
+  marked@17.0.4: {}
 
   mdast-util-definitions@6.0.0:
     dependencies:
