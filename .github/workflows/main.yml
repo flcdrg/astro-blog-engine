@@ -380,7 +380,8 @@ jobs:
 
       # Cache lychee results (e.g. to avoid hitting rate limits)
       - name: Restore lychee cache
-        uses: actions/cache@v5
+        id: restore-cache
+        uses: actions/cache/restore@v5
         with:
           path: .lycheecache
           key: cache-lychee-${{ github.sha }}
@@ -394,13 +395,13 @@ jobs:
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v2.8.0 # 2.4.0 has a bug. Don't upgrade until fixed
+        uses: lycheeverse/lychee-action@v2.8.0
         with:
           fail: false
           output: ${{ github.workspace }}/output.json
           format: json
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          args: --root-dir "$(pwd)/dist/" 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0" --fallback-extensions html -v --cache-exclude-status '429' --insecure --accept '200..=204'
+          args: --root-dir "$(pwd)/dist/" 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --max-concurrency 20 --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0" --fallback-extensions html -v --cache-exclude-status '429' --insecure --accept '200..=204'
 
       - name: Report results
         run: |
@@ -418,3 +419,10 @@ jobs:
         with:
           name: link-checker-results
           path: output.*
+
+      - name: Save lychee cache
+        uses: actions/cache/save@v5
+        if: always()
+        with:
+          path: .lycheecache
+          key: ${{ steps.restore-cache.outputs.cache-primary-key }}
