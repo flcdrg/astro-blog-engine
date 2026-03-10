@@ -1,0 +1,78 @@
+name: Links - Redirect
+
+# This workflow can be triggered manually
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  generate_report:
+    runs-on: ubuntu-latest
+    name: Generate Redirect Links PR
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download Latest Artifact
+        uses: dawidd6/action-download-artifact@v16
+        with:
+          name: link-checker-results
+          workflow: main.yml
+          branch: main
+          path: ./artifacts
+          github_token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}
+          check_artifacts: true
+          search_artifacts: true
+          if_no_artifact_found: fail
+
+      - name: Build Replacements from redirect_map
+        id: build_replacements
+        run: |
+          $json = Get-Content -Path ./artifacts/output.json | ConvertFrom-Json
+
+          $replacements = [ordered]@{}
+
+          foreach ($page in $json.redirect_map.PSObject.Properties) {
+              foreach ($entry in $page.Value) {
+                  $originalUrl = $entry.url
+                  $redirects = $entry.status.redirects.redirects
+
+                  if ($redirects -and $redirects.Count -gt 0) {
+                      $finalUrl = $redirects[-1].url
+
+                      if ($originalUrl -ne $finalUrl) {
+                          $replacements[$originalUrl] = $finalUrl
+                      }
+                  }
+              }
+          }
+
+          $replacementsJson = $replacements | ConvertTo-Json -Depth 2 -Compress
+          $replacementsJson | Set-Content -Path ./artifacts/replacements.json
+
+          Write-Host "Found $($replacements.Count) URL replacements"
+
+          "replacements=$replacementsJson" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: redirect-replacements
+          path: ./artifacts/replacements.json
+
+      - name: Replacements
+        uses: flcdrg/replace-multiple-action@v3
+        with:
+          files: "src/posts/**/*.md"
+          find: ${{ steps.build_replacements.outputs.replacements }}
+          prefix: '(^|\s+|\()'
+          suffix: '($|\s+|\))'
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8.1.0
+        with:
+          title: "Fix redirect links"
+          token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}
