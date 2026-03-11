@@ -33,6 +33,8 @@ jobs:
         run: |
           $json = Get-Content -Path ./artifacts/output.json | ConvertFrom-Json
 
+          $hasRedirectMap = $null -ne $json.redirect_map -and $json.redirect_map.PSObject.Properties.Count -gt 0
+
           $replacements = [ordered]@{}
 
           foreach ($page in $json.redirect_map.PSObject.Properties) {
@@ -56,22 +58,26 @@ jobs:
           Write-Host "Found $($replacements.Count) URL replacements"
 
           "replacements=$replacementsJson" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "should_continue=$hasRedirectMap" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         shell: pwsh
 
       - uses: actions/upload-artifact@v7
+        if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
         with:
           name: redirect-replacements
           path: ./artifacts/replacements.json
 
       - name: Replacements
-        uses: flcdrg/replace-multiple-action@v3
+        if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
+        uses: flcdrg/replace-multiple-action@v4
         with:
           files: "src/posts/**/*.md"
-          find: ${{ steps.build_replacements.outputs.replacements }}
+          findJsonFile: ./artifacts/replacements.json
           prefix: '(^|\s+|\()'
           suffix: '($|\s+|\))'
 
       - name: Create Pull Request
+        if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
         uses: peter-evans/create-pull-request@v8.1.0
         with:
           title: "Fix redirect links"
