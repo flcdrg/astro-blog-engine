@@ -45,6 +45,13 @@ jobs:
                   if ($redirects -and $redirects.Count -gt 0) {
                       $finalUrl = $redirects[-1].url
 
+                      # Skip replacements for learn.microsoft.com links that only differ by the presence of "en-us" in the path, as these are intentional
+                      $isLearnWithoutEnUs = $originalUrl -match '^https://learn\.microsoft\.com/(?!en-us(?:/|$))'
+                      $isLearnWithEnUs = $finalUrl -match '^https://learn\.microsoft\.com/en-us(?:/|$)'
+                      if ($isLearnWithoutEnUs -and $isLearnWithEnUs) {
+                        continue
+                      }
+
                       if ($originalUrl -ne $finalUrl) {
                           $replacements[$originalUrl] = $finalUrl
                       }
@@ -52,10 +59,19 @@ jobs:
               }
           }
 
-          $replacementsJson = $replacements | ConvertTo-Json -Depth 2 -Compress
+          $replacementPairs = @(
+              foreach ($key in $replacements.Keys) {
+                  [PSCustomObject]@{
+                      find = $key
+                      replace = $replacements[$key]
+                  }
+              }
+          )
+
+          $replacementsJson = $replacementPairs | ConvertTo-Json -Depth 3 -Compress
           $replacementsJson | Set-Content -Path ./artifacts/replacements.json
 
-          Write-Host "Found $($replacements.Count) URL replacements"
+          Write-Host "Found $($replacementPairs.Count) URL replacements"
 
           "replacements=$replacementsJson" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           "should_continue=$hasRedirectMap" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -82,3 +98,5 @@ jobs:
         with:
           title: "Fix redirect links"
           token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}
+          add-paths: "src/posts/**/*.md"
+          base: main
