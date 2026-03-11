@@ -41,7 +41,7 @@ I ended up removing the capture device and not streaming that month.
 
 In the months that followed we tried various combinations and managed to get the stream to work, but there was always the uncertainty of not knowing until the last minute whether it was going to work correctly or not.
 
-The audio was refined a bit by making use of the [Rode Connect](https://rode.com/en/apps/rodeconnect) application to allow the mixing/muting of the two wireless mics. Much easier to mute the mics remotely, rather than having to ask the presenters to turn their mics on and off. The only downside is that the audio from Rode Connect comes into [OBS Studio](https://obsproject.com/) as a single channel, rather than two separate ones.
+The audio was refined a bit by making use of the [Rode Connect](https://rode.com/en-au/apps/rodeconnect) application to allow the mixing/muting of the two wireless mics. Much easier to mute the mics remotely, rather than having to ask the presenters to turn their mics on and off. The only downside is that the audio from Rode Connect comes into [OBS Studio](https://obsproject.com/) as a single channel, rather than two separate ones.
 
 ![Rode Connect software](../../assets/2024/02/rode-connect.png)
 

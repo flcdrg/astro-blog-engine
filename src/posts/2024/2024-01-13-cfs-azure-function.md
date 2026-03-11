@@ -113,7 +113,7 @@ I ended up writing a relatively simple Azure Function in C# that polls the RSS f
     }
 ```
 
-We keep a copy of the previous list of items, and then compare it to the new list. If there are any new items, we post them to Mastodon. Because we need to remember the previous run items, we need to use [Durable Functions](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp). This was my first time creating a Durable Function, so that also made it a good learning experience. The ['eternal orchestration' pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-eternal-orchestrations?WT.mc_id=DOP-MVP-5001655) is used, where the orchestration function calls itself, passing in the new list of items. Here's the orchestration function code:
+We keep a copy of the previous list of items, and then compare it to the new list. If there are any new items, we post them to Mastodon. Because we need to remember the previous run items, we need to use [Durable Functions](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp). This was my first time creating a Durable Function, so that also made it a good learning experience. The ['eternal orchestration' pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-eternal-orchestrations?WT.mc_id=DOP-MVP-5001655) is used, where the orchestration function calls itself, passing in the new list of items. Here's the orchestration function code:
 
 ```csharp
     [Function(nameof(MonitorJobStatus))]
