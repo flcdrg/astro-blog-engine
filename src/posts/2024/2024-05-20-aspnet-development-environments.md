@@ -17,7 +17,7 @@ One example to consider is connection strings to databases or blob storage.
 - When developing locally these might resolve to localhost where you have SQL Server installed or a local Docker container running a storage emulator.
 - When running in a deployment environment, they would point to existing resources. In Azure, they might be Azure SQL databases or Azure Storage accounts.
 
-The [Environment class](https://learn.microsoft.com/dotnet/api/microsoft.extensions.hosting.environments?view=net-8.0&WT.mc_id=DOP-MVP-5001655) defines three pre-defined fields - Development, Production and Staging. There are also [three related extension methods](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.hosting.hostingenvironmentextensions?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655) to test if the current environment is one of these - IsDevelopment, IsProduction, and isStaging. These are the three environment names provided in the box, but you are free to use other names too.
+The [Environment class](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.environments?view=net-10.0-pp&viewFallbackFrom=net-8.0&WT.mc_id=DOP-MVP-5001655) defines three pre-defined fields - Development, Production and Staging. There are also [three related extension methods](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.hostingenvironmentextensions?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655) to test if the current environment is one of these - IsDevelopment, IsProduction, and isStaging. These are the three environment names provided in the box, but you are free to use other names too.
 
 It's also quite common (even in Microsoft samples) to see code like this:
 

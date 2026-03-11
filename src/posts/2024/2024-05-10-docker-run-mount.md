@@ -7,7 +7,7 @@ tags:
 - Azure Pipelines
 ---
 
-This caught me out today. I was trying to run a Docker container directly from a script task, where the pipeline job was already running in a container (as a [Container Job](https://learn.microsoft.com/azure/devops/pipelines/process/container-phases?view=azure-devops&WT.mc_id=DOP-MVP-5001655)), similar to this:
+This caught me out today. I was trying to run a Docker container directly from a script task, where the pipeline job was already running in a container (as a [Container Job](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops&WT.mc_id=DOP-MVP-5001655)), similar to this:
 
 ```yaml
   - job: MyJob

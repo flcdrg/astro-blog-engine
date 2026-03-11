@@ -14,7 +14,7 @@ In my [last post](/2025/06/azure-pipeline-conditionals) I wrote about using cust
 
 Sometimes we can do better though. With template expressions we can not just skip something, we can remove it entirely. We can also use it to optionally insert values in a pipeline (something you can't do with runtime custom conditions).
 
-The important thing to remember is that template expression are a "compile time" feature. They can only operate on things that are available at compile time. [Variables set by scripts](https://learn.microsoft.com/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&WT.mc_id=DOP-MVP-5001655), and [task output variables](https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch&WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks) are two examples of things that are not available at compile time.
+The important thing to remember is that template expression are a "compile time" feature. They can only operate on things that are available at compile time. [Variables set by scripts](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/set-variables-scripts?view=azure-devops&WT.mc_id=DOP-MVP-5001655), and [task output variables](https://learn.microsoft.com/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch&WT.mc_id=DOP-MVP-5001655#use-output-variables-from-tasks) are two examples of things that are not available at compile time.
 
 Compare these two Azure Pipeline runs. The first uses custom conditions to decided if the 'Publish Artifact' step is executed or not. Notice the 'Publish Artifact' step is listed, but the icon shown is a white arrow (rather than green tick)
 ![Job showing a step 'Publish Artifact' that was conditionally not executed](../../assets/2025/07/azure-pipelines-custom-conditions.png)
@@ -23,7 +23,7 @@ If we use a template expression, then if it evaluates to false then the step is 
 
 ![Job without a 'Publish Artifact' step ](../../assets/2025/07/azure-pipelines-template-expressions.png)
 
-[Template expressions](https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) use the syntax `${{ }}`
+[Template expressions](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) use the syntax `${{ }}`
 
 You can reference `parameters` and `variables` in template expressions. The latter are only variables that are defined in the YAML file and most of the [predefined variables](https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&WT.mc_id=DOP-MVP-5001655). (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)
 

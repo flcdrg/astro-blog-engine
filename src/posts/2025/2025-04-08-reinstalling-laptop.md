@@ -19,7 +19,7 @@ If you use the built in [Windows Reset feature](https://support.microsoft.com/en
 
 If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.
 
-In my case, I partitioned my SSD to have D: as my [Dev Drive](https://learn.microsoft.com/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655) (which uses the newer [ReFS file system](https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655)).
+In my case, I partitioned my SSD to have D: as my [Dev Drive](https://learn.microsoft.com/en-us/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655) (which uses the newer [ReFS file system](https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655)).
 
 Having a full system backup is another great idea. Knowing that if something goes wrong and you have a way to restore your system back to how it was before you started it process is reassuring. I take advantage of [Synology Active Backup for Business](https://www.synology.com/en-global/dsm/feature/active-backup-business/pc) to take full backups of my machines, as well as taking using OneDrive for storing other important files and documents.
 
@@ -40,7 +40,7 @@ cd c:\MachineImaging
 
 ## Step 3. Mount the .WIM file
 
-The Windows Image .WIM file is a special file format that can contain one or more Windows images. There's a tool built in to Windows - `DISM.EXE` that is used for working with .WIM files. Conveniently, there's also a [Dism PowerShell module](https://learn.microsoft.com/powershell/module/dism/?view=windowsserver2025-ps&WT.mc_id=DOP-MVP-5001655) with equivalent cmdlets. I find these a bit friendlier to use, as you get parameter completion etc.
+The Windows Image .WIM file is a special file format that can contain one or more Windows images. There's a tool built in to Windows - `DISM.EXE` that is used for working with .WIM files. Conveniently, there's also a [Dism PowerShell module](https://learn.microsoft.com/en-us/powershell/module/dism/?view=windowsserver2025-ps&WT.mc_id=DOP-MVP-5001655) with equivalent cmdlets. I find these a bit friendlier to use, as you get parameter completion etc.
 
 We're going to copy the .WIM file from the ISO (or bootable USB we just created), but I'm also going to extract out just the particular image index I plan to use. This will make things simpler later on.
 
@@ -179,7 +179,7 @@ Copy-Item install.wim E:\sources
 
 ## Step 7. Extra automation with an `autounattend.xml` file
 
-The image we've got is a good start, but we're still going to be asked lots of questions during the install. Wouldn't it be nice to have most of those pre-answered? The way to do this is to create an [`autounattend.xml` file](https://learn.microsoft.com/windows-hardware/manufacture/desktop/automate-windows-setup?view=windows-11&WT.mc_id=DOP-MVP-5001655). There are Microsoft-provided tools to do this, which are included as part of the [Windows ADK](https://learn.microsoft.com/windows-hardware/get-started/adk-install?WT.mc_id=DOP-MVP-5001655), but that's really intended for folks running large Windows networks.
+The image we've got is a good start, but we're still going to be asked lots of questions during the install. Wouldn't it be nice to have most of those pre-answered? The way to do this is to create an [`autounattend.xml` file](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/automate-windows-setup?view=windows-11&WT.mc_id=DOP-MVP-5001655). There are Microsoft-provided tools to do this, which are included as part of the [Windows ADK](https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install?WT.mc_id=DOP-MVP-5001655), but that's really intended for folks running large Windows networks.
 
 An easier alternative is this very nifty [`autounattend.xml` generator website](https://schneegans.de/windows/unattend-generator/).
 

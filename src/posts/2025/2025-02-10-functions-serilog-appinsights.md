@@ -7,9 +7,9 @@ tags:
 - Azure Functions
 ---
 
-There's already some good resources online about configuring [.NET Azure Functions](https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655) with [Serilog](https://serilog.net/). For example, Shazni gives a [good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions](https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76), and Simon shows [how to use Serilog with Azure Functions in isolated worker model](https://simonholman.dev/configure-serilog-for-logging-in-azure-functions), but neither cover using App Insights.
+There's already some good resources online about configuring [.NET Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/how-to-create-function-azure-cli?pivots=programming-language-csharp&WT.mc_id=DOP-MVP-5001655) with [Serilog](https://serilog.net/). For example, Shazni gives a [good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions](https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76), and Simon shows [how to use Serilog with Azure Functions in isolated worker model](https://simonholman.dev/configure-serilog-for-logging-in-azure-functions), but neither cover using App Insights.
 
-It's important to note that the [in-process model goes out of support (along with .NET 8) in November 2026](https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655). Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)
+It's important to note that the [in-process model goes out of support (along with .NET 8) in November 2026](https://learn.microsoft.com/en-us/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655). Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)
 
 ![Serilog logo](../../assets/2025/02/serilog.png)
 
@@ -43,7 +43,7 @@ var host = new HostBuilder()
 host.Run();
 ```
 
-One of the challenges with using the App Insights Serilog Sink, is that it needs to be configured with an existing `TelemetryConfiguration`. The old way of doing this was to reference [`TelemetryConfiguration.Active`](https://learn.microsoft.com/dotnet/api/microsoft.applicationinsights.extensibility.telemetryconfiguration.active?view=azure-dotnet&WT.mc_id=DOP-MVP-5001655), however using this property has been discouraged in .NET Core (aka modern .NET).
+One of the challenges with using the App Insights Serilog Sink, is that it needs to be configured with an existing `TelemetryConfiguration`. The old way of doing this was to reference [`TelemetryConfiguration.Active`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.applicationinsights.extensibility.telemetryconfiguration.active?view=azure-dotnet&WT.mc_id=DOP-MVP-5001655), however using this property has been discouraged in .NET Core (aka modern .NET).
 
 Instead you're encouraged to retrieve a valid `TelemetryConfiguration` instance from the service provider, like this:
 
@@ -231,4 +231,4 @@ If I simulate a configuration error by throwing an exception inside the `Configu
 
 So there you go!
 
-And this is all well and good, but it's important to mention that Microsoft are suggesting for new codebases [use OpenTelemetry instead of App Insights](https://learn.microsoft.com/azure/azure-monitor/app/worker-service?WT.mc_id=DOP-MVP-5001655)! I'll have to check out how that works soon.
+And this is all well and good, but it's important to mention that Microsoft are suggesting for new codebases [use OpenTelemetry instead of App Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/classic-api?WT.mc_id=DOP-MVP-5001655)! I'll have to check out how that works soon.

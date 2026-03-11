@@ -10,7 +10,7 @@ One enhancement included in the .NET 8 SDK you might have overlooked is that if 
 
 ![.NET Logo](../../assets/2024/01/dotnet-logo.png)
 
-Find out more about Source Link in the [NuGet documentation](https://learn.microsoft.com/dotnet/standard/library-guidance/sourcelink?WT.mc_id=DOP-MVP-5001655)
+Find out more about Source Link in the [NuGet documentation](https://learn.microsoft.com/en-us/dotnet/standard/library-guidance/sourcelink?WT.mc_id=DOP-MVP-5001655)
 
 If you're using a tool like Dependabot to keep your NuGet packages up to date, you might see a pull request with a title similar to this:
 

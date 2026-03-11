@@ -24,7 +24,7 @@ Like primary constructors, I've also found these quite useful in new .NET 8 proj
 
 ### Further reading
 
-[https://learn.microsoft.com/dotnet/csharp/language-reference/operators/collection-expressions?WT.mc_id=DOP-MVP-5001655](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/collection-expressions?WT.mc_id=DOP-MVP-5001655)
+[https://learn.microsoft.com/dotnet/csharp/language-reference/operators/collection-expressions?WT.mc_id=DOP-MVP-5001655](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/collection-expressions?WT.mc_id=DOP-MVP-5001655)
 
 ### Example source
 

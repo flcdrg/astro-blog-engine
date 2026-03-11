@@ -15,17 +15,17 @@ One customisation I like to make to Windows is to disable the 'Tap with a single
 
 ![Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked](../../assets/2025/04/touchpad-settings.png)
 
-I found some [online articles](https://learn.microsoft.com/answers/questions/1258054/how-to-turn-off-touch-gestures-in-windows-10-11-%28d?WT.mc_id=DOP-MVP-5001655) that suggested this was managed by the Registry setting `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad`. Experimenting with this seems to be partly true. I can see the Registry value `TapsEnabled` is updated when I enable or disable the checkbox in Windows Settings. But the reverse did not seem to be true - if I modified the Registry key, Windows Settings doesn't change, nor does the touchpad behaviour.
+I found some [online articles](https://learn.microsoft.com/en-us/answers/questions/1258054/how-to-turn-off-touch-gestures-in-windows-10-11-(d?WT.mc_id=DOP-MVP-5001655) that suggested this was managed by the Registry setting `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad`. Experimenting with this seems to be partly true. I can see the Registry value `TapsEnabled` is updated when I enable or disable the checkbox in Windows Settings. But the reverse did not seem to be true - if I modified the Registry key, Windows Settings doesn't change, nor does the touchpad behaviour.
 
 ![Windows Registry Editor showing keys for PrecisionTouchPad](../../assets/2025/04/registry-editor.png)
 
-Further searching lead me to the [Tuning Guidelines](https://learn.microsoft.com/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655) page of the Windows Hardware Precision Touchpad Implementation Guide. I'm no hardware manufacturer, but this does document the [`TapsEnabled`](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655#tap-with-a-single-finger-to-single-click) setting. Interestinly, down the bottom of that page it does also mention:
+Further searching lead me to the [Tuning Guidelines](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655) page of the Windows Hardware Precision Touchpad Implementation Guide. I'm no hardware manufacturer, but this does document the [`TapsEnabled`](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-tuning-guidelines?WT.mc_id=DOP-MVP-5001655#tap-with-a-single-finger-to-single-click) setting. Interestinly, down the bottom of that page it does also mention:
 
 > As of Windows 11, build 26027, the user's touchpad settings can be queried and modified dynamically via the SystemParametersInfo API
 
-I'm running Windows 11 24H2, which is build 26100, so that ['SystemParametersInfo'](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-systemparametersinfoa?WT.mc_id=DOP-MVP-5001655) API should be available to me. Let's see if calling that does the trick.
+I'm running Windows 11 24H2, which is build 26100, so that ['SystemParametersInfo'](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa?WT.mc_id=DOP-MVP-5001655) API should be available to me. Let's see if calling that does the trick.
 
-My C/C++ is pretty rusty, whereas I'm quite at home in C# or PowerShell. My preference would be to use [.NET P/Invoke](https://learn.microsoft.com/dotnet/standard/native-interop/pinvoke?WT.mc_id=DOP-MVP-5001655) to call the Windows API.
+My C/C++ is pretty rusty, whereas I'm quite at home in C# or PowerShell. My preference would be to use [.NET P/Invoke](https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke?WT.mc_id=DOP-MVP-5001655) to call the Windows API.
 
 As I've learned from previous times using P/Invoke, The trick to getting it working properly is to make sure you have the method signature(s) and data structures correct.
 
@@ -101,7 +101,7 @@ public struct TOUCHPAD_PARAMETERS
 }
 ```
 
-And likewise for the two enums [LEGACY_TOUCHPAD_FEATURES enumeration](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ne-winuser-legacy_touchpad_features?WT.mc_id=DOP-MVP-5001655) and [TOUCHPAD_SENSITIVITY_LEVEL enumeration](https://learn.microsoft.com/windows/win32/api/winuser/ne-winuser-touchpad_sensitivity_level?WT.mc_id=DOP-MVP-5001655).
+And likewise for the two enums [LEGACY_TOUCHPAD_FEATURES enumeration](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ne-winuser-legacy_touchpad_features?WT.mc_id=DOP-MVP-5001655) and [TOUCHPAD_SENSITIVITY_LEVEL enumeration](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ne-winuser-touchpad_sensitivity_level?WT.mc_id=DOP-MVP-5001655).
 
 One thing you need to do is set the `VersionNumber` property to `TOUCHPAD_PARAMETERS_LATEST_VERSION`. Except I searched to find out what the value of that is, and no results. I ended up resorting to installing the Windows 11 SDK so I could locate WinUser.h and then I found this:
 
@@ -147,7 +147,7 @@ typedef struct TOUCHPAD_PARAMETERS {
 
 Notice all those numbers after many of the fields? Those indicate it is a [C bit field](https://learn.microsoft.com/en-us/cpp/c-language/c-bit-fields?view=msvc-170&WT.mc_id=DOP-MVP-5001655). And guess what feature [C# doesn't currently support](https://github.com/dotnet/csharplang/discussions/465)?
 
-In that discussion though [there is a suggestion](https://github.com/dotnet/csharplang/discussions/465#discussioncomment-8399377) that you can use [`BitVector32`](https://learn.microsoft.com/dotnet/api/system.collections.specialized.bitvector32?view=net-9.0&WT.mc_id=DOP-MVP-5001655) or [`BitArray`](https://learn.microsoft.com/dotnet/api/system.collections.bitarray?view=net-9.0&WT.mc_id=DOP-MVP-5001655) as a workaround. For usability, we can add properties in to expose access to the individual bits in the `BitVector32` field. Also note that the values passed in via the `[]` is a bitmask, not an array index. (Yes, that tricked me the first time too!)
+In that discussion though [there is a suggestion](https://github.com/dotnet/csharplang/discussions/465#discussioncomment-8399377) that you can use [`BitVector32`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.specialized.bitvector32?view=net-9.0&WT.mc_id=DOP-MVP-5001655) or [`BitArray`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.bitarray?view=net-9.0&WT.mc_id=DOP-MVP-5001655) as a workaround. For usability, we can add properties in to expose access to the individual bits in the `BitVector32` field. Also note that the values passed in via the `[]` is a bitmask, not an array index. (Yes, that tricked me the first time too!)
 
 ```csharp
 [StructLayout(LayoutKind.Sequential)]

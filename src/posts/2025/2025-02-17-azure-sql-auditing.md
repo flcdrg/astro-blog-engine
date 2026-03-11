@@ -17,7 +17,7 @@ Sometimes when you're using Terraform for your Infrastructure as Code with Azure
 
 In the Azure Portal, select your Azure SQL resource, then expand the **Security** menu and select **Auditing**. You can then choose to **Enable Azure SQL Auditing**, and upon doing this you can then choose to send auditing data to any or all of Azure Storage, Log Analytics and/or Event Hub.
 
-It's also worth highlighting that usually you'd [enable auditing at the server level](https://learn.microsoft.com/azure/azure-sql/database/auditing-server-level-database-level?view=azuresql&WT.mc_id=DOP-MVP-5001655), but it is also possible to enable it per database.
+It's also worth highlighting that usually you'd [enable auditing at the server level](https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-server-level-database-level?view=azuresql&WT.mc_id=DOP-MVP-5001655), but it is also possible to enable it per database.
 
 The two Terraform resources you may have encountered to manage this are [`mssql_server_extended_auditing_policy`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server_extended_auditing_policy) and [`mssql_database_extended_auditing_policy`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_database_extended_auditing_policy).
 

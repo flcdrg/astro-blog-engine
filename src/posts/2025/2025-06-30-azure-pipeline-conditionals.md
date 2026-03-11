@@ -18,7 +18,7 @@ In this post we'll look at custom conditions.
 
 ## Custom conditions
 
-[Custom conditions](https://learn.microsoft.com/azure/devops/pipelines/process/conditions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) are evaluated at runtime.
+[Custom conditions](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/conditions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) are evaluated at runtime.
 
 Here's an example of a step with a custom condition which causes it to be skipped if the pipeline runs on a branch other than 'main':
 

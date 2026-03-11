@@ -23,7 +23,7 @@ I do really prefer using TypeScript if possibly, and the support for that was no
 
 Eleventy v3 was released late last year after I'd done my test run, so it could be worth revisiting.
 
-Lastly, I wondered whether it was worth trying to do it all myself. I started to prototype out what this might look like at [https://github.com/flcdrg/DaydreamEngine](https://github.com/flcdrg/DaydreamEngine). I could potentially use ASP.NET Core's Razor components for managing layout with the [ability to render them even when you're not running a web server](https://learn.microsoft.com/aspnet/core/blazor/components/render-components-outside-of-aspnetcore?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655).
+Lastly, I wondered whether it was worth trying to do it all myself. I started to prototype out what this might look like at [https://github.com/flcdrg/DaydreamEngine](https://github.com/flcdrg/DaydreamEngine). I could potentially use ASP.NET Core's Razor components for managing layout with the [ability to render them even when you're not running a web server](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-components-outside-of-aspnetcore?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655).
 
 ## Blog structure
 
