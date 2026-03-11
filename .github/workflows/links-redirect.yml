@@ -52,10 +52,19 @@ jobs:
               }
           }
 
-          $replacementsJson = $replacements | ConvertTo-Json -Depth 2 -Compress
+          $replacementPairs = @(
+              foreach ($key in $replacements.Keys) {
+                  [PSCustomObject]@{
+                      find = $key
+                      replace = $replacements[$key]
+                  }
+              }
+          )
+
+          $replacementsJson = $replacementPairs | ConvertTo-Json -Depth 3 -Compress
           $replacementsJson | Set-Content -Path ./artifacts/replacements.json
 
-          Write-Host "Found $($replacements.Count) URL replacements"
+          Write-Host "Found $($replacementPairs.Count) URL replacements"
 
           "replacements=$replacementsJson" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           "should_continue=$hasRedirectMap" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
