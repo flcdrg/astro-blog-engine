@@ -82,6 +82,7 @@ jobs:
         with:
           name: redirect-replacements
           path: ./artifacts/replacements.json
+          retention-days: 7
 
       - name: Replacements
         if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
