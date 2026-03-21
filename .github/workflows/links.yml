@@ -65,6 +65,7 @@ jobs:
         with:
           name: modified
           path: ./artifacts/output.json
+          retention-days: 7
 
       - name: Wayback Machine Query
         uses: flcdrg/wayback-machine-query-action@v7
@@ -77,6 +78,7 @@ jobs:
         with:
           name: replacements
           path: ./wayback/replacements.json
+          retention-days: 7
 
       - name: Replacements
         uses: flcdrg/replace-multiple-action@v4
