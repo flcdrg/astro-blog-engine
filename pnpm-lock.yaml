@@ -45,8 +45,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       astrojs-atom:
-        specifier: ^1.0.246
-        version: 1.0.246(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.3)
+        specifier: ^1.0.263
+        version: 1.0.263(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.3)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -1006,8 +1006,8 @@ packages:
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
-  astrojs-atom@1.0.246:
-    resolution: {integrity: sha512-JcVRisaOqMTm2aZSiy7n++fDFr1fj5OoAY75VW0OecYPGM34r5gbjyk+nxvrIQer0usJua0UK8sY+jy0ylxuRw==}
+  astrojs-atom@1.0.263:
+    resolution: {integrity: sha512-Y0wCgWggQveJs/bA3tkcJ4kL9rnnC7Y6I39Flou08cxW3RtD7eVEFd7hdZXzA5UCiJWba+cUYOdYNzNvk77wQw==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -1294,8 +1294,8 @@ packages:
   fast-xml-builder@1.1.4:
     resolution: {integrity: sha512-f2jhpN4Eccy0/Uz9csxh3Nu6q4ErKxf0XIsasomfOihuSUa3/xw6w8dnOtCDgEItQFJG8KyXPzQXzcODDrrbOg==}
 
-  fast-xml-parser@5.5.8:
-    resolution: {integrity: sha512-Z7Fh2nVQSb2d+poDViM063ix2ZGt9jmY1nWhPfHBOK2Hgnb/OW3P4Et3P/81SEej0J7QbWtJqxO05h8QYfK7LQ==}
+  fast-xml-parser@5.5.9:
+    resolution: {integrity: sha512-jldvxr1MC6rtiZKgrFnDSvT8xuH+eJqxqOBThUVjYrxssYTo1avZLGql5l0a0BAERR01CadYzZ83kVEkbyDg+g==}
     hasBin: true
 
   fastq@1.20.1:
@@ -2049,8 +2049,8 @@ packages:
     resolution: {integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==}
     engines: {node: '>=12'}
 
-  strnum@2.2.0:
-    resolution: {integrity: sha512-Y7Bj8XyJxnPAORMZj/xltsfo55uOiyHcU2tnAVzHUnSJR/KsEX+9RoDeXEnsXtl/CX4fAcrt64gZ13aGaWPeBg==}
+  strnum@2.2.2:
+    resolution: {integrity: sha512-DnR90I+jtXNSTXWdwrEy9FakW7UX+qUZg28gj5fk2vxxl7uS/3bpI4fjFYVmdK9etptYBPNkpahuQnEwhwECqA==}
 
   style-to-js@1.1.21:
     resolution: {integrity: sha512-RjQetxJrrUJLQPHbLku6U/ocGtzyjbJMP9lCNK7Ag0CNh690nSH8woqWH9u16nMjYBAok+i7JO1NP2pOy8IsPQ==}
@@ -3310,10 +3310,10 @@ snapshots:
       - uploadthing
       - yaml
 
-  astrojs-atom@1.0.246(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.3):
+  astrojs-atom@1.0.263(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.3):
     dependencies:
       astro: 5.18.1(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.3)
-      fast-xml-parser: 5.5.8
+      fast-xml-parser: 5.5.9
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -3658,11 +3658,11 @@ snapshots:
     dependencies:
       path-expression-matcher: 1.2.0
 
-  fast-xml-parser@5.5.8:
+  fast-xml-parser@5.5.9:
     dependencies:
       fast-xml-builder: 1.1.4
       path-expression-matcher: 1.2.0
-      strnum: 2.2.0
+      strnum: 2.2.2
 
   fastq@1.20.1:
     dependencies:
@@ -4888,7 +4888,7 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
-  strnum@2.2.0: {}
+  strnum@2.2.2: {}
 
   style-to-js@1.1.21:
     dependencies:
