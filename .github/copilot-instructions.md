@@ -4,7 +4,7 @@ This is a static website using Astro. Use pnpm for all Node package operations. 
 
 ## Tooling
 
-- Node: Use LTS (recommend 20.x). Prefer `.nvmrc`/`.node-version` if adding engine constraints.
+- Node: Use Node `22.12.0+` (Astro v6 requirement). Prefer `.nvmrc`/`.node-version` if adding engine constraints.
 - Package manager: pnpm only. Do not suggest npm/yarn commands.
 
 Common commands:
@@ -19,6 +19,7 @@ Common commands:
 - Layouts: `src/layouts/BaseLayout.astro` is the root layout. Put global head/nav/footer there.
 - Components: `src/components/*`. Keep components small and reusable.
 - Styles: Global styles in `src/styles/global.css`. Prefer component-scoped styles otherwise.
+- Content collections: `src/content.config.ts` uses the Content Layer API.
 
 ## Layout and slots
 
@@ -43,6 +44,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 - Use Luxon for dates. Display dates relative to the Australia/Adelaide timezone.
 - Prefer `DateTime.fromISO(iso, { zone: "Australia/Adelaide" })` and format via `toLocaleString` with proper options.
+
+## Content schemas (Astro v6)
+
+- Import `z` from `astro/zod` (not from `astro:content` or `astro:schema`).
+- Keep collection schemas aligned with Zod 4 APIs.
 
 ## Environment variables
 

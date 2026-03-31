@@ -1,5 +1,6 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { DateTime } from "luxon";
 
 const blog = defineCollection({
@@ -18,7 +19,7 @@ const blog = defineCollection({
   }),
   schema: ({ image }) =>
     z.object({
-      date: z.string().datetime({ offset: true }),
+      date: z.iso.datetime({ offset: true }),
       title: z.string(),
       draft: z.boolean().optional().default(false),
       tags: z.array(z.string()).default(["others"]),
