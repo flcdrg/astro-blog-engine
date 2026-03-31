@@ -4,12 +4,19 @@
   <title type="html">David Gardiner</title>
   <updated>DateTime_1</updated>
   <subtitle>A blog of software development, .NET and other interesting things</subtitle>
-  <generator uri="https://github.com/flcdrg/astrojs-atom" version="3.0.2">astrojs-atom</generator>
+  <rights>Copyright 2026 David Gardiner</rights>
+  <icon>https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab?s=64</icon>
+  <logo>https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab?s=256</logo>
+  <generator uri="https://github.com/flcdrg/astrojs-atom" version="3">astrojs-atom</generator>
   <author>
     <name>David Gardiner</name>
   </author>
   <link href="https://david.gardiner.net.au/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://david.gardiner.net.au/" rel="alternate" type="text/html" hreflang="en-AU"/>
+  <category term=".NET"/>
+  <category term="Software Development"/>
+  <category term="Azure"/>
+  <category term="DevOps"/>
   <entry>
     <id>https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression</id>
     <updated>2025-07-14T08:00:00.000+09:30</updated>
@@ -108,8 +115,8 @@ Loop expressions are a powerful technique that can be used to reduce duplication
 &lt;p&gt;Template expressions are a powerful feature. Curiously, despite GitHub Actions having many similarities to Azure Pipelines, this is one aspect that they didn&apos;t port over.&lt;/p&gt;
 &lt;p&gt;Often I see custom conditions being used where template expressions would be a better fit. It&apos;s worth considering if using them more could simplify and improve your pipelines.&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png" width="80" height="80"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png" width="80" height="80"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals</id>
@@ -225,8 +232,8 @@ Loop expressions are a powerful technique that can be used to reduce duplication
 &lt;p&gt;For activities that were skipped, when you select the specific task, job or stage, you can view the conditional expression and the actual parameters that were used in its evaluation to understand why it resulted in a &lt;code&gt;False&lt;/code&gt; value. In the screenshot above, notice that while the &lt;code&gt;succeeded()&lt;/code&gt; function evaluated to &lt;code&gt;True&lt;/code&gt;, the &lt;code&gt;ne()&lt;/code&gt; function did not, and because those two were combined with an &lt;code&gt;and()&lt;/code&gt; then the final result was also &lt;code&gt;False&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;In the next post we&apos;ll look at conditional insertion with template expressions and discuss when you&apos;d use that approach over custom conditions.&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png" width="80" height="80"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-pipelines-logo.B45UakAg.png" width="80" height="80"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/04/edifier-speakers</id>
@@ -261,8 +268,8 @@ Powered Studio Monitor speakers.</summary>
 &lt;p&gt;One thing to be aware of if you regularly turn off the power to your devices when you&apos;re not using them (like I do to save power) - when mains power is restored they default to &apos;off&apos; mode. So you need to press the power button on the front of the speakers to turn them on.&lt;/p&gt;
 &lt;p&gt;So thanks Rebecca, those were a good recommendation. I&apos;m enjoying them a lot!&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg" width="605" height="806"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/edifier-rear-view.GTkyIzJg.jpg" width="605" height="806"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/04/touchpad-settings</id>
@@ -469,8 +476,8 @@ Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerOptions &qu
 &lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/touchpad-settings-demo.iszIrUx__MTfLT.webp&quot; alt=&quot;Demo of script disabling touchpad&apos;s &apos;tap with single finger to single-click&apos;&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;That&apos;s one problem solved. Just a few more to go!&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png" width="499" height="472"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/touchpad-settings.QcmMTYok.png" width="499" height="472"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/04/reinstalling-laptop</id>
@@ -705,8 +712,8 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
 &lt;p&gt;It&apos;s worth thinking about what else could be include in the custom Windows image or the autounattend.xml file, to further streamline the installation process. For example, the latest cumulative updates?&lt;/p&gt;
 &lt;p&gt;The other part that would be great to automate is all the numerous tasks you need to perform to finish setting up application software, signing into things, setting up your web browser, have Git configured correctly, OneDrive(s) and the list goes on. Some of these (especially the signing in/authenticating) ones may always require manual intervention, but the others may be able to be scripted, if not totally then at least partially.&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg" width="1000" height="404"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/Windows-11-Logo-1000x404.B7euyBZy.jpg" width="1000" height="404"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/04/azure-function-isolated</id>
@@ -826,8 +833,8 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Looks like &lt;a href=&quot;https://github.com/Azure/azure-functions-dotnet-worker/issues/3010&quot;&gt;I&apos;m not alone&lt;/a&gt; with this either.&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png" width="400" height="400"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-function.B3FwAwqX.png" width="400" height="400"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/02/ddd-melbourne</id>
@@ -867,8 +874,8 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 &lt;p&gt;There&apos;s definitely some logistical challenges that Melbourne has with running such a large event compared to what we do in Adelaide. It&apos;s also interesting to see first hand how DDD runs in a commercial conference venue.&lt;/p&gt;
 &lt;p&gt;Well done DDD Melbourne, you put on a great day. As someone who has a good idea what goes into doing that, I really appreciate all you did (both seen and unseen).&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png" width="1329" height="118"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/dddmelbourne-2025.DQN7H_co.png" width="1329" height="118"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/02/azure-sql-auditing</id>
@@ -1211,8 +1218,8 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 }
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg" width="120" height="120"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg" width="120" height="120"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/02/powershell-command-arguments</id>
@@ -1245,8 +1252,8 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 &lt;p&gt;And the colouring on the command line also hints that it is not treating the comma as something special.&lt;/p&gt;
 &lt;p&gt;And now our Docker command works!&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
   </entry>
   <entry>
     <id>https://david.gardiner.net.au/2025/02/functions-serilog-appinsights</id>
@@ -1450,7 +1457,7 @@ finally
 &lt;p&gt;So there you go!&lt;/p&gt;
 &lt;p&gt;And this is all well and good, but it&apos;s important to mention that Microsoft are suggesting for new codebases &lt;a href=&quot;https://learn.microsoft.com/azure/azure-monitor/app/worker-service?WT.mc_id=DOP-MVP-5001655&quot;&gt;use OpenTelemetry instead of App Insights&lt;/a&gt;! I&apos;ll have to check out how that works soon.&lt;/p&gt;
 </content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png"/>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png" width="200" height="200"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png" width="200" height="200"/>
   </entry>
 </feed>

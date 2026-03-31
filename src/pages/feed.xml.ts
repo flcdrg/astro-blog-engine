@@ -107,6 +107,8 @@ export async function GET(context: APIContext) {
       thumbnail: post.data.image
         ? {
             url: `${new URL(post.data.image.src, context.site).toString()}`,
+            width: post.data.image.width,
+            height: post.data.image.height,
           }
         : undefined,
     });
@@ -128,6 +130,20 @@ export async function GET(context: APIContext) {
     updated: new Date().toISOString(),
     subtitle:
       "A blog of software development, .NET and other interesting things",
+    generator: {
+      value: "astrojs-atom",
+      uri: "https://github.com/flcdrg/astrojs-atom",
+      version: "3",
+    },
+    rights: `Copyright ${new Date().getFullYear()} David Gardiner`,
+    icon: "https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab?s=64",
+    logo: "https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab?s=256",
+    category: [
+      { term: ".NET" },
+      { term: "Software Development" },
+      { term: "Azure" },
+      { term: "DevOps" },
+    ],
     link: [
       {
         rel: "self",
@@ -142,6 +158,7 @@ export async function GET(context: APIContext) {
       },
     ],
     lang: "en-AU",
+    sortEntriesByUpdated: true,
     entry: feed,
   });
 }
