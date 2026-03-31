@@ -4,7 +4,9 @@
   "LinkFormat": "GitHub",
   "TocLevel": 3,
   "UrlsAsSnippets": [ 
-    "https://raw.githubusercontent.com/flcdrg/azure-pipelines-template-expressions/refs/heads/main/azure-pipelines.yml" 
+    "https://raw.githubusercontent.com/flcdrg/azure-pipelines-template-expressions/refs/heads/main/azure-pipelines.yml",
+    "https://raw.githubusercontent.com/flcdrg/Verify.Cli/refs/heads/main/Verify.Other.Tests/Tests.cs",
+    "https://raw.githubusercontent.com/flcdrg/astro-blog-engine/refs/heads/main/.github/workflows/main.yml"
      ],
   "TocExcludes": [ "Exclude Heading1", "Exclude Heading2" ],
   "Convention": "InPlaceOverwrite",

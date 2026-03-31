@@ -21,7 +21,7 @@ It's also worth highlighting that usually you'd [enable auditing at the server l
 
 The two Terraform resources you may have encountered to manage this are [`mssql_server_extended_auditing_policy`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server_extended_auditing_policy) and [`mssql_database_extended_auditing_policy`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_database_extended_auditing_policy).
 
-It's useful to refer back to the [Azure SQL documentation on setting up auditing](https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-setup?view=azuresql&WT.mc_id=DOP-MVP-5001655) to understand how to use these.
+It's useful to refer back to the [Azure SQL documentation on setting up auditing](https://learn.microsoft.com/azure/azure-sql/database/auditing-setup?view=azuresql&WT.mc_id=DOP-MVP-5001655) to understand how to use these.
 
 A couple of points that are worth highlighting:
 
@@ -33,7 +33,7 @@ A couple of points that are worth highlighting:
 
 2. If you do define auditing at the server level, the policy applies to all existing and newly created databases on the server. If you define auditing at the database level, the policy will apply in addition to any server level settings. So be careful you don't end up auditing the same thing twice unintentionally!
 
-Sometimes it can also be useful to review equivalent the Bicep/ARM definitions [Microsoft.Sql/servers/extendedAuditingSettings](https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/extendedauditingsettings?pivots=deployment-language-bicep&WT.mc_id=DOP-MVP-5001655), as sometimes they can clarify how to use various properties.
+Sometimes it can also be useful to review equivalent the Bicep/ARM definitions [Microsoft.Sql/servers/extendedAuditingSettings](https://learn.microsoft.com/azure/templates/microsoft.sql/servers/extendedauditingsettings?pivots=deployment-language-bicep&WT.mc_id=DOP-MVP-5001655), as sometimes they can clarify how to use various properties.
 
 You'll see both the Terraform and Bicep have properties to configure using a Storage Account, but while you can see Log Analytics and Event Hub in the Portal UI, it's not obvious how those set up.
 
@@ -51,7 +51,7 @@ This enables the server auditing policy, but the data isn't going anywhere yet!
 
 When you select an Azure Storage Account for storing auditing data, you will end up with a bunch `.xel` files created under a **sqldbauditlogs** blob container.
 
-There are a number of ways to view the `.xel` files, [documented here](https://learn.microsoft.com/en-us/azure/azure-sql/database/auditing-analyze-audit-logs?view=azuresql&WT.mc_id=DOP-MVP-5001655#analyze-logs-using-logs-in-an-azure-storage-account)
+There are a number of ways to view the `.xel` files, [documented here](https://learn.microsoft.com/azure/azure-sql/database/auditing-analyze-audit-logs?view=azuresql&WT.mc_id=DOP-MVP-5001655#analyze-logs-using-logs-in-an-azure-storage-account)
 
 Using a storage account for storing auditing has a few variations, depending on how you want to authenticate to the Storage Account.
 
