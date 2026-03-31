@@ -5,16 +5,9 @@ import sanitizeHtml from "sanitize-html";
 import type { APIContext } from "astro";
 import getExcerpt from "../scripts/getExcerpt";
 import onlyCurrent from "../scripts/filters";
+import { resolveFeedImageSrc } from "../scripts/resolveFeedImageSrc";
 import { parse as htmlParser } from "node-html-parser";
-import { getImage } from "astro:assets";
 import { marked } from "marked";
-
-// From https://billyle.dev/posts/adding-rss-feed-content-and-fixing-markdown-image-paths-in-astro
-
-// get dynamic import of images as a map collection
-const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,avif,svg}" // add more image formats if needed
-);
 
 export async function GET(context: APIContext) {
   if (!context.site) {
@@ -41,38 +34,17 @@ export async function GET(context: APIContext) {
     const body = await marked.parse(post.body!);
 
     // convert html string to DOM-like structure
-    const html = htmlParser.parse(body, { comment: false});
+    const html = htmlParser.parse(body, { comment: false });
     // hold all img tags in variable images
     const images = html.querySelectorAll("img");
 
     for (const img of images) {
       const src = img.getAttribute("src")!;
 
-      // Relative paths that are optimized by Astro build
-      if (src.startsWith("../../assets/")) {
-        // remove prefix of `./`
-        const prefixRemoved = src.replace("../../assets/", "");
-        // create prefix absolute path from root dir
-        const imagePathPrefix = `/src/assets/${prefixRemoved}`;
+      const resolvedSrc = await resolveFeedImageSrc(src, context.site);
 
-        // call the dynamic import and return the module
-        const imagePath = await imagesGlob[imagePathPrefix]?.()?.then(
-          (res) => res.default
-        );
-
-        if (imagePath) {
-          const optimizedImg = await getImage({ src: imagePath });
-          const newSrc = new URL(optimizedImg.src, context.site).toString();
-
-          // set the correct path to the optimized image
-          img.setAttribute("src", newSrc);
-        }
-      } else if (src.startsWith("/images")) {
-        // images starting with `/images/` is the public dir
-        img.setAttribute("src", new URL(src, context.site).toString());
-      } else if (/^https?:\/\//i.test(src)) {
-        // Keep already absolute external image URLs as-is.
-        continue;
+      if (resolvedSrc) {
+        img.setAttribute("src", resolvedSrc);
       }
     }
 
