@@ -7,7 +7,7 @@ tags:
 - Azure Functions
 ---
 
-There's already some good resources online about configuring [.NET Azure Functions](https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655) with [Serilog](https://serilog.net/). For example, Shazni gives a [good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions](https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76), and Simon shows [how to use Serilog with Azure Functions in isolated worker model](https://simonholman.dev/configure-serilog-for-logging-in-azure-functions), but neither cover using App Insights.
+There's already some good resources online about configuring [.NET Azure Functions](https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655) with [Serilog](https://serilog.net/). For example, Shazni gives a [good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions](https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76), and Simon shows [how to use Serilog with Azure Functions in isolated worker model](https://simonholman.dev/blog/configure-serilog-for-logging-in-azure-functions), but neither cover using App Insights.
 
 It's important to note that the [in-process model goes out of support (along with .NET 8) in November 2026](https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655). Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)
 
@@ -129,7 +129,7 @@ try
         .ConfigureLogging(logging =>
         {
             // Remove the default Application Insights logger provider so that Information logs are sent
-            // https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Clinux&WT.mc_id=DOP-MVP-5001655#managing-log-levels
+            // https://learn.microsoft.com/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Clinux&WT.mc_id=DOP-MVP-5001655#managing-log-levels
             logging.Services.Configure<LoggerFilterOptions>(options =>
             {
                 LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule => rule.ProviderName

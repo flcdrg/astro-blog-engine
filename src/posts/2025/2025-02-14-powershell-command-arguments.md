@@ -23,9 +23,9 @@ It should be evaluating the `$($env:USERPROFILE)` expression to the current user
 
 Is there some recent breaking change in how PowerShell evaluates arguments to a native command? I skimmed the release notes but nothing jumped out.
 
-I know you can use the ["stop-parsing token" `--%`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&WT.mc_id=DOP-MVP-5001655#the-stop-parsing-token) to stop PowerShell from interpreting subsequent text on the line as commands or expressions, but I wasn't using that.
+I know you can use the ["stop-parsing token" `--%`](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&WT.mc_id=DOP-MVP-5001655#the-stop-parsing-token) to stop PowerShell from interpreting subsequent text on the line as commands or expressions, but I wasn't using that.
 
-In fact the whole [about_Parsing](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&WT.mc_id=DOP-MVP-5001655) documentation is a good read to understand the different modes and how PowerShell passes arguments to native and PowerShell commands. But I still couldn't figure it out.
+In fact the whole [about_Parsing](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&WT.mc_id=DOP-MVP-5001655) documentation is a good read to understand the different modes and how PowerShell passes arguments to native and PowerShell commands. But I still couldn't figure it out.
 
 So what's going on?
 

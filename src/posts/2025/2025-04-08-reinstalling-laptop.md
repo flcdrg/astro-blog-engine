@@ -19,7 +19,7 @@ If you use the built in [Windows Reset feature](https://support.microsoft.com/en
 
 If you want to make this whole process easier, having a separate partition (or second physical drive) for all your data/documents/files will mean you can completely blow away your C: drive where Windows is installed, and all those files in the other partition will be untouched.
 
-In my case, I partitioned my SSD to have D: as my [Dev Drive](https://learn.microsoft.com/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655) (which uses the newer [ReFS file system](https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655)).
+In my case, I partitioned my SSD to have D: as my [Dev Drive](https://learn.microsoft.com/windows/dev-drive/?WT.mc_id=DOP-MVP-5001655) (which uses the newer [ReFS file system](https://learn.microsoft.com/windows-server/storage/refs/refs-overview?WT.mc_id=DOP-MVP-5001655)).
 
 Having a full system backup is another great idea. Knowing that if something goes wrong and you have a way to restore your system back to how it was before you started it process is reassuring. I take advantage of [Synology Active Backup for Business](https://www.synology.com/en-global/dsm/feature/active-backup-business/pc) to take full backups of my machines, as well as taking using OneDrive for storing other important files and documents.
 

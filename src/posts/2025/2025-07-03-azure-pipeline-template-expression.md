@@ -25,11 +25,11 @@ If we use a template expression, then if it evaluates to false then the step is 
 
 [Template expressions](https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655) use the syntax `${{ }}`
 
-You can reference `parameters` and `variables` in template expressions. The latter are only variables that are defined in the YAML file and most of the [predefined variables](https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&WT.mc_id=DOP-MVP-5001655). (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)
+You can reference `parameters` and `variables` in template expressions. The latter are only variables that are defined in the YAML file and most of the [predefined variables](https://learn.microsoft.com/azure/devops/pipelines/build/variables?view=azure-devops&WT.mc_id=DOP-MVP-5001655). (That page does list which variables can be used in template expressions, but you may need to scroll the page to the right to see that column!)
 
 You can't reference variables that are created by scripts or anything else that is only available at runtime.
 
-You can use [general functions](https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#functions) (the same ones we used previously with runtime Custom Conditions) in template expressions, as well as two special [Template expression functions](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#template-expression-functions).
+You can use [general functions](https://learn.microsoft.com/azure/devops/pipelines/process/expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#functions) (the same ones we used previously with runtime Custom Conditions) in template expressions, as well as two special [Template expression functions](https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#template-expression-functions).
 
 ## Common patterns
 
@@ -37,7 +37,7 @@ You can see a complete pipeline demonstrating all the following patterns at <htt
 
 ### Conditionally include stage, job or step
 
-The official documentation calls this [Conditional Insertion](https://learn.microsoft.com/en-au/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#conditional-insertion).
+The official documentation calls this [Conditional Insertion](https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&WT.mc_id=DOP-MVP-5001655#conditional-insertion).
 
 Here's an example where we only want to publish build artifacts if we're building the main branch:
 
