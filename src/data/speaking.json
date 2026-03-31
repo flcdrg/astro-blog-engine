@@ -1,0 +1,568 @@
+[
+  {
+    "date": "11th February 2026",
+    "title": "Our favourite parts of .NET 10, with Ryan, Mark and David",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Meetup",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/313171139"
+      },
+      {
+        "label": "Audio recording",
+        "url": "https://archive.org/details/adnug-2026-02"
+      }
+    ]
+  },
+  {
+    "date": "14th November 2025",
+    "title": "Taking .NET out of .NET Aspire - working with non-.NET applications",
+    "event": ".NET Conf 2025",
+    "links": [
+      {
+        "label": "2025 agenda",
+        "url": "https://web.archive.org/web/20251114145210/https://www.dotnetconf.net/agenda",
+        "note": ""
+      },
+      {
+        "label": "Recording",
+        "url": "https://www.youtube.com/watch?v=FcAi-kqo3ps"
+      }
+    ]
+  },
+  {
+    "date": "10th June 2025",
+    "title": "Order from chaos - Importing brownfield Azure applications into Terraform",
+    "event": "Adelaide Azure User Group",
+    "links": [
+      {
+        "label": "Meetup",
+        "url": "https://www.meetup.com/adelaide-azure-user-group/events/308059790"
+      }
+    ]
+  },
+  {
+    "date": "12th March 2025",
+    "title": ".NET Development in 2025 + InstallFest!",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Meetup",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/306373821"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/cqtj0Zh1G-k"
+      }
+    ]
+  },
+  {
+    "date": "7th December 2024",
+    "title": "10 tips and tricks for GitHub Actions and Azure DevOps",
+    "event": "DDD Brisbane",
+    "links": [
+      {
+        "label": "Agenda",
+        "url": "https://www.dddbrisbane.com/agenda/2024"
+      }
+    ]
+  },
+  {
+    "date": "11th September 2024",
+    "title": "10 tips and tricks for GitHub Actions and Azure DevOps",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Meetup",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/303049329"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/kbXooI0Ux9E"
+      }
+    ]
+  },
+  {
+    "date": "4th June 2024",
+    "title": "DevOps for IT Pros",
+    "event": "Adelaide Microsoft IT Pro Community",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/adelaide-microsoft-itpro-community/events/300265089"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/7Ty8XZtYwSc?si=t_DjvRIYc4bL_Abg&t=1401"
+      }
+    ]
+  },
+  {
+    "date": "22nd February 2024",
+    "title": "Bullet-proof builds",
+    "event": "Australian Computer Society (SA Branch)",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.acs.org.au/cpd-education/event-detail.html?eventId=701GB000002Cc1LYAS"
+      }
+    ]
+  },
+  {
+    "date": "14th February 2024",
+    "title": ".NET 8 Lightning talks - What's new in C# 12",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Meetup",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/298685906/"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/2YrDEC1PDek"
+      }
+    ]
+  },
+  {
+    "date": "21st January 2023",
+    "title": "Contain your enthusiasm (and your app) with the .NET SDK Container Building Tools",
+    "event": ".NET Conf Manilla 2022",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://rijsat.com/2022/10/06/net-conf-2022-philippines/"
+      }
+    ]
+  },
+  {
+    "date": "9th November 2022",
+    "title": "Containers in .NET 7",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/289414799/"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/vhg0pSLJgQE"
+      }
+    ]
+  },
+  {
+    "date": "25th January 2022",
+    "title": "What's new in .NET 6 and Visual Studio 2022",
+    "event": ".NET Virtual Conference 2022",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.csharp.com/events/net-conference-2022"
+      },
+      {
+        "label": "Website",
+        "url": "https://dotnetconference.com/"
+      }
+    ]
+  },
+  {
+    "date": "10th November 2021",
+    "title": ".NET 6 Launch",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/Adelaide-dotNET/events/280982508/"
+      }
+    ]
+  },
+  {
+    "date": "14th July 2021",
+    "title": "Funky Azure Functions with .NET 5 and 6",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/Adelaide-dotNET/events/278946503/"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/R9cjn2G46bE"
+      }
+    ]
+  },
+  {
+    "date": "29th April 2021",
+    "title": "Tabs vs Spaces",
+    "event": "New Breakpoint",
+    "links": [
+      {
+        "label": "Recording",
+        "url": "https://www.youtube.com/watch?v=OzSv4ae6-Xo"
+      }
+    ]
+  },
+  {
+    "date": "30th March 2021",
+    "title": "Harder, Better, Faster, Stronger Builds",
+    "event": "Microsoft Reactor Sydney",
+    "links": [
+      {
+        "label": "Recording",
+        "url": "https://www.youtube.com/watch?v=25v5H9WAmYk"
+      }
+    ]
+  },
+  {
+    "date": "12th December 2020",
+    "title": "Harder, Better, Faster, Stronger Builds",
+    "event": "DDD UK 2020",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://developerdeveloperdeveloper.com/"
+      }
+    ]
+  },
+  {
+    "date": "9th September 2020",
+    "title": "Harder, Better, Faster, Stronger Builds",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/Adelaide-dotNET/events/272666555/"
+      }
+    ]
+  },
+  {
+    "date": "September 2020",
+    "title": "Why I'm excited to be a developer right now (panel discussion)",
+    "event": "Microsoft Ignite 2020",
+    "links": [
+      {
+        "label": "Session link",
+        "url": "https://web.archive.org/web/20201024213659/https://myignite.microsoft.com/sessions/ef0a56d6-0570-4fb6-ac38-0b268804b707",
+        "note": "broken"
+      }
+    ]
+  },
+  {
+    "date": "19th August 2020",
+    "title": "Azure DevOps API: Improving quality by extending Azure Repos",
+    "event": "Microsoft Reactor Sydney",
+    "links": [
+      {
+        "label": "Recording",
+        "url": "https://www.youtube.com/watch?v=gSHIDLcwLUk"
+      }
+    ]
+  },
+  {
+    "date": "13th November 2019",
+    "title": ".NET Core 3 Publishing",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/Adelaide-dotNET/events/265896189/"
+      }
+    ]
+  },
+  {
+    "date": "8th May 2019",
+    "title": "VS2019 Launch",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/258974130"
+      }
+    ]
+  },
+  {
+    "date": "27th March 2019",
+    "title": "Improving quality by extending Azure Repos",
+    "event": "North Toronto Cloud & DevOps User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/NorthTorontoUG/events/257079122/"
+      }
+    ]
+  },
+  {
+    "date": "14th September 2018",
+    "title": "Put your C#, VB and F# projects and packaging on a diet",
+    "event": ".NET Conf 2018",
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.dotnetconf.net/"
+      },
+      {
+        "label": "Recording",
+        "url": "https://www.youtube.com/watch?v=plYzZxhYGzI"
+      }
+    ]
+  },
+  {
+    "date": "28th February 2018",
+    "title": "Migrating to VSTS",
+    "event": "Toronto Azure Community",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/toronto-azure-community/events/246659995/"
+      }
+    ]
+  },
+  {
+    "date": "26th February 2018",
+    "title": "Build Automation with Cake",
+    "event": "North Toronto .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/northtorontoug/events/246122203/"
+      }
+    ]
+  },
+  {
+    "date": "14th February 2018",
+    "title": "Migrating to Git and VSTS",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/247505479/"
+      }
+    ]
+  },
+  {
+    "date": "13th December 2017",
+    "title": "Cake Build Automation",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/Adelaide-dotNET/events/244245302/"
+      }
+    ]
+  },
+  {
+    "date": "16th August 2017",
+    "title": "Life is like a Box of Chocolate(y)",
+    "event": "NDC Sydney 2017",
+    "links": [
+      {
+        "label": "Event",
+        "url": "http://ndcsydney.com/"
+      },
+      {
+        "label": "Recording",
+        "url": "https://youtu.be/sq2mqeIG2I4?si=r_dhH2oYzFORws-J"
+      }
+    ]
+  },
+  {
+    "date": "16th June 2017",
+    "title": "Life is like a Box of Chocolate(y)",
+    "event": "Adelaide Microsoft IT Pro Community",
+    "links": [
+      {
+        "label": "Recording",
+        "url": "https://vimeo.com/220727340"
+      }
+    ]
+  },
+  {
+    "date": "April 2017",
+    "title": "Recharging your user group",
+    "event": "MVP Connection Sydney",
+    "links": []
+  },
+  {
+    "date": "13th August 2016",
+    "title": "10 tools and libraries to enhance .NET Unit Testing",
+    "event": "DDD Melbourne 2016",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20160724204149/http://www.dddmelbourne.com/agenda"
+      }
+    ]
+  },
+  {
+    "date": "15th June 2016",
+    "title": "Enhanced .NET Unit Testing",
+    "event": "Sydney .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/sydney-net-user-group/events/231548436"
+      }
+    ]
+  },
+  {
+    "date": "January 2016",
+    "title": "IntelliTest and other .NET unit testing tools",
+    "event": "Adelaide .NET User Group",
+    "links": []
+  },
+  {
+    "date": "8th August 2015",
+    "title": "10+ unusual tips & tricks for .NET",
+    "event": "DDD Melbourne 6",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20150702151508/http://www.dddmelbourne.com:80/agenda"
+      }
+    ]
+  },
+  {
+    "date": "10th June 2015",
+    "title": "10 unusual tips & tricks for .NET",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.meetup.com/adelaide-dotnet/events/222628311/"
+      }
+    ]
+  },
+  {
+    "date": "28th May 2015",
+    "title": "10 unusual tips & tricks for .NET",
+    "event": "ANZ Coders",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.anzcoders.com/"
+      }
+    ]
+  },
+  {
+    "date": "26th May 2015",
+    "title": "Hot Dates",
+    "event": "ANZ Coders",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://www.anzcoders.com/"
+      }
+    ]
+  },
+  {
+    "date": "11th November 2014",
+    "title": "Azure for Developers",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20160303201448/http://www.acs.org.au/branches/south-australia/events/upcoming-events/event-details?eveID=10310633303016"
+      }
+    ]
+  },
+  {
+    "date": "5th August 2014",
+    "title": "PowerShell 301",
+    "event": "Adelaide Windows User Group",
+    "links": []
+  },
+  {
+    "date": "9th July 2014",
+    "title": "PowerShell for Developers",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20160414051401/http://www.acs.org.au/branches/south-australia/events/upcoming-events/event-details?eveID=10299056997351"
+      }
+    ]
+  },
+  {
+    "date": "17th April 2013",
+    "title": "SSDT - Managing your SQL schemas with style",
+    "event": "Adelaide SQL User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20140203173436/http://www.eventbrite.com.au/e/adelaide-sql-server-user-group-april-17-with-david-gardiner-tickets-5929446133"
+      }
+    ]
+  },
+  {
+    "date": "July 2011",
+    "title": "Creating Windows Phone apps with the Caliburn Micro framework",
+    "event": "DDD Adelaide 2011",
+    "links": []
+  },
+  {
+    "date": "November 2010",
+    "title": "SQL PASS Update",
+    "event": "PDC Adelaide",
+    "links": []
+  },
+  {
+    "date": "July 2010",
+    "title": "Data mining for developers",
+    "event": "CodeCampSA",
+    "links": []
+  },
+  {
+    "date": "9th October 2008",
+    "title": "Using SQL Server 2008 for Enterprise Applications",
+    "event": "Adelaide SQL User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20150227213842/http://www.sqlserver.org.au/Events/RegisterMeeting.aspx?EventId=359"
+      }
+    ]
+  },
+  {
+    "date": "July 2007",
+    "title": "LINQ for SQL",
+    "event": "CodeCampSA",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20170201115401/http://www.adnug.com/news.htm"
+      }
+    ]
+  },
+  {
+    "date": "June 2007",
+    "title": "Unit testing with MbUnit",
+    "event": "Adelaide .NET User Group",
+    "links": [
+      {
+        "label": "Mention",
+        "url": "/2007/06/speaking-at-adnug-unit-testing-with"
+      }
+    ]
+  },
+  {
+    "date": "15th February 2007",
+    "title": "LINQ for SQL",
+    "event": "Adelaide SQL User Group",
+    "links": [
+      {
+        "label": "Event",
+        "url": "https://web.archive.org/web/20150301054258/http://www.sqlserver.org.au/Events/RegisterMeeting.aspx?EventId=236"
+      }
+    ]
+  },
+  {
+    "date": "18th August 2005",
+    "title": "Securing SQL 2000 with IPsec and Group Policy",
+    "event": "Adelaide SQL Server User Group",
+    "links": [
+      {
+        "label": "Notes",
+        "url": "/2005/08/securing-sql-2000-with-ipsec-and-group"
+      }
+    ]
+  }
+]
