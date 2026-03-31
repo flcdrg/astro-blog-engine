@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import david  from '../assets/2024/12/ddd-bne-david-presenting.jpg';
+import talks from '../data/speaking.json';
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout pageTitle="Speaking">
+
+<h1>Talks and presentations</h1>
+
+<Image src={david} alt="David speaking at DDD Brisbane 2024" layout="constrained" width={200} style="float: right" />
+
+<p>Check out my <a href="https://sessionize.com/DavidGardiner/">Sessionize profile</a> for my current talks.</p>
+
+<p>Presentations I have given to user groups, conferences and online:</p>
+
+<div style="clear: both;"></div>
+
+<table>
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Title</th>
+			<th>Event</th>
+			<th>Links</th>
+		</tr>
+	</thead>
+	<tbody>
+		{talks.map((talk) => (
+			<tr>
+				<td>{talk.date}</td>
+				<td>{talk.title}</td>
+				<td>{talk.event}</td>
+				<td>
+					{talk.links.map((link, index) => (
+						<>{index > 0 && ', '}<a href={link.url}>{link.label}</a>{link.note && ` (${link.note})`}</>
+					))}
+				</td>
+			</tr>
+		))}
+	</tbody>
+</table>
+
+</BaseLayout>
