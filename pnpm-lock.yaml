@@ -12,6 +12,8 @@ overrides:
   fast-xml-parser@>=4.0.0-beta.3 <=5.5.6: '>=5.5.7'
   h3@<1.15.9: '>=1.15.9'
   h3@<=1.15.8: '>=1.15.9'
+  smol-toml@<1.6.1: '>=1.6.1'
+  yaml@>=2.0.0 <2.8.3: '>=2.8.3'
 
 importers:
 
@@ -1819,10 +1821,6 @@ packages:
     resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
     engines: {node: '>=14.16'}
 
-  smol-toml@1.6.0:
-    resolution: {integrity: sha512-4zemZi0HvTnYwLfrpk/CF9LOd9Lt87kAt50GnqhMpyF9U3poDAP2+iukq2bZsO/ufegbYehBkqINbsWxj4l4cw==}
-    engines: {node: '>= 18'}
-
   smol-toml@1.6.1:
     resolution: {integrity: sha512-dWUG8F5sIIARXih1DTaQAX4SsiTXhInKf1buxdY9DIg4ZYPZK5nGM1VRIYmEbDbsHt7USo99xSLFu5Q1IqTmsg==}
     engines: {node: '>= 18'}
@@ -2064,7 +2062,7 @@ packages:
       sugarss: ^5.0.0
       terser: ^5.16.0
       tsx: ^4.8.1
-      yaml: ^2.4.2
+      yaml: '>=2.8.3'
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -2209,11 +2207,6 @@ packages:
 
   yaml-language-server@1.20.0:
     resolution: {integrity: sha512-qhjK/bzSRZ6HtTvgeFvjNPJGWdZ0+x5NREV/9XZWFjIGezew2b4r5JPy66IfOhd5OA7KeFwk1JfmEbnTvev0cA==}
-    hasBin: true
-
-  yaml@2.7.1:
-    resolution: {integrity: sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ==}
-    engines: {node: '>= 14'}
     hasBin: true
 
   yaml@2.8.3:
@@ -3631,7 +3624,7 @@ snapshots:
       markdownlint: 0.40.0
       markdownlint-cli2-formatter-default: 0.0.6(markdownlint-cli2@0.22.0)
       micromatch: 4.0.8
-      smol-toml: 1.6.0
+      smol-toml: 1.6.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4496,8 +4489,6 @@ snapshots:
 
   slash@5.1.0: {}
 
-  smol-toml@1.6.0: {}
-
   smol-toml@1.6.1: {}
 
   source-map-js@1.2.1: {}
@@ -4829,9 +4820,7 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.17.5
       vscode-uri: 3.1.0
-      yaml: 2.7.1
-
-  yaml@2.7.1: {}
+      yaml: 2.8.3
 
   yaml@2.8.3: {}
 
