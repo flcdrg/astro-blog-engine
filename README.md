@@ -1,29 +1,52 @@
 # David's blog engine using Astro
 
-Based on the astro-blog-tutorial and then customised to fit to how I wanted it to work.
+Based on the Astro blog tutorial and customized for this site's publishing workflow.
 
-## 🚀 Project Structure
+## Requirements
 
-Inside of your Astro project, you'll see the following folders and files:
+- Node.js `22.12.0` or newer (Astro v6 requirement)
+- `pnpm` (managed via `corepack`)
+
+## Development
+
+```pwsh
+corepack enable
+pnpm install
+pnpm dev
+```
+
+## Build
+
+```pwsh
+pnpm build
+pnpm preview
+```
+
+`pnpm build` runs `astro check` and `astro build`.
+
+## Useful scripts
+
+- `pnpm lint` - markdown lint checks
+- `pnpm lint:fix` - auto-fix markdown lint issues where possible
+- `pnpm validate-frontmatter` - checks post frontmatter placeholders are not left in content
+
+## Project structure
 
 ```text
 /
 ├── public/
 ├── src/
-│   └── pages/
-│   │   └── index.astro
-│   └── posts/
-| 
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   ├── posts/
+│   ├── styles/
+│   └── content.config.ts
+├── verified/
 └── package.json
 ```
 
-## Development
-
-- Uses `pnpm` for package management and itself is managed by `corepack`. To upgrade pnpm, use `corepack up`
-
-## Verify
-
-Verify with the following commands:
+## Verify generated output
 
 ```pwsh
 verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
