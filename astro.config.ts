@@ -6,8 +6,6 @@ import { join, resolve } from 'path';
 
 import sitemap, { type SitemapItem } from "@astrojs/sitemap";
 
-import mdx from "@astrojs/mdx";
-
 // https://astro.build/config
 export default defineConfig({
   compressHTML: false,
@@ -64,7 +62,7 @@ export default defineConfig({
       
       return item;
     }
-  }), mdx()],
+  })],
   experimental: {
   },
   build: {
