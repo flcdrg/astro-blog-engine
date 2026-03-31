@@ -13,7 +13,7 @@ import { marked } from "marked";
 
 // get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/**/*.{jpeg,jpg,png,gif}" // add more image formats if needed
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,avif,svg}" // add more image formats if needed
 );
 
 export async function GET(context: APIContext) {
@@ -62,16 +62,17 @@ export async function GET(context: APIContext) {
 
         if (imagePath) {
           const optimizedImg = await getImage({ src: imagePath });
-          const newSrc = context.site + optimizedImg.src.replace("/", "");
+          const newSrc = new URL(optimizedImg.src, context.site).toString();
 
           // set the correct path to the optimized image
           img.setAttribute("src", newSrc);
         }
       } else if (src.startsWith("/images")) {
         // images starting with `/images/` is the public dir
-        img.setAttribute("src", context.site + src.replace("/", ""));
-      } else {
-        throw Error(`src unknown: ${src}`);
+        img.setAttribute("src", new URL(src, context.site).toString());
+      } else if (/^https?:\/\//i.test(src)) {
+        // Keep already absolute external image URLs as-is.
+        continue;
       }
     }
 
@@ -111,7 +112,7 @@ export async function GET(context: APIContext) {
     });
   }
 
-  const atomFeedUrl = `${siteUrl}feed.xml`;
+  const atomFeedUrl = new URL("feed.xml", context.site).toString();
 
   return atom({
     id: atomFeedUrl,
@@ -135,7 +136,7 @@ export async function GET(context: APIContext) {
       },
       {
         rel: "alternate",
-        href: siteUrl,
+        href: new URL("/", context.site).toString(),
         type: "text/html",
         hreflang: "en-AU",
       },

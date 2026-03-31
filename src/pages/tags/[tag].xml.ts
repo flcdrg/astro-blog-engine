@@ -11,7 +11,7 @@ import { marked } from "marked";
 
 // get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/**/*.{jpeg,jpg,png,gif}" // add more image formats if needed
+  "/src/assets/**/*.{jpeg,jpg,png,gif,webp,avif,svg}" // add more image formats if needed
 );
 
 export async function getStaticPaths() {
@@ -80,19 +80,17 @@ export async function GET(context: APIContext) {
 
         if (imagePath) {
           const optimizedImg = await getImage({ src: imagePath });
-          const newSrc = context.site + optimizedImg.src.replace("/", "");
+          const newSrc = new URL(optimizedImg.src, context.site).toString();
 
           // set the correct path to the optimized image
           img.setAttribute("src", newSrc);
         }
       } else if (src.startsWith("/images")) {
         // images starting with `/images/` is the public dir
-        img.setAttribute("src", context.site + src.replace("/", ""));
-      } else if (src.startsWith("http://") || src.startsWith("https://")) {
-        // External URLs - leave as is
-        // No change needed for external URLs
-      } else {
-        throw Error(`src unknown: ${src}`);
+        img.setAttribute("src", new URL(src, context.site).toString());
+      } else if (/^https?:\/\//i.test(src)) {
+        // Keep already absolute external image URLs as-is.
+        continue;
       }
     }
 
@@ -132,7 +130,8 @@ export async function GET(context: APIContext) {
     });
   }
 
-  const atomFeedUrl = `${siteUrl}${tag}.xml`;
+  const encodedTag = encodeURIComponent(tag);
+  const atomFeedUrl = new URL(`tags/${encodedTag}.xml`, context.site).toString();
 
   return atom({
     id: atomFeedUrl,
@@ -155,7 +154,7 @@ export async function GET(context: APIContext) {
       },
       {
         rel: "alternate",
-        href: `${siteUrl}tags/${tag}`,
+        href: new URL(`tags/${encodedTag}`, context.site).toString(),
         type: "text/html",
         hreflang: "en-AU",
       },
