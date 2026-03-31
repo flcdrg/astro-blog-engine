@@ -8,7 +8,7 @@ tags:
 - Azure Pipelines
 ---
 
-Sonar offer some really useful products for analysing the quality of your application's source code. There's a great mix of free and paid products, including SonarQube Cloud (formerly known as SonarCloud), SonarQube Server (for on-prem), and [SonarQube for IDE](https://docs.sonarsource.com/sonarqube-for-ide/visual-studio/) (formerly SonarLint) static code analysers for IntelliJ, Visual Studio, VS Code and Eclipse.
+Sonar offer some really useful products for analysing the quality of your application's source code. There's a great mix of free and paid products, including SonarQube Cloud (formerly known as SonarCloud), SonarQube Server (for on-prem), and [SonarQube for IDE](https://docs.sonarsource.com/sonarqube-for-visual-studio) (formerly SonarLint) static code analysers for IntelliJ, Visual Studio, VS Code and Eclipse.
 
 I was looking to integrate an Azure DevOps project containing a .NET application with SonarQube Cloud, and in particular include code coverage data both for Azure Pipelines (so you can view the coverage in the pipeline run), but also in SonarQube Cloud.
 
@@ -87,14 +87,14 @@ According to [the docs for coverlet.msbuild](https://github.com/coverlet-coverag
 
 (The TeamCity format just generates special service messages in the standard output that TeamCity will recognise, it doesn't create a file)
 
-According to [the docs for SonarCloud](https://docs.sonarsource.com/sonarcloud/enriching/test-coverage/dotnet-test-coverage/), it supports the following formats for .NET code coverage:
+According to [the docs for SonarCloud](https://docs.sonarsource.com/sonarqube-cloud/enriching/test-coverage/dotnet-test-coverage), it supports the following formats for .NET code coverage:
 
 - Visual Studio Code Coverage
 - dotnet-coverage Code Coverage
 - dotCover
 - OpenCover
 - Coverlet (OpenCover format)
-- [Generic test data](https://docs.sonarsource.com/sonarcloud/enriching/test-coverage/generic-test-data/)
+- [Generic test data](https://docs.sonarsource.com/sonarqube-cloud/enriching/test-coverage/generic-test-data)
 
 The docs for the Azure Pipelines [PublishCodeCoverageResults@2 task](https://learn.microsoft.com/azure/devops/pipelines/tasks/reference/publish-code-coverage-results-v2?view=azure-pipelines&WT.mc_id=DOP-MVP-5001655) don't actually mention which formats are supported (hopefully this will be fixed soon). But in the [blog post that announced the availability of the v2 task](https://devblogs.microsoft.com/devops/new-pccr-task/) the following formats were mentioned (including ones from the v1 task):
 

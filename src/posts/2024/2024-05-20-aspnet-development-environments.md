@@ -6,7 +6,7 @@ tags:
 - .NET
 ---
 
-ASP.NET Core has a useful feature for loading [different configuration settings depending on which environment](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655) you're running in.
+ASP.NET Core has a useful feature for loading [different configuration settings depending on which environment](https://learn.microsoft.com/aspnet/core/fundamentals/environments?view=aspnetcore-8.0&WT.mc_id=DOP-MVP-5001655) you're running in.
 
 One question that is worth considering though: When it refers to a 'Development' configuration, do you understand that is for your local development/debugging experience, or is it for some non-production deployment environment (Azure, AWS, or even specifically dedicated machines)?
 
