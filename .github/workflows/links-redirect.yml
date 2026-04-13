@@ -95,7 +95,7 @@ jobs:
 
       - name: Create Pull Request
         if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
-        uses: peter-evans/create-pull-request@v8.1.0
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           title: "Fix redirect links"
           token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}
