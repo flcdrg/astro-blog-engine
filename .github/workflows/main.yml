@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.1
 
       - name: Use Node.js 22.x
         uses: actions/setup-node@v6
@@ -81,7 +81,7 @@ jobs:
             ${{ runner.os }}-dist
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.1
 
       - name: Use Node.js 22.x
         uses: actions/setup-node@v6
@@ -166,7 +166,7 @@ jobs:
 
     steps:
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.1
         with:
           version: 10.x
 
@@ -209,7 +209,7 @@ jobs:
 
     steps:
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.1
         with:
           version: 10.x
 
@@ -286,7 +286,7 @@ jobs:
           path: dist
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.0
+        uses: pnpm/action-setup@v6.0.1
 
       - name: Install Node.js 22.x
         uses: actions/setup-node@v6
