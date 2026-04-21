@@ -48,8 +48,6 @@ and see some common examples of their usage.</summary>
       artifact: drop
       displayName: &quot;Publish Artifact&quot;
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;h3&gt;Conditionally set variable&lt;/h3&gt;
 &lt;p&gt;Using template expressions to conditionally set the values of variables is a common use case.&lt;/p&gt;
 
@@ -59,8 +57,6 @@ and see some common examples of their usage.</summary>
   ${{ else }}:
     Environment: &quot;Not-Production&quot;
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;p&gt;Note that YAML formatting rules apply - each property must be unique, so you can&apos;t repeat the expression line more than once. Instead you would just group additional variable declarations together.&lt;/p&gt;
 &lt;h3&gt;Conditionally set stage or job dependency&lt;/h3&gt;
 &lt;p&gt;DependsOn applies to stages and jobs. We can conditionally include the entire dependency:&lt;/p&gt;
@@ -69,8 +65,6 @@ and see some common examples of their usage.</summary>
   dependsOn:
     - Version
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;p&gt;Or when we have multiple dependencies, we can conditionally include an additional dependency. Because dependsOn in this case is referring to an array, we need to use the array syntax for our template expression.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;dependsOn:
@@ -78,8 +72,6 @@ and see some common examples of their usage.</summary>
   - ${{ if ne(parameters.DependsOn, &apos;&apos;) }}:
       - ${{ parameters.DependsOn }}
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;h3&gt;Looping&lt;/h3&gt;
 &lt;p&gt;The official name for this in the documentation is &lt;a href=&quot;https://learn.microsoft.com/azure/devops/pipelines/process/template-expressions?view=azure-devops&amp;amp;WT.mc_id=DOP-MVP-5001655#iterative-insertion&quot;&gt;Iterative insertion&lt;/a&gt;.
 Loop expressions are a powerful technique that can be used to reduce duplication in your pipelines.&lt;/p&gt;
@@ -96,8 +88,6 @@ Loop expressions are a powerful technique that can be used to reduce duplication
       - name: Prod
         displayName: &quot;Production&quot;
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;p&gt;I tend to add a &lt;code&gt;displayName&lt;/code&gt; on those parameters just to make it clear they&apos;re just there to store the array data (and you probably shouldn&apos;t be altering the values in the Azure Pipelines web UI if you run the pipeline manually)&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;- ${{ each env in parameters.Environments }}:
@@ -109,8 +99,6 @@ Loop expressions are a powerful technique that can be used to reduce duplication
             - script: echo &quot;Deploying to ${{ env.name }} environment...&quot;
               displayName: &quot;Deploy to ${{ env.name }}&quot;
 &lt;/code&gt;&lt;/pre&gt;
-
-
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;Template expressions are a powerful feature. Curiously, despite GitHub Actions having many similarities to Azure Pipelines, this is one aspect that they didn&apos;t port over.&lt;/p&gt;
 &lt;p&gt;Often I see custom conditions being used where template expressions would be a better fit. It&apos;s worth considering if using them more could simplify and improve your pipelines.&lt;/p&gt;
