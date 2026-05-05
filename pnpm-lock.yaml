@@ -44,8 +44,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       astrojs-atom:
-        specifier: ^3.0.33
-        version: 3.0.33(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^3.0.51
+        version: 3.0.51(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -835,8 +835,8 @@ packages:
     engines: {node: '>=22.12.0', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
-  astrojs-atom@3.0.33:
-    resolution: {integrity: sha512-DtZP6AqmPmbpNzCEB4PH7xkJGsEzfNb2aemAd7Gd+nI8hni+J8B9ZCrPvKxv/JQU2VOQXFPMXEj1wenNrXNBYg==}
+  astrojs-atom@3.0.51:
+    resolution: {integrity: sha512-jCUgapcxz32wEPducImtbLgbu4FSyXmMw60gStbTks/kAtkPxo+PEJmTGccXRb4Xf8VGpWBOFB7FkI8MXqXKVQ==}
     engines: {node: '>=22.0.0'}
 
   axobject-query@4.1.0:
@@ -1065,11 +1065,11 @@ packages:
   fast-wrap-ansi@0.1.6:
     resolution: {integrity: sha512-HlUwET7a5gqjURj70D5jl7aC3Zmy4weA1SHUfM0JFI0Ptq987NH2TwbBFLoERhfwk+E+eaq4EK3jXoT+R3yp3w==}
 
-  fast-xml-builder@1.1.5:
-    resolution: {integrity: sha512-4TJn/8FKLeslLAH3dnohXqE3QSoxkhvaMzepOIZytwJXZO69Bfz0HBdDHzOTOon6G59Zrk6VQ2bEiv1t61rfkA==}
+  fast-xml-builder@1.1.8:
+    resolution: {integrity: sha512-sDVBc2gg8pSKvcbE8rBmOyjSGQf0AdsbqvHeIOv3D/uYNoV4eCReQXyDF8Pdv8+m1FHazACypSz2hR7O2S1LLw==}
 
-  fast-xml-parser@5.7.1:
-    resolution: {integrity: sha512-8Cc3f8GUGUULg34pBch/KGyPLglS+OFs05deyOlY7fL2MTagYPKrVQNmR1fLF/yJ9PH5ZSTd3YDF6pnmeZU+zA==}
+  fast-xml-parser@5.7.3:
+    resolution: {integrity: sha512-C0AaNuC+mscy6vrAQKAc/rMq+zAPHodfHGZu4sGVehvAQt/JLG1O5zEcYcXSY5zSqr4YVgxsB+pHXTq0i7eDlg==}
     hasBin: true
 
   fastq@1.20.1:
@@ -2834,10 +2834,10 @@ snapshots:
       - uploadthing
       - yaml
 
-  astrojs-atom@3.0.33(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4):
+  astrojs-atom@3.0.51(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4):
     dependencies:
       astro: 6.1.9(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
-      fast-xml-parser: 5.7.1
+      fast-xml-parser: 5.7.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -3083,14 +3083,14 @@ snapshots:
     dependencies:
       fast-string-width: 1.1.0
 
-  fast-xml-builder@1.1.5:
+  fast-xml-builder@1.1.8:
     dependencies:
       path-expression-matcher: 1.5.0
 
-  fast-xml-parser@5.7.1:
+  fast-xml-parser@5.7.3:
     dependencies:
       '@nodable/entities': 2.1.0
-      fast-xml-builder: 1.1.5
+      fast-xml-builder: 1.1.8
       path-expression-matcher: 1.5.0
       strnum: 2.2.3
 
