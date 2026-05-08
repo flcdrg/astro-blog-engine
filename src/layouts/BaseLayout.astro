@@ -1,4 +1,15 @@
 ---
+function getCanonicalUrl(): string | URL | null | undefined {
+  const pathname = Astro.url.pathname.replace(".html", "");
+
+  console.log(`Generating canonical URL for pathname: ${pathname}`);
+  if (pathname === "/index") {
+    return new URL("/", Astro.site);
+  }
+
+  return new URL(pathname, Astro.site);
+}
+
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import Navigation from "../components/Navigation.astro";
@@ -29,8 +40,8 @@ const siteJsonLd = {
         "https://www.linkedin.com/in/davidrgardiner/",
         "https://mastodon.online/@DavidRGardiner",
         "https://stackoverflow.com/users/25702/david-gardiner",
-        "https://bsky.app/profile/david.gardiner.net.au"
-      ]
+        "https://bsky.app/profile/david.gardiner.net.au",
+      ],
     },
     {
       "@type": "WebSite",
@@ -42,10 +53,10 @@ const siteJsonLd = {
       potentialAction: {
         "@type": "SearchAction",
         target: `${Astro.site}tags/{search_term_string}`,
-        "query-input": "required name=search_term_string"
-      }
-    }
-  ]
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
 };
 ---
 
@@ -55,10 +66,7 @@ const siteJsonLd = {
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <link
-      rel="canonical"
-      href={new URL(Astro.url.pathname.replace(".html", ""), Astro.site)}
-    />
+    <link rel="canonical" href={getCanonicalUrl()} />
     <slot name="head" />
     <title>{pageTitle || frontmatter?.title}</title>
     {
@@ -66,8 +74,17 @@ const siteJsonLd = {
         <meta name="description" content={frontmatter.description} />
       )
     }
-    <!-- Cloudflare Web Analytics --><script is:inline is:raw defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a5756d0460ba41beba515f2b7666093d"}'></script><!-- End Cloudflare Web Analytics -->
-    <script is:raw is:inline
+    <!-- Cloudflare Web Analytics -->
+    <script
+      is:inline
+      is:raw
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "a5756d0460ba41beba515f2b7666093d"}'
+    ></script><!-- End Cloudflare Web Analytics -->
+    <script
+      is:raw
+      is:inline
       type="application/ld+json"
       set:html={JSON.stringify(siteJsonLd)}
     />
