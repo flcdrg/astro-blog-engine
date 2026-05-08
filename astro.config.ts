@@ -5,6 +5,7 @@ import { execSync } from 'child_process';
 import { join, resolve } from 'path';
 
 import sitemap, { type SitemapItem } from "@astrojs/sitemap";
+import astroCanonical from "./scripts/astroCanonical";
 
 // https://astro.build/config
 export default defineConfig({
@@ -62,7 +63,8 @@ export default defineConfig({
       
       return item;
     }
-  })],
+  }),
+  astroCanonical()],
   experimental: {
   },
   build: {

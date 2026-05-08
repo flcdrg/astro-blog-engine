@@ -106,12 +106,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.x
+          dotnet-version: 10.x
 
       - name: Install Verify.Cli
         run: dotnet tool install --global Verify.Cli
 
-      - name: Verify
+      - name: Verify Feed
         run: |
           verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
       # end-snippet
@@ -131,7 +131,20 @@ jobs:
         run: |
           ls -al verified/
           echo ""
-          diff -u verified/azure-pipeline-template-expression.html.received.html verified/azure-pipeline-template-expression.html.verified.html
+          diff -u verified/index.html.received.html verified/index.html.verified.html
+      
+      # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
+      - name: Verify home
+        if: github.repository == 'flcdrg/astro-blog-engine'
+        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/index.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
+      # end-snippet
+
+      - name: Diff home if error
+        if: failure() && github.repository == 'flcdrg/astro-blog-engine'
+        run: |
+          ls -al verified/
+          echo ""
+          diff -u verified/index.html.received.html verified/index.html.verified.html
 
       # dist as artifact
       - name: Upload dist as artifact
