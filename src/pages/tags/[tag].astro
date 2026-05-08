@@ -38,7 +38,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { tag } = Astro.params as Params;
 const { posts } = Astro.props as Props;
 
-const feedUrl = `/tags/${tag}.xml`;
+const feedUrl = `/tags/${encodeURIComponent(tag)}.xml`;
 ---
 
 <BaseLayout pageTitle={tag}>
@@ -58,7 +58,7 @@ const feedUrl = `/tags/${tag}.xml`;
     {
       posts.map((post: any) => (
         <li>
-          <BlogPost url={`/${post.id}`} title={post.data.title} /> (
+          <BlogPost url={encodeURI(`/${post.id}`)} title={post.data.title} /> (
           <DateTimeComponent date={post.data.date} />)
         </li>
       ))

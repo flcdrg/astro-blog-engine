@@ -40,7 +40,7 @@ const collectionJsonLd = {
     {
       tags.map(([tag, count]) => (
         <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a> ({count})
+          <a href={`/tags/${encodeURIComponent(tag)}`}>{tag}</a> ({count})
         </p>
       ))
     }

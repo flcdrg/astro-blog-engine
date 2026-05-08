@@ -58,7 +58,7 @@ const frontmatter = {
             class="text-gray-500"
             hideYear={true}
           />
-          - <a href={`/${post.id}`}>{post.data.title}</a>
+          - <a href={encodeURI(`/${post.id}`)}>{post.data.title}</a>
         </li>
       ))
     }

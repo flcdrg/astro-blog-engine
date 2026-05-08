@@ -1,4 +1,4 @@
 ---
 const {url, title} = Astro.props;
 ---
-<a href={url}>{title}</a>
+<a href={encodeURI(url)}>{title}</a>
