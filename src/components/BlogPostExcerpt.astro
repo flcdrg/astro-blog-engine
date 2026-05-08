@@ -14,4 +14,4 @@ const { body, length } = Astro.props;
 const content = await marked.parse(body || "");
 ---
 
-<section set:html={getExcerpt(content, length)} />
+<div set:html={getExcerpt(content, length)} />
