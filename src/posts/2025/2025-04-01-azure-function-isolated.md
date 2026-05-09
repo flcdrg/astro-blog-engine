@@ -3,6 +3,7 @@ title: ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .
 date: '2025-04-01T21:30:00.000+10:30'
 image: ../../assets/2021/08/azure-function.png
 imageAlt: Azure Functions logo
+description: 'When to use ConfigureFunctionsWorkerDefaults versus ConfigureFunctionsWebApplication in .NET isolated Azure Functions.'
 tags:
 - .NET
 - Azure Functions

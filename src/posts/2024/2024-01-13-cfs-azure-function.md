@@ -2,6 +2,7 @@
 title: Azure Function posting an RSS feed to Mastodon
 date: '2024-01-13T13:00:00.000+10:30'
 image: ../../assets/2021/08/azure-function.png
+description: How to use an Azure Function and C# script to poll an RSS feed and post new entries to Mastodon.
 tags:
 - Azure
 - Azure Functions

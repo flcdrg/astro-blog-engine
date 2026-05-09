@@ -2,6 +2,7 @@
 title: 3 years at SixPivot
 date: '2024-02-01T15:54:00.000+09:30'
 image: ../../assets/2024/02/sixpivot-logo.png
+description: A reflection on three years at SixPivot, including highlights from projects, people, and growth.
 tags:
 - Work
 ---

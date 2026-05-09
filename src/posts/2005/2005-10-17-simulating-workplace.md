@@ -2,6 +2,7 @@
 title: A simulating workplace
 date: '2005-10-17T12:56:00.000+09:30'
 author: David Gardiner
+description: 'The word on the street is that there might be an article in tomorrow''s IT section of The Australian newspaper too.'
 tags:
   - UniSA
 modified_time: '2010-05-04T16:21:14.785+09:30'

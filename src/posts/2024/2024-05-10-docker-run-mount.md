@@ -2,6 +2,7 @@
 title: Docker run from an Azure Pipeline Container Job with a volume mount
 date: '2024-05-10T17:30:00.000+09:30'
 image: ../../assets/2020/05/azure-pipelines-logo.png
+description: How to run Docker with volume mounts inside an Azure Pipelines container job and avoid common pitfalls.
 tags:
 - Azure DevOps
 - Azure Pipelines

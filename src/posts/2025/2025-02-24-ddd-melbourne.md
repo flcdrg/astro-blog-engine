@@ -3,6 +3,7 @@ title: DDD Melbourne 2025
 date: '2025-02-24T20:30:00.000+10:30'
 image: ../../assets/2025/02/dddmelbourne-2025.png
 imageAlt: DDD Melbourne 2025 logo
+description: 'A report from DDD Melbourne 2025, including the talks, venue, and what stood out.'
 tags:
 - Conferences
 ---

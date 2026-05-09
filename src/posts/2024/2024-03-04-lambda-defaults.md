@@ -2,6 +2,7 @@
 title: 'C# 12 features: Default lambda parameters'
 date: '2024-03-04T07:00:00.000+10:30'
 image: ../../assets/2024/03/logo_csharp.png
+description: Part 4 of a C# 12 series on default lambda parameters and how they simplify delegate code.
 tags:
 - .NET
 ---

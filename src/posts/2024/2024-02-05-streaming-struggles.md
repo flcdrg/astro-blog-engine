@@ -2,6 +2,7 @@
 title: ADNUG Streaming struggles
 date: '2024-02-05T08:00:00.000+10:30'
 #image: ../../assets
+description: A look at the challenges of streaming Adelaide .NET User Group events and lessons from improving the setup.
 tags:
 - ADNUG
 - Hardware

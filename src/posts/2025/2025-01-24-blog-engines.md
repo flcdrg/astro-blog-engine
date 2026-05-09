@@ -1,5 +1,6 @@
 ---
 title: Blog engine thoughts
+description: Reflections on evaluating alternatives to Jekyll for a long-running static blog, including Statiq, Eleventy, and a custom engine approach. It covers performance constraints, tooling preferences, and desired future site structure.
 date: '2025-01-24T16:00:00.000+10:30'
 tags:
 - Blogging

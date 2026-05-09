@@ -3,6 +3,7 @@ title: Azure SQL and enabling auditing with Terraform
 date: '2025-02-17T08:00:00.000+10:30'
 image: ../../assets/2021/10/azure-logo.jpg
 imageAlt: Azure logo
+description: 'How to enable Azure SQL auditing with Terraform when the portal and provider settings do not line up.'
 tags:
 - Azure
 - SQL

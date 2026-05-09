@@ -2,6 +2,7 @@
 title: Pasting Markdown into Confluence
 date: '2024-04-29T10:30:00.000+09:30'
 image: ../../assets/2024/04/confluence-paste-options.png
+description: A practical way to paste Markdown content into Confluence with better formatting results.
 tags:
 - Software
 ---

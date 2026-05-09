@@ -2,6 +2,7 @@
 title: .NET Azure Functions, Isolated worker model, Serilog to App Insights
 date: '2025-02-10T08:00:00.000+10:30'
 image: ../../assets/2025/02/serilog.png
+description: 'How to configure Serilog and Application Insights in .NET Azure Functions using the isolated worker model.'
 tags:
 - .NET
 - Azure Functions
