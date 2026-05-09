@@ -2,6 +2,7 @@
 title: Farewell Facebook (and Meta)
 date: '2025-02-03T18:00:00.000+10:30'
 image: ../../assets/2025/02/facebook-logo.png
+description: 'Why the author decided to delete Facebook and the rest of the Meta accounts.'
 tags:
 - Friends
 ---

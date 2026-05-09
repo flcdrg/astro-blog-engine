@@ -2,6 +2,7 @@
 title: 'C# 12 features: Inline arrays'
 date: '2024-03-06T07:00:00.000+10:30'
 image: ../../assets/2024/03/logo_csharp.png
+description: Part 6 of a C# 12 series introducing inline arrays and scenarios where they are useful.
 tags:
 - .NET
 ---

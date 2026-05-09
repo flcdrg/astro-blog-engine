@@ -3,6 +3,7 @@ title: Why is PowerShell not expanding variables for a command?
 date: '2025-02-14T12:00:00.000+10:30'
 image: ../../assets/2025/02/powershell-logo.png
 imageAlt: PowerShell logo
+description: 'Why PowerShell can stop command arguments expanding as expected, and how to work around it.'
 tags:
 - PowerShell
 ---

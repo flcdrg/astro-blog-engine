@@ -2,6 +2,7 @@
 title: 'C# 12 features: Primary constructors'
 date: '2024-03-01T07:00:00.000+10:30'
 image: ../../assets/2024/03/logo_csharp.png
+description: Part 1 of a C# 12 series covering primary constructors, how they work, and when to use them.
 tags:
 - .NET
 ---

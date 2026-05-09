@@ -2,6 +2,7 @@
 title: 'C# 12 features: ExperimentalAttribute'
 date: '2024-03-07T07:00:00.000+10:30'
 image: ../../assets/2024/03/logo_csharp.png
+description: Part 7 of a C# 12 series describing ExperimentalAttribute and how it signals preview APIs.
 tags:
 - .NET
 ---

@@ -3,6 +3,7 @@ title: Customising and optimising Windows 11 installation
 date: '2025-04-08T20:30:00.000+09:30'
 image: ../../assets/2025/04/Windows-11-Logo-1000x404.jpg
 imageAlt: Windows 11 logo
+description: 'How to reinstall a Windows 11 laptop and customise it for a smoother setup.'
 tags:
 - Hardware
 - PowerShell

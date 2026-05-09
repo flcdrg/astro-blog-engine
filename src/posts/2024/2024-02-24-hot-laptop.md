@@ -2,6 +2,7 @@
 title: Laptop heat wave
 date: '2024-02-24T17:00:00.000+10:30'
 #image: ../../assets
+description: Troubleshooting persistent overheating and stability issues on a new laptop, including hardware and firmware fixes.
 tags:
 - Hardware
 - Synology

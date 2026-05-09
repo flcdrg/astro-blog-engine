@@ -2,6 +2,7 @@
 title: Source Link improvements in .NET 8 SDK
 date: '2024-01-26T17:30:00.000+10:30'
 image: ../../assets/2024/01/dotnet-logo.png
+description: An overview of .NET 8 SDK Source Link improvements, including when package references are no longer required.
 tags:
 - .NET
 ---
