@@ -35,7 +35,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "About David Gardiner, Senior Developer at SixPivot and organiser of DDD Adelaide" }}>
     {
       jsonLd && (
         <script slot="head" is:raw is:inline

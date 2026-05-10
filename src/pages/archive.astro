@@ -20,7 +20,7 @@ const collectionJsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "Archive of blog posts by year" }}>
   <script slot="head" is:raw is:inline
     type="application/ld+json"
     set:html={JSON.stringify(collectionJsonLd)}
