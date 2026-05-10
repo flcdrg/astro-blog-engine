@@ -27,7 +27,7 @@ const collectionJsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "Browse blog posts by tag" }}>
   <script slot="head" is:raw is:inline
     type="application/ld+json"
     set:html={JSON.stringify(collectionJsonLd)}
