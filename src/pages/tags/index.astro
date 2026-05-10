@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import onlyCurrent from "../../scripts/filters";
+import { getCanonicalUrl } from "../../scripts/canonical";
 const pageTitle = "Tags";
 const allPosts = (await getCollection("blog")).filter(onlyCurrent);
 
@@ -17,14 +18,12 @@ const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)
 );
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "Blog Tags",
   description: "Browse blog posts by tag",
-  url: canonicalURL,
+  url: getCanonicalUrl(Astro.url, Astro.site),
 };
 ---
 

@@ -1,5 +1,6 @@
 ---
 import DateTimeComponent from "../components/DateTimeComponent.astro";
+import { getCanonicalUrl } from "../scripts/canonical";
 import BaseLayout from "./BaseLayout.astro";
 import { Disqus } from "astro-disqus";
 
@@ -22,10 +23,8 @@ const { frontmatter } = Astro.props;
 const description = frontmatter.description;
 const image = frontmatter.image;
 const title = frontmatter.title;
-const canonicalURL = new URL(Astro.url.pathname.replace(".html", ""), Astro.site).toString();
 
-
-
+const canonicalUrl = getCanonicalUrl(Astro.url, Astro.site);
 // https://www.cemkiray.com/posts/how-to-add-json-ld-schema-in-astro/
 // https://developers.google.com/search/docs/appearance/structured-data/article
 // Construct JSON-LD data for the blog post
@@ -34,7 +33,7 @@ const blogJsonLd = {
   "@type": "BlogPosting",
   mainEntityOfPage: {
     "@type": "WebPage",
-    "@id": canonicalURL,
+    "@id": canonicalUrl,
   },
   headline: title,
   description: description,
@@ -77,7 +76,7 @@ const blogJsonLd = {
 
   <meta name="og:title" content={title} slot="head" />
   <meta name="og:type" content="article" slot="head" />
-  <meta name="og:url" content={canonicalURL} slot="head" />
+  <meta name="og:url" content={canonicalUrl} slot="head" />
   {image && (
     <meta name="og:image" content={image.src} slot="head" />
   )}

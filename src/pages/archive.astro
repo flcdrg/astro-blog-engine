@@ -4,19 +4,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import getPostsByGroupCondition from "../scripts/getPostsByGroupCondition";
 import { DateTime } from "luxon";
 import onlyCurrent from "../scripts/filters";
+import { getCanonicalUrl } from "../scripts/canonical";
 
 const pageTitle = "Archive";
 
 const posts = (await getCollection("blog")).filter(onlyCurrent);
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "Blog Archive",
   description: "Archive of blog posts by year",
-  url: canonicalURL,
+  url: getCanonicalUrl(Astro.url, Astro.site),
 };
 ---
 
