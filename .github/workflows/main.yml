@@ -27,6 +27,8 @@ permissions:
   pull-requests: write # Required for PR comments
   deployments: write # Required for Cloudflare Pages
 
+env:
+  WranglerVersion: 4.90.1 # https://github.com/cloudflare/workers-sdk/releases
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -39,10 +41,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6.0.6
 
-      - name: Use Node.js 22.x
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version-file: package.json
 
       - run: pnpm install
         name: Install dependencies
@@ -83,10 +85,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6.0.6
 
-      - name: Use Node.js 22.x
+      - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version-file: package.json
           cache: "pnpm"
           cache-dependency-path: "pnpm-lock.yaml"
 
@@ -132,7 +134,7 @@ jobs:
           ls -al verified/
           echo ""
           diff -u verified/index.html.received.html verified/index.html.verified.html
-      
+
       # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
       - name: Verify home
         if: github.repository == 'flcdrg/astro-blog-engine'
@@ -203,7 +205,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: 4.45.0 # https://github.com/cloudflare/workers-sdk/releases
+          wranglerVersion: ${{ env.WranglerVersion }}
 
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
@@ -221,22 +223,22 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: package.json
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v6.0.6
-        with:
-          version: 10.x
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
-
-      - name: Download wrangler.jsonc
-        uses: actions/download-artifact@v8
-        with:
-          name: wrangler.jsonc
-          path: .
 
       - name: Cloudflare Preview
         uses: cloudflare/wrangler-action@v3.15.0
@@ -246,13 +248,47 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: 4.45.0
+          wranglerVersion: ${{ env.WranglerVersion }}
 
       - name: Output variables
         run: echo $OUTPUTS
         env:
           OUTPUTS: ${{ toJson(steps.deploy.outputs) }}
 
+      - name: HTTP redirect testing
+        shell: pwsh
+        run: |
+          $url = "${{ steps.deploy.outputs.deployment-url }}"
+          Write-Host "Testing URL: $url"
+
+          ./Test-HttpRedirects.ps1 -url $url
+
+          (Get-Content httptraces.txt)
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.x
+
+      - name: Install Verify.Cli
+        run: dotnet tool install --global Verify.Cli
+
+      - name: Verify HTTP traces
+        run: |
+          verify --file httptraces-scrubbed.txt --verified-dir verified
+
+      - name: Diff files if error
+        if: failure()
+        run: |
+          diff -u httptraces-scrubbed.txt verified/httptraces-scrubbed.txt.verified.txt
+
+      - name: Upload scripts as artifact
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: verified-http-traces
+          path: verified
+          retention-days: 2
   update_readme:
     runs-on: ubuntu-latest
     needs: publish_to_cloudflare
@@ -301,10 +337,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6.0.6
 
-      - name: Install Node.js 22.x
+      - name: Install Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       - name: Extract latest post URL from feed
         id: extract-url
@@ -448,4 +484,4 @@ jobs:
         if: ${{ always() && (github.event_name != 'workflow_dispatch' || github.event.inputs.linkCache == 'true') }}
         with:
           path: .lycheecache
-          key: ${{ steps.restore-cache.outputs.cache-primary-key }}          
+          key: ${{ steps.restore-cache.outputs.cache-primary-key }}
