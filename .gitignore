@@ -38,3 +38,4 @@ wayback/replacements.json
 
 # VerifyTests
 *.received.*
+/.claude/settings.local.json
