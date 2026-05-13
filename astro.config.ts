@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { existsSync, globSync } from 'node:fs';
+import { readFile, writeFile } from 'node:fs/promises';
 import { execSync } from 'child_process';
 import { join, resolve } from 'path';
+import { fileURLToPath } from 'node:url';
 
 import sitemap, { type SitemapItem } from "@astrojs/sitemap";
 import astroCanonical from "./scripts/astroCanonical";
@@ -64,7 +66,24 @@ export default defineConfig({
       return item;
     }
   }),
-  astroCanonical()],
+  {
+    name: "sitemap-root-trailing-slash",
+    hooks: {
+      "astro:build:done": async ({ dir }) => {
+        const siteRoot = (process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au").replace(/\/$/, '');
+        const distDir = dir instanceof URL ? fileURLToPath(dir) : dir;
+        const sitemapPath = join(distDir, 'sitemap-0.xml');
+        const content = await readFile(sitemapPath, 'utf8');
+        const fixed = content.replace(`<loc>${siteRoot}</loc>`, `<loc>${siteRoot}/</loc>`);
+        if (fixed !== content) {
+          await writeFile(sitemapPath, fixed, 'utf8');
+          console.log(`[sitemap-root-trailing-slash] Added trailing slash to root URL in sitemap-0.xml`);
+        }
+      },
+    },
+  },
+  astroCanonical(),
+  ],
   experimental: {
   },
   build: {
