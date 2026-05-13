@@ -1,0 +1,21 @@
+﻿Tracing URL: https://testsite/
+FINAL: https://testsite/ [200 OK]
+Tracing URL: https://testsite/2025/07/azure-pipeline-template-expression.html
+REDIRECT 1: https://testsite/2025/07/azure-pipeline-template-expression.html -> https://testsite/2025/07/azure-pipeline-template-expression [307 Temporary Redirect]
+FINAL: https://testsite/2025/07/azure-pipeline-template-expression [200 OK]
+Tracing URL: https://testsite/index.html
+REDIRECT 1: https://testsite/index.html -> https://testsite/ [307 Temporary Redirect]
+FINAL: https://testsite/ [200 OK]
+Tracing URL: https://testsite/speaking
+FINAL: https://testsite/speaking [200 OK]
+Tracing URL: https://testsite/2025
+FINAL: https://testsite/2025 [200 OK]
+Tracing URL: https://testsite/archive
+FINAL: https://testsite/archive [200 OK]
+Tracing URL: https://testsite/tags
+FINAL: https://testsite/tags [200 OK]
+Tracing URL: https://testsite/tags/
+REDIRECT 1: https://testsite/tags/ -> https://testsite/tags [307 Temporary Redirect]
+FINAL: https://testsite/tags [200 OK]
+Tracing URL: https://testsite/tags/Azure
+FINAL: https://testsite/tags/Azure [200 OK]
