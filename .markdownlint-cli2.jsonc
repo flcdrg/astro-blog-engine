@@ -18,6 +18,7 @@
     "globs": [
         "**/*.md", // We don't include .mdx files as you can't ignore via HTML comments
         "!**/node_modules/**",
-        "!**/dist/**"
+        "!**/dist/**",
+        "!**/CLAUDE.md"
     ]
 }
