@@ -3,5 +3,3 @@ Allow: /
 
 User-agent: *
 Disallow: /
-
-Sitemap: https://david.gardiner.net.au/sitemap-index.xml
