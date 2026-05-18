@@ -73,6 +73,23 @@ const siteJsonLd = {
       src="https://static.cloudflareinsights.com/beacon.min.js"
       data-cf-beacon='{"token": "a5756d0460ba41beba515f2b7666093d"}'
     ></script><!-- End Cloudflare Web Analytics -->
+
+    <!-- Google tag (gtag.js) -->
+    {
+      Astro.site && Astro.site.href.includes('david.gardiner.net.au') && (
+        <>
+          <script is:raw is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-RKLVTK1HGL"></script>
+          <script is:raw is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-RKLVTK1HGL');
+          </script>
+        </>
+      )
+    }
+
     <script
       is:raw
       is:inline
