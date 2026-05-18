@@ -25,6 +25,9 @@ importers:
       '@astrojs/sitemap':
         specifier: 3.7.2
         version: 3.7.2
+      '@digi4care/astro-google-tagmanager':
+        specifier: ^2.0.0
+        version: 2.0.0(astro@6.3.3(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.4)(yaml@2.8.4))
       '@fortawesome/fontawesome-svg-core':
         specifier: ^7.2.0
         version: 7.2.0
@@ -155,6 +158,11 @@ packages:
   '@clack/prompts@1.4.0':
     resolution: {integrity: sha512-S0My7XPGIgpRWMDG8uRqalbgT+a6FmCUdOW+HaIOVVpUPHOb7RrpvjTjiODadKp06fsrVDJZlIzc6yCTp4AnxA==}
     engines: {node: '>= 20.12.0'}
+
+  '@digi4care/astro-google-tagmanager@2.0.0':
+    resolution: {integrity: sha512-uoyo8cJRMBuzvSscRZvMog9ggEztR8TAWrIBniP7Z7Cs42DjGveTclLhMmqAnDBzdc/BqoCj/zjN6j4MajrWKw==}
+    peerDependencies:
+      astro: ^6.0.0
 
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -2251,6 +2259,10 @@ snapshots:
       fast-string-width: 3.0.2
       fast-wrap-ansi: 0.2.0
       sisteransi: 1.0.5
+
+  '@digi4care/astro-google-tagmanager@2.0.0(astro@6.3.3(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.4)(yaml@2.8.4))':
+    dependencies:
+      astro: 6.3.3(@netlify/blobs@8.2.0)(@types/node@25.0.8)(jiti@2.4.2)(rollup@4.60.4)(yaml@2.8.4)
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:
