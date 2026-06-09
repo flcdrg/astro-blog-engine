@@ -285,7 +285,7 @@ jobs:
       - name: Diff files if error
         if: failure()
         run: |
-          diff -u httptraces-scrubbed.txt verified/httptraces-scrubbed.txt.verified.txt
+          diff -u --strip-trailing-cr verified/httptraces-scrubbed.txt.verified.txt httptraces-scrubbed.txt
 
       - name: Upload scripts as artifact
         if: failure()

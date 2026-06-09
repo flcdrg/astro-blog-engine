@@ -6,7 +6,10 @@ $uri = [Uri]$url
 
 (@(
 "$url",
+"$url/",
 "$url/2025/07/azure-pipeline-template-expression.html",
+"$url/2025/07/azure-pipeline-template-expression/",
+"$url/2025/07/azure-pipeline-template-expression",
 "$url/index.html",
 "$url/speaking",
 "$url/2025",

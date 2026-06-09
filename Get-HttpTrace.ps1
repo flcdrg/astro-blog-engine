@@ -49,7 +49,9 @@ $client.Timeout = [TimeSpan]::FromSeconds($TimeoutSeconds)
 try {
 	foreach ($singleUrl in $allUrls) {
 		try {
+			# Check that it is a valid URL
 			$currentUri = [Uri]::new($singleUrl)
+			$currentDisplayUrl = $singleUrl
 		}
 		catch {
 			Write-Error "Invalid URL: $singleUrl"
@@ -59,7 +61,7 @@ try {
 		$visited = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 		$redirectCount = 0
 
-		Write-Output "Tracing URL: $currentUri"
+		Write-Output "Tracing URL: $currentDisplayUrl"
 
 		try {
 			while ($true) {
@@ -86,13 +88,13 @@ try {
 					$isRedirect = $statusCode -ge 300 -and $statusCode -lt 400
 
 					if (-not $isRedirect) {
-						Write-Output "FINAL: $currentUri [$statusCode $reason]"
+						Write-Output "FINAL: $currentDisplayUrl [$statusCode $reason]"
 						break
 					}
 
 					$locationHeader = $response.Headers.Location
 					if ($null -eq $locationHeader) {
-						Write-Output "FINAL (no Location header): $currentUri [$statusCode $reason]"
+						Write-Output "FINAL (no Location header): $currentDisplayUrl [$statusCode $reason]"
 						break
 					}
 
@@ -100,11 +102,11 @@ try {
 						$nextUri = $locationHeader
 					}
 					else {
-						$nextUri = [Uri]::new($currentUri, $locationHeader)
+						$nextUri = [Uri]::new($currentUri, $locationHeader.OriginalString)
 					}
 
 					$redirectCount++
-					Write-Output "REDIRECT $redirectCount`: $currentUri -> $nextUri [$statusCode $reason]"
+					Write-Output "REDIRECT $redirectCount`: $currentDisplayUrl -> $($nextUri.AbsoluteUri) [$statusCode $reason]"
 
 					if ($redirectCount -ge $MaxRedirects) {
 						Write-Error "Reached MaxRedirects ($MaxRedirects) before resolving a final URL."
@@ -117,6 +119,7 @@ try {
 					}
 
 					$currentUri = $nextUri
+					$currentDisplayUrl = $nextUri.AbsoluteUri
 				}
 				finally {
 					if ($null -ne $response) {
