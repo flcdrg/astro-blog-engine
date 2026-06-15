@@ -28,7 +28,7 @@
     "marked": "^18.0.5",
     "node-html-parser": "^7.1.0",
     "sanitize-html": "^2.17.4",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.1",
     "typescript": "^6.0.3"
   },
   "pnpm": {
