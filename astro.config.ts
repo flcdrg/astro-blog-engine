@@ -1,101 +1,132 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import { existsSync, globSync } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
-import { execSync } from 'child_process';
-import { join, resolve } from 'path';
-import { fileURLToPath } from 'node:url';
+import { defineConfig } from "astro/config";
+import { existsSync, globSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
+import { execSync } from "child_process";
+import { join, resolve } from "path";
+import { fileURLToPath } from "node:url";
 
 import sitemap, { type SitemapItem } from "@astrojs/sitemap";
 import astroCanonical from "./scripts/astroCanonical";
+import mermaid from "astro-mermaid";
 
 // https://astro.build/config
 export default defineConfig({
   compressHTML: false,
   site: process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au",
-  integrations: [sitemap({
-    serialize(item) {
+  integrations: [
+    sitemap({
+      serialize(item) {
+        // ensure we have no trailing slash for files
+        item.url = item.url.replace(/\/$/, "");
 
-      // ensure we have no trailing slash for files
-      item.url = item.url.replace(/\/$/, '');
+        try {
+          // if item is a post, get last modified date from Git
+          const urlPattern = /https:\/\/.*?\/(\d{4})\/(\d{2})\/(.+)/;
+          const match = item.url.match(urlPattern);
 
-      try {
-        // if item is a post, get last modified date from Git
-        const urlPattern = /https:\/\/.*?\/(\d{4})\/(\d{2})\/(.+)/;
-        const match = item.url.match(urlPattern);
-        
-        if (match && match[1] && match[2] && match[3]) {
-          const year = match[1];
-          const month = match[2];
-          const slug = match[3];
-          
-          // Create a glob pattern for the file
-          const filePattern = `${year}-${month}-*-${slug}.md`;
-          const postsDir = resolve(process.cwd(), 'src', 'posts', year);
-          
-          try {
-            // First check if the directory exists
-            if (existsSync(postsDir)) {
-              // Use Node's built-in fs.globSync to find files matching the pattern
-              const files = globSync(filePattern, { cwd: postsDir });
-              
-              if (files.length > 0 && files[0]) {
-                const filePath = join(postsDir, files[0]);
-                
-                updateLastModifiedFromGit(filePath, item);
+          if (match && match[1] && match[2] && match[3]) {
+            const year = match[1];
+            const month = match[2];
+            const slug = match[3];
+
+            // Create a glob pattern for the file
+            const filePattern = `${year}-${month}-*-${slug}.md`;
+            const postsDir = resolve(process.cwd(), "src", "posts", year);
+
+            try {
+              // First check if the directory exists
+              if (existsSync(postsDir)) {
+                // Use Node's built-in fs.globSync to find files matching the pattern
+                const files = globSync(filePattern, { cwd: postsDir });
+
+                if (files.length > 0 && files[0]) {
+                  const filePath = join(postsDir, files[0]);
+
+                  updateLastModifiedFromGit(filePath, item);
+                }
               }
+            } catch (err) {
+              // Handle errors without crashing
+              console.error(
+                `Error finding file for ${item.url}: ${err instanceof Error ? err.message : String(err)}`,
+              );
             }
-          } catch (err) {
-            // Handle errors without crashing
-            console.error(`Error finding file for ${item.url}: ${err instanceof Error ? err.message : String(err)}`);
+          } // or specific root-level pages /about, /speaking
+          else if (item.url.match(/\/about$/)) {
+            const filePath = join(process.cwd(), "src", "pages", "about.astro");
+            updateLastModifiedFromGit(filePath, item);
+          } else if (item.url.match(/\/speaking$/)) {
+            const filePath = join(process.cwd(), "src", "pages", "speaking.md");
+            updateLastModifiedFromGit(filePath, item);
           }
-        } // or specific root-level pages /about, /speaking
-        else if (item.url.match(/\/about$/)) {
-          const filePath = join(process.cwd(), 'src', 'pages', 'about.astro');
-          updateLastModifiedFromGit(filePath, item);
+        } catch (error) {
+          // Catch any errors to prevent build failures
+          console.error(
+            `Error processing sitemap item ${item.url}: ${error instanceof Error ? error.message : String(error)}`,
+          );
         }
-        else if (item.url.match(/\/speaking$/)) {
-          const filePath = join(process.cwd(), 'src', 'pages', 'speaking.md');
-          updateLastModifiedFromGit(filePath, item);
-        }
-      } catch (error) {
-        // Catch any errors to prevent build failures
-        console.error(`Error processing sitemap item ${item.url}: ${error instanceof Error ? error.message : String(error)}`);
-      }
-      
-      return item;
-    }
-  }),
-  {
-    name: "sitemap-root-trailing-slash",
-    hooks: {
-      "astro:build:done": async ({ dir }) => {
-        const siteRoot = (process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au").replace(/\/$/, '');
-        const distDir = dir instanceof URL ? fileURLToPath(dir) : dir;
-        const sitemapPath = join(distDir, 'sitemap-0.xml');
-        const content = await readFile(sitemapPath, 'utf8');
-        const fixed = content.replace(`<loc>${siteRoot}</loc>`, `<loc>${siteRoot}/</loc>`);
-        if (fixed !== content) {
-          await writeFile(sitemapPath, fixed, 'utf8');
-          console.log(`[sitemap-root-trailing-slash] Added trailing slash to root URL in sitemap-0.xml`);
-        }
+
+        return item;
+      },
+    }),
+    {
+      name: "sitemap-root-trailing-slash",
+      hooks: {
+        "astro:build:done": async ({ dir }) => {
+          const siteRoot = (
+            process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au"
+          ).replace(/\/$/, "");
+          const distDir = dir instanceof URL ? fileURLToPath(dir) : dir;
+          const sitemapPath = join(distDir, "sitemap-0.xml");
+          const content = await readFile(sitemapPath, "utf8");
+          const fixed = content.replace(
+            `<loc>${siteRoot}</loc>`,
+            `<loc>${siteRoot}/</loc>`,
+          );
+          if (fixed !== content) {
+            await writeFile(sitemapPath, fixed, "utf8");
+            console.log(
+              `[sitemap-root-trailing-slash] Added trailing slash to root URL in sitemap-0.xml`,
+            );
+          }
+        },
       },
     },
-  },
-  astroCanonical(),
+    astroCanonical(),
+    mermaid({
+      theme: "forest",
+      autoTheme: true,
+      // Register icon packs for use in diagrams
+      iconPacks: [
+        {
+          name: "logos",
+          loader: () =>
+            fetch("https://unpkg.com/@iconify-json/logos@1/icons.json").then(
+              (res) => res.json(),
+            ),
+        },
+        {
+          name: "iconoir",
+          loader: () =>
+            fetch("https://unpkg.com/@iconify-json/iconoir@1/icons.json").then(
+              (res) => res.json(),
+            ),
+        },
+      ],
+    }),
   ],
-  experimental: {
-  },
+  experimental: {},
   build: {
-    format: 'file',
-  }
+    format: "file",
+  },
 });
 
 function updateLastModifiedFromGit(filePath: string, item: SitemapItem) {
   if (existsSync(filePath)) {
     // Get last modified date from git
     const gitCmd = `git log -1 --pretty="format:%cI" "${filePath}"`;
-    const lastModified = execSync(gitCmd, { encoding: 'utf8' }).trim();
+    const lastModified = execSync(gitCmd, { encoding: "utf8" }).trim();
 
     if (lastModified) {
       item.lastmod = new Date(lastModified).toISOString();
