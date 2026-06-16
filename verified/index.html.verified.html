@@ -27,7 +27,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://david.gardiner.net.au/#organization","name":"David Gardiner","url":"https://david.gardiner.net.au/","logo":"https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab","sameAs":["https://github.com/flcdrg","https://www.linkedin.com/in/davidrgardiner/","https://mastodon.online/@DavidRGardiner","https://stackoverflow.com/users/25702/david-gardiner","https://bsky.app/profile/david.gardiner.net.au"]},{"@type":"WebSite","@id":"https://david.gardiner.net.au/#website","url":"https://david.gardiner.net.au/","name":"Dave's Daydreams","description":"Blog by David Gardiner","publisher":{"@id":"https://david.gardiner.net.au/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://david.gardiner.net.au/tags/{search_term_string}","query-input":"required name=search_term_string"}}]}</script>
   <link rel="stylesheet" href="STRING_0">
 <style>picture[data-astro-cid-ytwuefmh]{float:left;margin:0 1em 1em 0}.list-none[data-astro-cid-j7pv25f6]{list-style-type:none}
-</style></head>
+</style><script type="module" src="STRING_1"></script></head>
   <body>
     <header>
       <nav>
@@ -88,6 +88,7 @@
       document.documentElement.classList.add('dark');
     }
   
+    document.body.setAttribute('data-theme', theme);
     window.localStorage.setItem('theme', theme);
   
     const handleToggleClick = () => {
@@ -95,7 +96,9 @@
       element.classList.toggle("dark");
   
       const isDark = element.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
+      const newTheme = isDark ? "dark" : "light";
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem("theme", newTheme);
     }
   
     document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
@@ -120,9 +123,9 @@
           <time datetime="2025-07-14T08:00:00.000+09:30" title="STRING_0">14th July 2025</time> 
         </p>
         <!-- Just fix height. Allow width to autoscale --><picture data-astro-cid-ytwuefmh="true">
-	<source srcset="STRING_1" type="image/webp">
+	<source srcset="STRING_2" type="image/webp">
 	
-	<img src="STRING_2" loading="lazy" alt="Azure Pipelines logo" data-astro-cid-ytwuefmh="true" decoding="async" width="100" height="100">
+	<img src="STRING_3" loading="lazy" alt="Azure Pipelines logo" data-astro-cid-ytwuefmh="true" decoding="async" width="100" height="100">
 </picture>
         <div>Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
 and see some common examples of their usage.</div> 
@@ -141,9 +144,9 @@ and see some common examples of their usage.</div>
           <time datetime="2025-06-30T07:00:00.000+09:30" title="STRING_1">30th June 2025</time> 
         </p>
         <!-- Just fix height. Allow width to autoscale --><picture data-astro-cid-ytwuefmh="true">
-	<source srcset="STRING_1" type="image/webp">
+	<source srcset="STRING_2" type="image/webp">
 	
-	<img src="STRING_2" loading="lazy" alt="Azure Pipelines logo" data-astro-cid-ytwuefmh="true" decoding="async" width="100" height="100">
+	<img src="STRING_3" loading="lazy" alt="Azure Pipelines logo" data-astro-cid-ytwuefmh="true" decoding="async" width="100" height="100">
 </picture>
         <div>How to use custom conditions in your Azure Pipelines to evaluate at runtime whether to execute a given step, job or stage.</div> 
         <a href="2025/06/azure-pipeline-conditionals" data-astro-cid-j7pv25f6>Read more...</a>
@@ -161,9 +164,9 @@ and see some common examples of their usage.</div>
           <time datetime="2025-04-21T15:00:00.000+09:30" title="STRING_2">21st April 2025</time> 
         </p>
         <!-- Just fix height. Allow width to autoscale --><picture data-astro-cid-ytwuefmh="true">
-	<source srcset="STRING_3" type="image/webp">
+	<source srcset="STRING_4" type="image/webp">
 	
-	<img src="STRING_4" loading="lazy" alt="Rear view of speaker showing input jacks and bass/treble knobs" data-astro-cid-ytwuefmh="true" decoding="async" width="75" height="100">
+	<img src="STRING_5" loading="lazy" alt="Rear view of speaker showing input jacks and bass/treble knobs" data-astro-cid-ytwuefmh="true" decoding="async" width="75" height="100">
 </picture>
         <div>Adding some external speakers to my work desk, and what I thought of the Edifier MR4
 Powered Studio Monitor speakers.</div> 
@@ -184,9 +187,9 @@ Powered Studio Monitor speakers.</div>
           <time datetime="2025-04-13T19:00:00.000+09:30" title="STRING_3">13th April 2025</time> 
         </p>
         <!-- Just fix height. Allow width to autoscale --><picture data-astro-cid-ytwuefmh="true">
-	<source srcset="STRING_5" type="image/webp">
+	<source srcset="STRING_6" type="image/webp">
 	
-	<img src="STRING_6" loading="lazy" alt="Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked" data-astro-cid-ytwuefmh="true" decoding="async" width="106" height="100">
+	<img src="STRING_7" loading="lazy" alt="Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked" data-astro-cid-ytwuefmh="true" decoding="async" width="106" height="100">
 </picture>
         <div>How to change Windows touchpad settings programmatically after a fresh install.</div> 
         <a href="2025/04/touchpad-settings" data-astro-cid-j7pv25f6>Read more...</a>
@@ -208,9 +211,9 @@ Powered Studio Monitor speakers.</div>
           <time datetime="2025-04-08T20:30:00.000+09:30" title="STRING_4">8th April 2025</time> 
         </p>
         <!-- Just fix height. Allow width to autoscale --><picture data-astro-cid-ytwuefmh="true">
-	<source srcset="STRING_7" type="image/webp">
+	<source srcset="STRING_8" type="image/webp">
 	
-	<img src="STRING_8" loading="lazy" alt="Windows 11 logo" data-astro-cid-ytwuefmh="true" decoding="async" width="248" height="100">
+	<img src="STRING_9" loading="lazy" alt="Windows 11 logo" data-astro-cid-ytwuefmh="true" decoding="async" width="248" height="100">
 </picture>
         <div>How to reinstall a Windows 11 laptop and customise it for a smoother setup.</div> 
         <a href="2025/04/reinstalling-laptop" data-astro-cid-j7pv25f6>Read more...</a>
@@ -240,9 +243,9 @@ Powered Studio Monitor speakers.</div>
     <div class="centered-content" data-astro-cid-sz7xmlte>
       <div class="mvp-logo" data-astro-cid-sz7xmlte>
         <a href="https://mvp.microsoft.com/en-US/MVP/profile/04080298-ff57-e511-8102-fc15b4282e38" data-astro-cid-sz7xmlte><picture data-astro-cid-sz7xmlte="true">
-	<source srcset="STRING_9" type="image/webp">
+	<source srcset="STRING_10" type="image/webp">
 	
-	<img src="STRING_10" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" width="300" height="121">
+	<img src="STRING_11" alt="Microsoft MVP Logo" loading="lazy" decoding="async" data-astro-cid-sz7xmlte="true" width="300" height="121">
 </picture></a>
       </div>
 
