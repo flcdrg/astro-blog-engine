@@ -53,3 +53,9 @@ verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyy
 verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")'
 verify --file ./dist/index.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")'
 ```
+
+## Only for astro-blog-engine
+
+```bash
+verify --file ./dist/index.html --verified-dir verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")'
+```

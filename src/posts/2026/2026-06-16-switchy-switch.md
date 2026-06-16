@@ -1,15 +1,15 @@
 ---
 title: The network switch that keeps switching more than it should
-date: '2026-06-17T08:00:00.000+09:30'
+date: "2026-06-16T20:30:00.000+09:30"
 image: ../../assets/2022/06/unifi-usw-flex-mini-00.jpg
 imageAlt: UniFi USW Flex Mini 5-port switch
 description: |
-    How I accidentally discovered that one of my home network switches seems unable to decide who its upstream
-    device should be.
+  How I accidentally discovered that one of my home network switches seems unable to decide who its upstream
+  device should be.
 tags:
-- Hardware
-- Networking
-- Synology
+  - Hardware
+  - Networking
+  - Synology
 ---
 
 A couple of months ago a suggestion came up at home about getting some kind of low-powered light in the hallway for people who might need to go to the bathroom in the middle of the night. Not an unreasonable request - maybe some LED strip lights would work? And then I wondered, how about adding a motion sensor? And then could you integrate it with some home automation of some kind? And that's how I ended up completely distracted looking at [Home Assistant](https://www.home-assistant.io/)!
@@ -72,8 +72,8 @@ The TP-Link is not a managed switch. It is essentially 'invisible' to other devi
 
 To test this theory, I changed the cables so that the Flex Mini is plugged directly into the Cloud Gateway. But as the gateway doesn't provide PoE I needed to power the Mini directly through its USB-C port.
 
-Making that change, and now the Cloud Gateway's Network page reverts back to the expected layout and doesn't change.
+Making that change, and now the Cloud Gateway's Network page reverts back to the expected layout and doesn't change. Home Assistant's Activity log also becomes a lot quieter.
 
-That seems to be the problem solved. Ideally I'd really prefer to keep using PoE for the Flex Mini switch, but I suspect to do that in a reliable way might mean replacing the unmanaged TP-Link switch with a newer managed one - something like the UniFi [USW Lite 8](https://www.amazon.com.au/Ubiquiti-UniFi-Switch-8-Port-Network/dp/B0C6BPKXDF?&linkCode=ll2&tag=flcdrg07-22&linkId=5a4b1ea1f998e5eb75850909842534ac&ref_=as_li_ss_tl) or [USW Ultra](https://www.amazon.com.au/Ubiquiti-Ultra-8-Port-Network-Switch/dp/B0CR1YNLXC?&linkCode=ll2&tag=flcdrg07-22&linkId=a2f9311298976c19d21acec1f9d7eb81&ref_=as_li_ss_tl). Except it does seem the price jumps quite a bit when you go from 5 ports to 8. Maybe I'll stick with the USB-C power option for now.
+That seems to have solved the problem. I'd really prefer to keep using PoE for the Flex Mini switch, but I suspect to do that in a reliable way might mean replacing the unmanaged TP-Link switch with a newer managed one - something like the UniFi [USW Lite 8](https://www.amazon.com.au/Ubiquiti-UniFi-Switch-8-Port-Network/dp/B0C6BPKXDF?&linkCode=ll2&tag=flcdrg07-22&linkId=5a4b1ea1f998e5eb75850909842534ac&ref_=as_li_ss_tl) or [USW Ultra](https://www.amazon.com.au/Ubiquiti-Ultra-8-Port-Network-Switch/dp/B0CR1YNLXC?&linkCode=ll2&tag=flcdrg07-22&linkId=a2f9311298976c19d21acec1f9d7eb81&ref_=as_li_ss_tl). Except it does seem the price jumps quite a bit when you go from 5 ports to 8. Maybe I'll stick with the USB-C power option for now.
 
 Amazon affiliate links

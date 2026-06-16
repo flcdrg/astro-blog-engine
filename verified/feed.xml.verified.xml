@@ -18,6 +18,63 @@
   <category term="Azure"/>
   <category term="DevOps"/>
   <entry>
+    <id>https://david.gardiner.net.au/2026/06/switchy-switch</id>
+    <updated>2026-06-16T20:30:00.000+09:30</updated>
+    <title>The network switch that keeps switching more than it should</title>
+    <link href="https://david.gardiner.net.au/2026/06/switchy-switch" rel="alternate" type="text/html" title="The network switch that keeps switching more than it should"/>
+    <category term="Hardware"/>
+    <category term="Networking"/>
+    <category term="Synology"/>
+    <published>2026-06-16T20:30:00.000+09:30</published>
+    <summary type="html">How I accidentally discovered that one of my home network switches seems unable to decide who its upstream
+device should be.</summary>
+    <content type="html">&lt;p&gt;A couple of months ago a suggestion came up at home about getting some kind of low-powered light in the hallway for people who might need to go to the bathroom in the middle of the night. Not an unreasonable request - maybe some LED strip lights would work? And then I wondered, how about adding a motion sensor? And then could you integrate it with some home automation of some kind? And that&apos;s how I ended up completely distracted looking at &lt;a href=&quot;https://www.home-assistant.io/&quot;&gt;Home Assistant&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;Installing it on our Synology NAS seemed the logical choice, and it was pretty straightforward, going down the Docker container route. I clicked around the UI and it looked interesting, but didn&apos;t go much further (and I must admit by that time I&apos;d forgotten the original reason for heading down this rabbit hole).&lt;/p&gt;
+&lt;p&gt;Then a couple of weeks ago we got a new car (a Kia EV5) and it has an app that you can use to check current status and some limited remote control options. Given the need to charge it at home started me off on a new area of research for home charging devices, and also considering the current state of our home solar panels - whether to upgrade them, or at least figure out how to replace some that have had to be taken out of service due to impact damage.&lt;/p&gt;
+&lt;p&gt;That inspired me to go back and take another look at my Home Assistant instance, and see if I could add some &apos;integrations&apos; with some of the existing networked devices we already have. It turns out our current model solar panel inverter (a &lt;a href=&quot;https://www.fronius.com/en-au/australia/solar-energy/home-owners&quot;&gt;Fronius&lt;/a&gt;) is supported, as well as the &lt;a href=&quot;https://techspecs.ui.com/unifi&quot;&gt;Ubiquiti UniFi&lt;/a&gt; networking gear I have installed. That is pretty cool.&lt;/p&gt;
+&lt;p&gt;And that is a very long way of getting to the point of this blog post - once I had these devices integrated, I noticed in Home Assistant&apos;s &lt;strong&gt;Activity&lt;/strong&gt; page, that there were heaps of these entries being logged for my UniFi &lt;a href=&quot;https://www.amazon.com.au/Ubiquiti-Flex-Managed-Gigabit-Switch/dp/B08VRV9PWD?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=0dfeac74af4a36b6280c22ca74a2afad&amp;amp;ref_=as_li_ss_tl&quot;&gt;USW Flex Mini&lt;/a&gt; switch:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/home-assistant-activity-uplink-mac.8u9k_5cq_Z96Tnj.webp&quot; alt=&quot;Screenshot of Activity page in Home Assistant showing USW Flex Mini Uplink MAC address changing frequently&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;For some reason, either the Flex Mini switch itself, or my &lt;a href=&quot;https://www.amazon.com.au/Ubiquiti-UniFi-Cloud-Gateway-Ultra/dp/B0D8PSW2BZ?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=39ad4320d21517a1048ccd7df111cbd5&amp;amp;ref_=as_li_ss_tl&quot;&gt;UniFi Cloud Gateway Ultra&lt;/a&gt; thinks that the uplink MAC address for the switch is changing every minute. That is really weird.&lt;/p&gt;
+&lt;p&gt;The physical arrangement of networking hardware in our home looks roughly like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+graph TD;
+    ISP --&amp;gt; GW
+    GW[Cloud Gateway Ultra]
+    click GW href &quot;https://www.amazon.com.au/Ubiquiti-UniFi-Cloud-Gateway-Ultra/dp/B0D8PSW2BZ?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=39ad4320d21517a1048ccd7df111cbd5&amp;amp;ref_=as_li_ss_tl&quot; &quot;Cloud Gateway Ultra on Amazon&quot; _blank
+    GW --&amp;gt; TP
+
+    TP[TP-Link Switch]
+    TP --&amp;gt; PR
+
+    LT(UAP AC Lite)
+    TP --&amp;gt; LT
+
+    PR(AC Pro)
+    click PR href &quot;https://www.amazon.com.au/UAP-AC-PRO-UBIQUITI-Ac1750-Access-Injector/dp/B07JDNS774?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=bfe6e1c092cbf6dbf88d14b28e295ed4&amp;amp;ref_=as_li_ss_tl&quot; &quot;AC Pro&quot; _blank
+
+    USW(USW Flex Mini)
+    click USW href &quot;https://www.amazon.com.au/Ubiquiti-Flex-Managed-Gigabit-Switch/dp/B08VRV9PWD?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=0dfeac74af4a36b6280c22ca74a2afad&amp;amp;ref_=as_li_ss_tl&quot; &quot;USW Flex Mini switch on Amazon&quot; _blank
+    TP --&amp;gt; USW
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I had to do some hunting within the Cloud Gateway UI to figure out what the devices where that corresponded to the two MAC addresses.&lt;/p&gt;
+&lt;p&gt;One was indeed the gateway (which is what I would expect). The second, surprisingly turned out to be &lt;a href=&quot;https://www.amazon.com.au/UAP-AC-PRO-UBIQUITI-Ac1750-Access-Injector/dp/B07JDNS774?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=bfe6e1c092cbf6dbf88d14b28e295ed4&amp;amp;ref_=as_li_ss_tl&quot;&gt;AC Pro wireless access point&lt;/a&gt;. That doesn&apos;t make a lot of sense - it&apos;s a wireless access point. It should not be acting as the upstream for a wired device.&lt;/p&gt;
+&lt;p&gt;It&apos;s funny though. Once you&apos;re paying attention to something, you often notice other things that have probably been there the whole time.&lt;/p&gt;
+&lt;p&gt;Switching to the Cloud Gateway UI and bringing up the &lt;strong&gt;Network&lt;/strong&gt; page, I noticed something interesting.&lt;/p&gt;
+&lt;p&gt;At first it looked as I would have expected:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/gateway-network1.1E1pG1Li_2UGfQ.webp&quot; alt=&quot;Screenshot from Cloud Gateway Network page with expected layout&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;But then while on that page it updated and woah! That lines up with those logs!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/gateway-network2.1r40Rzbb_ZC8CXu.webp&quot; alt=&quot;Screenshot from Cloud Gateway Network page with unexpected layout&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Both the Flex Mini switch and the AC Pro access point use Power over Ethernet (PoE), and the &lt;a href=&quot;https://www.amazon.com.au/TP-Link-Gigabit-Ethernet-Unmanaged-TL-SG1008P/dp/B00BP0SSAS?th=1&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=6bbad2b757ca1431cfe8c2b8e50ccbfc&amp;amp;ref_=as_li_ss_tl&quot;&gt;TP-Link switch&lt;/a&gt; provides that on some of its ports so I had them both plugged into that.&lt;/p&gt;
+&lt;p&gt;The TP-Link is not a managed switch. It is essentially &apos;invisible&apos; to other devices on the network (notice how it doesn&apos;t show up on those Gateway Network diagrams above), so I wonder if that may be relevant?&lt;/p&gt;
+&lt;p&gt;To test this theory, I changed the cables so that the Flex Mini is plugged directly into the Cloud Gateway. But as the gateway doesn&apos;t provide PoE I needed to power the Mini directly through its USB-C port.&lt;/p&gt;
+&lt;p&gt;Making that change, and now the Cloud Gateway&apos;s Network page reverts back to the expected layout and doesn&apos;t change. Home Assistant&apos;s Activity log also becomes a lot quieter.&lt;/p&gt;
+&lt;p&gt;That seems to have solved the problem. I&apos;d really prefer to keep using PoE for the Flex Mini switch, but I suspect to do that in a reliable way might mean replacing the unmanaged TP-Link switch with a newer managed one - something like the UniFi &lt;a href=&quot;https://www.amazon.com.au/Ubiquiti-UniFi-Switch-8-Port-Network/dp/B0C6BPKXDF?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=5a4b1ea1f998e5eb75850909842534ac&amp;amp;ref_=as_li_ss_tl&quot;&gt;USW Lite 8&lt;/a&gt; or &lt;a href=&quot;https://www.amazon.com.au/Ubiquiti-Ultra-8-Port-Network-Switch/dp/B0CR1YNLXC?&amp;amp;linkCode=ll2&amp;amp;tag=flcdrg07-22&amp;amp;linkId=a2f9311298976c19d21acec1f9d7eb81&amp;amp;ref_=as_li_ss_tl&quot;&gt;USW Ultra&lt;/a&gt;. Except it does seem the price jumps quite a bit when you go from 5 ports to 8. Maybe I&apos;ll stick with the USB-C power option for now.&lt;/p&gt;
+&lt;p&gt;Amazon affiliate links&lt;/p&gt;
+</content>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/unifi-usw-flex-mini-00.BEVh-cO7.jpg" width="493" height="180"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/unifi-usw-flex-mini-00.BEVh-cO7.jpg" width="493" height="180"/>
+  </entry>
+  <entry>
     <id>https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression</id>
     <updated>2025-07-14T08:00:00.000+09:30</updated>
     <title>Azure Pipelines template expressions</title>
@@ -1242,210 +1299,5 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 </content>
     <media:thumbnail url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
     <media:content medium="image" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
-  </entry>
-  <entry>
-    <id>https://david.gardiner.net.au/2025/02/functions-serilog-appinsights</id>
-    <updated>2025-02-10T08:00:00.000+10:30</updated>
-    <title>.NET Azure Functions, Isolated worker model, Serilog to App Insights</title>
-    <link href="https://david.gardiner.net.au/2025/02/functions-serilog-appinsights" rel="alternate" type="text/html" title=".NET Azure Functions, Isolated worker model, Serilog to App Insights"/>
-    <category term=".NET"/>
-    <category term="Azure Functions"/>
-    <published>2025-02-10T08:00:00.000+10:30</published>
-    <summary type="html">How to configure Serilog and Application Insights in .NET Azure Functions using the isolated worker model.</summary>
-    <content type="html">&lt;p&gt;There&apos;s already some good resources online about configuring &lt;a href=&quot;https://learn.microsoft.com/azure/azure-functions/create-first-function-cli-csharp?WT.mc_id=DOP-MVP-5001655&quot;&gt;.NET Azure Functions&lt;/a&gt; with &lt;a href=&quot;https://serilog.net/&quot;&gt;Serilog&lt;/a&gt;. For example, Shazni gives a &lt;a href=&quot;https://medium.com/ascentic-technology/a-comprehensive-guide-to-configuring-logging-with-serilog-and-azure-app-insights-in-net-f6e4bda69e76&quot;&gt;good introduction to Serilog and then shows how to configure for in-process and isolated Azure Functions&lt;/a&gt;, and Simon shows &lt;a href=&quot;https://simonholman.dev/blog/configure-serilog-for-logging-in-azure-functions&quot;&gt;how to use Serilog with Azure Functions in isolated worker model&lt;/a&gt;, but neither cover using App Insights.&lt;/p&gt;
-&lt;p&gt;It&apos;s important to note that the &lt;a href=&quot;https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model?WT.mc_id=DOP-MVP-5001655&quot;&gt;in-process model goes out of support (along with .NET 8) in November 2026&lt;/a&gt;. Going forward, only the isolated worker model is supported by future versions of .NET (starting with .NET 9)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/serilog.DYu9tqZ__ZFlgFy.webp&quot; alt=&quot;Serilog logo&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;The Serilog Sink package for logging data to Application Insights is &lt;a href=&quot;https://www.nuget.org/packages/Serilog.Sinks.ApplicationInsights/&quot;&gt;Serilog.Extensions.AppInsights&lt;/a&gt;, and it has some useful code samples &lt;a href=&quot;https://github.com/serilog-contrib/serilog-sinks-applicationinsights&quot;&gt;in the README&lt;/a&gt;, but they also lack mentioning the differences for isolated worker model.&lt;/p&gt;
-&lt;p&gt;So my goal here is to demonstrate the following combination:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A .NET Azure Function&lt;/li&gt;
-&lt;li&gt;That is using isolated worker mode&lt;/li&gt;
-&lt;li&gt;That logs to Azure App Insights&lt;/li&gt;
-&lt;li&gt;Uses Serilog for structured logging&lt;/li&gt;
-&lt;li&gt;Uses the Serilog &apos;bootstrapper&apos; pattern to capture any errors during startup/configuration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note: There are full working samples for this post in &lt;a href=&quot;https://github.com/flcdrg/azure-function-dotnet-isolated-logging&quot;&gt;https://github.com/flcdrg/azure-function-dotnet-isolated-logging&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Our starting point is an Azure Function that has Application Insights enabled. We uncommented to the two lines in Program.cs and the two .csproj file from the default Functions project template.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-
-var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services =&amp;gt; {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
-    })
-    .Build();
-
-host.Run();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;One of the challenges with using the App Insights Serilog Sink, is that it needs to be configured with an existing &lt;code&gt;TelemetryConfiguration&lt;/code&gt;. The old way of doing this was to reference &lt;a href=&quot;https://learn.microsoft.com/dotnet/api/microsoft.applicationinsights.extensibility.telemetryconfiguration.active?view=azure-dotnet&amp;amp;WT.mc_id=DOP-MVP-5001655&quot;&gt;&lt;code&gt;TelemetryConfiguration.Active&lt;/code&gt;&lt;/a&gt;, however using this property has been discouraged in .NET Core (aka modern .NET).&lt;/p&gt;
-&lt;p&gt;Instead you&apos;re encouraged to retrieve a valid &lt;code&gt;TelemetryConfiguration&lt;/code&gt; instance from the service provider, like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Log.Logger = new LoggerConfiguration()
-    .WriteTo.ApplicationInsights(
-        serviceProvider.GetRequiredService&amp;lt;TelemetryConfiguration&amp;gt;(),
-    TelemetryConverter.Traces)
-    .CreateLogger();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Except we have a problem. How can we reference the service provider? We need to move this under the &lt;code&gt;HostBuilder&lt;/code&gt;, so we have access to a service provider.&lt;/p&gt;
-&lt;p&gt;There&apos;s a couple of ways to do this. Traditionally we would use &lt;code&gt;UseSerilog&lt;/code&gt; to register Serilog similar to this:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    var build = Host.CreateDefaultBuilder(args)
-        .UseSerilog((_, services, loggerConfiguration) =&amp;gt; loggerConfiguration
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty(&quot;ExtraInfo&quot;, &quot;FuncWithSerilog&quot;)
-
-            .WriteTo.ApplicationInsights(
-                services.GetRequiredService&amp;lt;TelemetryConfiguration&amp;gt;(),
-                TelemetryConverter.Traces))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;But &lt;a href=&quot;https://nblumhardt.com/2024/04/serilog-net8-0-minimal/#comment-6496448401&quot;&gt;as of relatively recently&lt;/a&gt;, you can now also use &lt;code&gt;AddSerilog&lt;/code&gt;, as it turns out under the covers, &lt;code&gt;UseSerilog&lt;/code&gt; just calls &lt;code&gt;AddSerilog&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;So this is the equivalent:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;builder.Services
-    .AddSerilog((serviceProvider, loggerConfiguration) =&amp;gt;
-    {
-        loggerConfiguration
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty(&quot;ExtraInfo&quot;, &quot;FuncWithSerilog&quot;)
-
-            .WriteTo.ApplicationInsights(
-                serviceProvider.GetRequiredService&amp;lt;TelemetryConfiguration&amp;gt;(),
-                TelemetryConverter.Traces);
-    })
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There&apos;s also the &apos;bootstrap logging&apos; pattern that was &lt;a href=&quot;https://nblumhardt.com/2020/10/bootstrap-logger/&quot;&gt;first outlined here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This can be useful if you want to log any configuration errors at start up. The only issue here is it will be tricky to log those into App Insights as you won&apos;t have the main Serilog configuration (where you wire up App Insights integration) completed yet. You could log to another sink (&lt;a href=&quot;https://github.com/serilog/serilog-sinks-console&quot;&gt;Console&lt;/a&gt;, or &lt;a href=&quot;https://github.com/serilog/serilog-sinks-debug&quot;&gt;Debug&lt;/a&gt; if you&apos;re running locally).&lt;/p&gt;
-&lt;p&gt;Here&apos;s an example that includes bootstrap logging.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.ApplicationInsights.Extensibility;
-using Serilog;
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.Debug()
-    .CreateBootstrapLogger();
-
-try
-{
-    Log.Warning(&quot;Starting up..&quot;); // Only logged to console
-
-    var build = Host.CreateDefaultBuilder(args)
-        .UseSerilog((_, services, loggerConfiguration) =&amp;gt; loggerConfiguration
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty(&quot;ExtraInfo&quot;, &quot;FuncWithSerilog&quot;)
-
-            .WriteTo.ApplicationInsights(
-                services.GetRequiredService&amp;lt;TelemetryConfiguration&amp;gt;(),
-                TelemetryConverter.Traces))
-
-        .ConfigureFunctionsWebApplication()
-
-        .ConfigureServices(services =&amp;gt; {
-            services.AddApplicationInsightsTelemetryWorkerService();
-            services.ConfigureFunctionsApplicationInsights();
-        })
-        .ConfigureLogging(logging =&amp;gt;
-        {
-            // Remove the default Application Insights logger provider so that Information logs are sent
-            // https://learn.microsoft.com/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Clinux&amp;amp;WT.mc_id=DOP-MVP-5001655#managing-log-levels
-            logging.Services.Configure&amp;lt;LoggerFilterOptions&amp;gt;(options =&amp;gt;
-            {
-                LoggerFilterRule? defaultRule = options.Rules.FirstOrDefault(rule =&amp;gt; rule.ProviderName
-                    == &quot;Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider&quot;);
-                if (defaultRule is not null)
-                {
-                    options.Rules.Remove(defaultRule);
-                }
-            });
-        })
-
-        .Build();
-
-    build.Run();
-    Log.Warning(&quot;After run&quot;);
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, &quot;An unhandled exception occurred during bootstrapping&quot;);
-}
-finally
-{
-    Log.Warning(&quot;Exiting application&quot;);
-    Log.CloseAndFlush();
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;In my experimenting with this, when the Function is closed normally (eg. by being requested to stop in the Azure Portal / or pressing Ctrl-C in the console window when running locally) I was not able to get any logging working in the &lt;code&gt;finally&lt;/code&gt; block. I think by then it&apos;s pretty much game over and the Function Host is keen to wrap things up.&lt;/p&gt;
-&lt;p&gt;But what if the Function is running in Azure? The Debug or Console sinks won&apos;t be much use there. In ApplicationInsights sink docs, there&apos;s a section on &lt;a href=&quot;https://github.com/serilog-contrib/serilog-sinks-applicationinsights#how-when-and-why-to-flush-messages-manually&quot;&gt;how to flush messages manually&lt;/a&gt;. The code sample shows creating a new instance of &lt;code&gt;TelemetryClient&lt;/code&gt; so that you &lt;em&gt;can&lt;/em&gt; use the ApplicationInsights sink in the bootstrap logger.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.Debug()
-    .WriteTo.ApplicationInsights(new TelemetryClient(new TelemetryConfiguration()), new TraceTelemetryConverter())
-    .CreateBootstrapLogger();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;If I simulate a configuration error by throwing an exception inside the &lt;code&gt;ConfigureServices&lt;/code&gt; call, then you do get data sent to App Insights. eg.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;{
-    &quot;name&quot;: &quot;AppExceptions&quot;,
-    &quot;time&quot;: &quot;2025-02-08T06:32:25.4548247Z&quot;,
-    &quot;tags&quot;: {
-        &quot;ai.cloud.roleInstance&quot;: &quot;Delphinium&quot;,
-        &quot;ai.internal.sdkVersion&quot;: &quot;dotnetc:2.22.0-997&quot;
-    },
-    &quot;data&quot;: {
-        &quot;baseType&quot;: &quot;ExceptionData&quot;,
-        &quot;baseData&quot;: {
-            &quot;ver&quot;: 2,
-            &quot;exceptions&quot;: [
-                {
-                    &quot;id&quot;: 59941933,
-                    &quot;outerId&quot;: 0,
-                    &quot;typeName&quot;: &quot;System.InvalidOperationException&quot;,
-                    &quot;message&quot;: &quot;This is a test exception&quot;,
-                    &quot;hasFullStack&quot;: true,
-                    &quot;parsedStack&quot;: [
-                        {
-                            &quot;level&quot;: 0,
-                            &quot;method&quot;: &quot;Program+&amp;lt;&amp;gt;c.&amp;lt;&amp;lt;Main&amp;gt;$&amp;gt;b__0_1&quot;,
-                            &quot;assembly&quot;: &quot;FuncWithSerilog, Version=1.2.6.0, Culture=neutral, PublicKeyToken=null&quot;,
-                            &quot;fileName&quot;: &quot;D:\\git\\azure-function-dotnet-isolated-logging\\net9\\FuncWithSerilog\\Program.cs&quot;,
-                            &quot;line&quot;: 36
-                        },
-                        {
-                            &quot;level&quot;: 1,
-                            &quot;method&quot;: &quot;Microsoft.Extensions.Hosting.HostBuilder.InitializeServiceProvider&quot;,
-                            &quot;assembly&quot;: &quot;Microsoft.Extensions.Hosting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60&quot;,
-                            &quot;line&quot;: 0
-                        },
-                        {
-                            &quot;level&quot;: 2,
-                            &quot;method&quot;: &quot;Microsoft.Extensions.Hosting.HostBuilder.Build&quot;,
-                            &quot;assembly&quot;: &quot;Microsoft.Extensions.Hosting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60&quot;,
-                            &quot;line&quot;: 0
-                        },
-                        {
-                            &quot;level&quot;: 3,
-                            &quot;method&quot;: &quot;Program.&amp;lt;Main&amp;gt;$&quot;,
-                            &quot;assembly&quot;: &quot;FuncWithSerilog, Version=1.2.6.0, Culture=neutral, PublicKeyToken=null&quot;,
-                            &quot;fileName&quot;: &quot;D:\\git\\azure-function-dotnet-isolated-logging\\net9\\FuncWithSerilog\\Program.cs&quot;,
-                            &quot;line&quot;: 21
-                        }
-                    ]
-                }
-            ],
-            &quot;severityLevel&quot;: &quot;Critical&quot;,
-            &quot;properties&quot;: {
-                &quot;MessageTemplate&quot;: &quot;An unhandled exception occurred during bootstrapping&quot;
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;So there you go!&lt;/p&gt;
-&lt;p&gt;And this is all well and good, but it&apos;s important to mention that Microsoft are suggesting for new codebases &lt;a href=&quot;https://learn.microsoft.com/azure/azure-monitor/app/worker-service?WT.mc_id=DOP-MVP-5001655&quot;&gt;use OpenTelemetry instead of App Insights&lt;/a&gt;! I&apos;ll have to check out how that works soon.&lt;/p&gt;
-</content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png" width="200" height="200"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/serilog.DYu9tqZ_.png" width="200" height="200"/>
   </entry>
 </feed>
