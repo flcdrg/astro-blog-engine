@@ -37,6 +37,7 @@
       document.documentElement.classList.add('dark');
     }
   
+    document.body.setAttribute('data-theme', theme);
     window.localStorage.setItem('theme', theme);
   
     const handleToggleClick = () => {
@@ -44,7 +45,9 @@
       element.classList.toggle("dark");
   
       const isDark = element.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
+      const newTheme = isDark ? "dark" : "light";
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem("theme", newTheme);
     }
   
     document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
