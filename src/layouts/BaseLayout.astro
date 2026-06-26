@@ -11,10 +11,18 @@ interface Props {
   frontmatter?: {
     title?: string;
     description?: string;
+    image?: {
+      src: string;
+      width: number;
+      height: number;
+    };
+    imageAlt?: string;
+    tags?: string[];
   };
+  canonicalUrl?: string | undefined;
 }
 
-const { pageTitle, frontmatter } = Astro.props;
+const { pageTitle, frontmatter, canonicalUrl } = Astro.props;
 
 // Site-wide JSON-LD structured data
 const siteJsonLd = {
@@ -63,6 +71,46 @@ const siteJsonLd = {
     {
       frontmatter?.description && (
         <meta name="description" content={frontmatter.description} />
+      )
+    }
+    {
+      frontmatter?.description && (
+        <meta name="og:description" content={frontmatter.description} />
+      )
+    }
+    {
+      pageTitle && (
+        <meta name="og:title" content={pageTitle} />
+      )
+    }
+    {
+      frontmatter && (
+        <meta name="og:type" content={frontmatter.tags ? "article" : "website"} />
+      )
+    }
+    {
+      canonicalUrl && (
+        <meta name="og:url" content={canonicalUrl} />
+      )
+    }
+    {
+      frontmatter?.image && (
+        <meta name="og:image" content={frontmatter.image.src} />
+      )
+    }
+    {
+      frontmatter?.image?.width && (
+        <meta name="og:image:width" content={frontmatter.image.width.toString()} />
+      )
+    }
+    {
+      frontmatter?.image?.height && (
+        <meta name="og:image:height" content={frontmatter.image.height.toString()} />
+      )
+    }
+    {
+      frontmatter?.imageAlt && (
+        <meta name="og:image:alt" content={frontmatter.imageAlt} />
       )
     }
     <!-- Cloudflare Web Analytics -->

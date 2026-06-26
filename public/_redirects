@@ -1,3 +1,6 @@
 /index.html / 301
 /*/index.html /:splat/ 301
 /*.html /:splat 301
+/tags/.net /tags/.NET 301
+/tags/networking.xml /tags/Networking.xml 301
+/tags/macos.xml /tags/macOS.xml 301

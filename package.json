@@ -11,7 +11,11 @@
     "validate-frontmatter:default": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content -Raw \\$_.FullName) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\"",
     "validate-frontmatter:windows": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content $_.FullName -Raw) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\"",
     "lint": "markdownlint-cli2",
-    "lint:fix": "markdownlint-cli2 --fix"
+    "lint:fix": "markdownlint-cli2 --fix",
+    "verify:dist": "verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime \"yyyy-MM-ddTHH:mm:ss.fffZ\" ",
+    "verify:post": "verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
+    "verify:index": "verify --file ./dist/index.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
+    "verify": "pnpm verify:dist && pnpm verify:post && pnpm verify:index"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -21,9 +25,9 @@
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@types/luxon": "^3.7.1",
-    "astro": "^6.4.8",
+    "astro": "^7.0.3",
     "astro-disqus": "^1.0.1",
-    "astrojs-atom": "^3.0.63",
+    "astrojs-atom": "^4.0.4",
     "luxon": "^3.7.2",
     "marked": "^18.0.5",
     "node-html-parser": "^8.0.2",

@@ -65,39 +65,27 @@ const blogJsonLd = {
 
 ---
 
-<BaseLayout pageTitle={title}>
+<BaseLayout 
+  pageTitle={title} 
+  frontmatter={{
+    title,
+    ...(description ? { description } : {}),
+    ...(image ? { image } : {}),
+    ...(frontmatter.imageAlt ? { imageAlt: frontmatter.imageAlt } : {}),
+    tags: frontmatter.tags
+  }} 
+  canonicalUrl={canonicalUrl?.toString()}
+>
   <slot name="head" slot="head" />
-  {description && (
-    <meta name="description" content={description} slot="head" />
-  )}
-  {description && (
-    <meta name="og:description" content={description} slot="head" />
-  )}
 
-  <meta name="og:title" content={title} slot="head" />
-  <meta name="og:type" content="article" slot="head" />
-  <meta name="og:url" content={canonicalUrl} slot="head" />
-  {image && (
-    <meta name="og:image" content={image.src} slot="head" />
-  )}
-  {image && image.width && (
-    <meta name="og:image:width" content={image.width.toString()} slot="head" />
-  )}
-  {image && image.height && (
-    <meta name="og:image:height" content={image.height.toString()} slot="head" />
-  )}
-  {frontmatter.imageAlt && (
-    <meta name="og:image:alt" content={frontmatter.imageAlt} slot="head" />
-  )}
-
-    {
-      blogJsonLd && (
-        <script slot="head" is:raw is:inline
-          type="application/ld+json"
-          set:html={JSON.stringify(blogJsonLd)}
-        />
-      )
-    }
+  {
+    blogJsonLd && (
+      <script slot="head" is:raw is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(blogJsonLd)}
+      />
+    )
+  }
   
   <h1>{frontmatter.title}</h1>
 
