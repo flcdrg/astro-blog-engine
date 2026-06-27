@@ -80,42 +80,42 @@ const siteJsonLd = {
     }
     {
       frontmatter?.description && (
-        <meta name="og:description" content={frontmatter.description} />
+        <meta name="og:description" property="og:description" content={frontmatter.description} />
       )
     }
     {
       pageTitle && (
-        <meta name="og:title" content={pageTitle} />
+        <meta name="og:title" property="og:title" content={pageTitle} />
       )
     }
     {
       frontmatter && (
-        <meta name="og:type" content={frontmatter.tags ? "article" : "website"} />
+        <meta name="og:type" property="og:type" content={frontmatter.tags ? "article" : "website"} />
       )
     }
     {
       canonicalUrl && (
-        <meta name="og:url" content={canonicalUrl} />
+        <meta name="og:url" property="og:url" content={canonicalUrl} />
       )
     }
     {
       absoluteImageUrl && (
-        <meta name="og:image" content={absoluteImageUrl} />
+        <meta name="og:image" property="og:image" content={absoluteImageUrl} />
       )
     }
     {
       frontmatter?.image?.width && (
-        <meta name="og:image:width" content={frontmatter.image.width.toString()} />
+        <meta name="og:image:width" property="og:image:width" content={frontmatter.image.width.toString()} />
       )
     }
     {
       frontmatter?.image?.height && (
-        <meta name="og:image:height" content={frontmatter.image.height.toString()} />
+        <meta name="og:image:height" property="og:image:height" content={frontmatter.image.height.toString()} />
       )
     }
     {
       frontmatter?.imageAlt && (
-        <meta name="og:image:alt" content={frontmatter.imageAlt} />
+        <meta name="og:image:alt" property="og:image:alt" content={frontmatter.imageAlt} />
       )
     }
     <!-- Cloudflare Web Analytics -->
