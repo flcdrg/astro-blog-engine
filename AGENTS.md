@@ -2,7 +2,7 @@
 
 This file provides guidance to agents when working with code in this repository.
 
-This is a static blog (Dave's Daydreams) built with Astro v6, deployed to Cloudflare Pages.
+This is a static blog (Dave's Daydreams) built with Astro v7, deployed to Cloudflare Pages.
 
 ## Tooling
 
@@ -19,7 +19,10 @@ pnpm preview
 pnpm run validate-frontmatter  # checks posts don't have unfilled template placeholders
 pnpm lint                   # markdownlint-cli2 on markdown files
 pnpm lint:fix
+pnpm verify                 # run all Verify.Cli snapshot checks (verify:dist, verify:post, verify:index)
 ```
+
+The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the `verify` (Verify.Cli) tool to be installed.
 
 ## Architecture
 
@@ -39,10 +42,11 @@ pnpm lint:fix
 
 ### Layouts and slots
 
-- `src/layouts/BaseLayout.astro` — root layout; handles `<head>`, nav, footer, JSON-LD structured data, and canonical link.
-- `src/layouts/MarkdownPostLayout.astro` — wraps blog post content; adds post-specific JSON-LD, Disqus comments.
+- `src/layouts/BaseLayout.astro` — root layout; handles `<head>`, nav, footer, canonical link, and site-wide JSON-LD. The JSON-LD is an `@graph` containing an `Organization` (with `sameAs` social links) and a `WebSite` (with a `SearchAction` pointing at `/tags/{search_term_string}`).
+- `src/layouts/MarkdownPostLayout.astro` — wraps blog post content; adds Disqus comments and post-specific JSON-LD: a `BlogPosting` plus one or more `BreadcrumbList` trails — a primary archive trail (`Archive → Year → Post`) and a secondary trail per tag (`Tags → Tag → Post`). Breadcrumb trails deliberately omit the site root.
 - `BaseLayout` exposes a `site-title` slot (default: `<SiteTitle />`). Only `index.astro` overrides it.
 - `BaseLayout` also exposes a `head` slot for extra `<head>` content.
+- Google Analytics (gtag) is only injected when the resolved `Astro.site` host is `david.gardiner.net.au`, so preview deploys don't emit analytics.
 
 ### Sitemap (`astro.config.ts`)
 
@@ -55,10 +59,15 @@ pnpm lint:fix
 - Use Luxon for all date handling. Display relative to `Australia/Adelaide` timezone.
 - `DateTime.fromISO(iso, { zone: "Australia/Adelaide" })`, format via `toLocaleString`.
 
+### Diagrams
+
+- Mermaid diagrams are supported via the `astro-mermaid` integration (`astro.config.ts`), configured with the `forest` theme, `autoTheme`, and the `logos`/`iconoir` icon packs (fetched from unpkg at build time).
+
 ### Verification / snapshot testing
 
 - `verified/` holds `.verified.*` snapshot files used by [Verify.Cli](https://github.com/VerifyTests/Verify) for regression testing in CI.
-- CI verifies `dist/feed.xml`, `dist/index.html`, a specific post HTML file, and HTTP redirect traces.
+- Run locally with `pnpm verify` (after `pnpm build`). The scripts verify `dist/feed.xml`, `dist/index.html`, and a specific post HTML file (`dist/2025/07/azure-pipeline-template-expression.html`); CI also verifies HTTP redirect traces.
+- Scrubbers in the `verify:*` scripts normalize hashed `/_astro/` asset names, `title="..."` attributes, the Astro generator version, and the `data-image-component` marker so snapshots stay stable across builds.
 - To update a snapshot, copy the `.received.*` file over the corresponding `.verified.*` file.
 
 ## CI/CD
@@ -75,7 +84,7 @@ pnpm lint:fix
 - `DEPLOY_PRIME_URL` — overrides the site URL (used in Cloudflare preview deploys).
 - Use `import.meta.env` in Astro components/pages. Do not use hyphens in shell variable names.
 
-## Content schemas (Astro v6)
+## Content schemas (Astro v7)
 
 - Import `z` from `astro/zod` (not from `astro:content` or `astro:schema`).
-- Post front matter fields: `date` (ISO datetime with offset, required), `title`, `draft` (optional bool), `tags` (string array), `image`, `imageAlt`, `description`.
+- Post front matter fields: `date` (ISO datetime with offset, required), `title` (required), `draft` (optional bool, defaults `false`), `tags` (string array, defaults `["others"]`), `image` (optional, resolved via Astro's `image()` helper), `imageAlt`, `description`.

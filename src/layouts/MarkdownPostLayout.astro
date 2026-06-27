@@ -25,6 +25,66 @@ const image = frontmatter.image;
 const title = frontmatter.title;
 
 const canonicalUrl = getCanonicalUrl(Astro.url, Astro.site);
+const canonicalUrlString = canonicalUrl?.toString();
+
+const getAbsoluteUrl = (path: string) => new URL(path, Astro.site ?? Astro.url).toString();
+
+const postPathSegments = Astro.url.pathname.replace(/^\/|\/$/g, "").split("/");
+const yearSegment = postPathSegments[0];
+const hasYearSegment = /^\d{4}$/.test(yearSegment ?? "");
+
+const archiveBreadcrumbs = hasYearSegment
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Archive",
+          item: getAbsoluteUrl("/archive"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: yearSegment,
+          item: getAbsoluteUrl(`/${yearSegment}`),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: title,
+          item: canonicalUrlString,
+        },
+      ],
+    }
+  : null;
+
+const tagBreadcrumbs = (frontmatter.tags ?? []).map((tag) => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Tags",
+      item: getAbsoluteUrl("/tags"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: tag,
+      item: getAbsoluteUrl(`/tags/${encodeURIComponent(tag)}`),
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: title,
+      item: canonicalUrlString,
+    },
+  ],
+}));
+
 // https://www.cemkiray.com/posts/how-to-add-json-ld-schema-in-astro/
 // https://developers.google.com/search/docs/appearance/structured-data/article
 // Construct JSON-LD data for the blog post
@@ -33,7 +93,7 @@ const blogJsonLd = {
   "@type": "BlogPosting",
   mainEntityOfPage: {
     "@type": "WebPage",
-    "@id": canonicalUrl,
+    "@id": canonicalUrlString,
   },
   headline: title,
   description: description,
@@ -63,6 +123,8 @@ const blogJsonLd = {
   inLanguage: "en-AU",
 };
 
+const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : []), ...tagBreadcrumbs];
+
 ---
 
 <BaseLayout 
@@ -74,15 +136,15 @@ const blogJsonLd = {
     ...(frontmatter.imageAlt ? { imageAlt: frontmatter.imageAlt } : {}),
     tags: frontmatter.tags
   }} 
-  canonicalUrl={canonicalUrl?.toString()}
+  canonicalUrl={canonicalUrlString}
 >
   <slot name="head" slot="head" />
 
   {
-    blogJsonLd && (
+    postJsonLd && (
       <script slot="head" is:raw is:inline
         type="application/ld+json"
-        set:html={JSON.stringify(blogJsonLd)}
+        set:html={JSON.stringify(postJsonLd, null, 2)}
       />
     )
   }
