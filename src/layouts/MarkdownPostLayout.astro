@@ -97,9 +97,10 @@ const blogJsonLd = {
   },
   headline: title,
   description: description,
-  image: image?.src ? {
+  // /@fs/... paths are Vite dev-server paths and cannot be made into valid public URLs
+  image: image?.src && !image.src.startsWith('/@') ? {
     "@type": "ImageObject",
-    url: image.src,
+    url: getAbsoluteUrl(image.src),
     width: image.width,
     height: image.height,
     caption: frontmatter.imageAlt,

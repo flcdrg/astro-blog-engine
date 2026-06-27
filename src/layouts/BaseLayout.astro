@@ -24,6 +24,11 @@ interface Props {
 
 const { pageTitle, frontmatter, canonicalUrl } = Astro.props;
 
+// /@fs/... paths are Vite dev-server paths and cannot be made into valid public URLs
+const absoluteImageUrl = frontmatter?.image?.src && !frontmatter.image.src.startsWith('/@')
+  ? new URL(frontmatter.image.src, Astro.site ?? Astro.url).toString()
+  : undefined;
+
 // Site-wide JSON-LD structured data
 const siteJsonLd = {
   "@context": "https://schema.org",
@@ -94,8 +99,8 @@ const siteJsonLd = {
       )
     }
     {
-      frontmatter?.image && (
-        <meta name="og:image" content={frontmatter.image.src} />
+      absoluteImageUrl && (
+        <meta name="og:image" content={absoluteImageUrl} />
       )
     }
     {
