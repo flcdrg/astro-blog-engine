@@ -72,7 +72,7 @@
     "astro-canonical": "^1.1.0",
     "astro-mermaid": "^2.1.0",
     "markdownlint-cli2": "^0.22.1",
-    "mermaid": "^11.15.0",
+    "mermaid": "^11.16.0",
     "run-script-os": "^1.1.6"
   }
 }
