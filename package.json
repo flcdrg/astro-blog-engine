@@ -21,7 +21,7 @@
     "@astrojs/check": "^0.9.9",
     "@astrojs/sitemap": "3.7.3",
     "@digi4care/astro-google-tagmanager": "^2.0.0",
-    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/fontawesome-svg-core": "^7.3.0",
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@types/luxon": "^3.7.1",
