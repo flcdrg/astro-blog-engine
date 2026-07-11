@@ -58,7 +58,7 @@
       "esbuild@>=0.17.0 <0.28.1": ">=0.28.1",
       "esbuild@>=0.27.3 <0.28.1": ">=0.28.1",
       "markdown-it@<=14.1.1": ">=14.2.0",
-      "js-yaml@<=4.1.1": ">=4.2.0",
+      "js-yaml@<=4.1.1": ">=4.2.0 <5.0.0",
       "dompurify@<=3.4.10": ">=3.4.11"
     }
   },
@@ -71,7 +71,7 @@
     "@types/sanitize-html": "^2.16.1",
     "astro-canonical": "^1.1.0",
     "astro-mermaid": "^2.1.0",
-    "markdownlint-cli2": "^0.22.1",
+    "markdownlint-cli2": "^0.23.0",
     "mermaid": "^11.16.0",
     "run-script-os": "^1.1.6"
   }
