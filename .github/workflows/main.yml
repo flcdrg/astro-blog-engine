@@ -27,8 +27,6 @@ permissions:
   pull-requests: write # Required for PR comments
   deployments: write # Required for Cloudflare Pages
 
-env:
-  WranglerVersion: 4.90.1 # https://github.com/cloudflare/workers-sdk/releases
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -210,7 +208,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: ${{ env.WranglerVersion }}
 
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
@@ -253,7 +250,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: ${{ env.WranglerVersion }}
 
       - name: Output variables
         run: echo $OUTPUTS

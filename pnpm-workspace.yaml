@@ -1,5 +1,7 @@
 allowBuilds:
   esbuild: true
+  sharp: true
+  workerd: true
 minimumReleaseAgeExclude:
   - yaml@2.8.3
 overrides:

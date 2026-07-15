@@ -46,6 +46,7 @@
     "astro-mermaid": "^2.1.0",
     "markdownlint-cli2": "^0.23.0",
     "mermaid": "^11.16.0",
-    "run-script-os": "^1.1.6"
+    "run-script-os": "^1.1.6",
+    "wrangler": "^4.110.0"
   }
 }
