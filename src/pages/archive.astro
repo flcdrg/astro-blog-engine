@@ -6,21 +6,21 @@ import { DateTime } from "luxon";
 import onlyCurrent from "../scripts/filters";
 import { getCanonicalUrl } from "../scripts/canonical";
 
-const pageTitle = "Archive";
+const pageTitle = "Post Archive";
 
 const posts = (await getCollection("blog")).filter(onlyCurrent);
 
-
+const description = "Browse blog posts by year to explore past articles on .NET, Azure, DevOps, software engineering, and community events.";
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "Blog Archive",
-  description: "Archive of blog posts by year",
+  description: description,
   url: getCanonicalUrl(Astro.url, Astro.site),
 };
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "Archive of blog posts by year" }}>
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: description }}>
   <script slot="head" is:raw is:inline
     type="application/ld+json"
     set:html={JSON.stringify(collectionJsonLd)}
