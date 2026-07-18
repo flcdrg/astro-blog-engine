@@ -3,7 +3,7 @@ title: Changing the Windows touchpad settings programmatically
 date: '2025-04-13T19:00:00.000+09:30'
 image: ../../assets/2025/04/touchpad-settings.png
 imageAlt: Screenshot of Windows Settings, showing Touchpad configuration, with 'Tap for a single finger to single-click' unchecked
-description: 'How to change Windows touchpad settings programmatically after a fresh install.'
+description: 'How to disable Windows touchpad tap-to-click programmatically after a reinstall by calling the SystemParametersInfo API from .NET and PowerShell.'
 tags:
 - .NET
 - PowerShell

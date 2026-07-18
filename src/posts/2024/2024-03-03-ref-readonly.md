@@ -2,7 +2,7 @@
 title: 'C# 12 features: ref readonly'
 date: '2024-03-03T07:00:00.000+10:30'
 image: ../../assets/2024/03/logo_csharp.png
-description: Part 3 of a C# 12 series explaining the new ref readonly parameter modifier and its implications.
+description: Part 3 of a C# 12 series explaining the ref readonly parameter modifier, when it is useful for structs, and what limitations it introduces.
 tags:
 - .NET
 ---

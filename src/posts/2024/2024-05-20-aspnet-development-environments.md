@@ -2,7 +2,7 @@
 title: ASP.NET Core 'Development' Environment confusion
 date: '2024-05-20T07:00:00.000+09:30'
 image: ../../assets/2024/01/dotnet-logo.png
-description: An explanation of ASP.NET Core environment naming behaviour and why 'Development' can be confusing.
+description: A practical look at ASP.NET Core environment naming and how to avoid confusion between local development, staging, and production configuration.
 tags:
 - .NET
 ---
