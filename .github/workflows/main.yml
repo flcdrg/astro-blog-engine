@@ -342,19 +342,6 @@ jobs:
           repo: flcdrg/flcdrg
           token: ${{ secrets.GH_FLCDRG_PROFILE }}
 
-  feedburner:
-    runs-on: ubuntu-latest
-    needs: publish_to_cloudflare
-    name: Notify Feedburner
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
-
-    # ignore errors as sometimes this fails
-    continue-on-error: true
-    steps:
-      - run: |
-          curl -X POST -F 'url=https://feeds.feedburner.com/DavesDaydreams' http://feedburner-pinger.herokuapp.com
-        name: Ping
-
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
