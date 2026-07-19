@@ -138,17 +138,9 @@ const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : 
     tags: frontmatter.tags
   }} 
   canonicalUrl={canonicalUrlString}
+  pageJsonLd={postJsonLd}
 >
   <slot name="head" slot="head" />
-
-  {
-    postJsonLd && (
-      <script slot="head" is:raw is:inline
-        type="application/ld+json"
-        set:html={JSON.stringify(postJsonLd, null, 2)}
-      />
-    )
-  }
   
   <h1>{frontmatter.title}</h1>
 

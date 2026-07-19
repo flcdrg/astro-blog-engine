@@ -20,9 +20,10 @@ interface Props {
     tags?: string[];
   };
   canonicalUrl?: string | undefined;
+  pageJsonLd?: Record<string, unknown> | Array<Record<string, unknown>> | undefined;
 }
 
-const { pageTitle, frontmatter, canonicalUrl } = Astro.props;
+const { pageTitle, frontmatter, canonicalUrl, pageJsonLd } = Astro.props;
 
 // /@fs/... paths are Vite dev-server paths and cannot be made into valid public URLs
 const absoluteImageUrl = frontmatter?.image?.src && !frontmatter.image.src.startsWith('/@')
@@ -61,6 +62,33 @@ const siteJsonLd = {
       },
     },
   ],
+};
+
+const getJsonLdNodes = (
+  input: Record<string, unknown> | Array<Record<string, unknown>> | undefined,
+): Array<Record<string, unknown>> => {
+  if (!input) {
+    return [];
+  }
+
+  const values = Array.isArray(input) ? input : [input];
+  return values.flatMap((value) => {
+    const graphValue = value["@graph"];
+    if (Array.isArray(graphValue)) {
+      return graphValue.filter((node): node is Record<string, unknown> => typeof node === "object" && node !== null);
+    }
+    return [value];
+  });
+};
+
+const pageJsonLdNodes = getJsonLdNodes(pageJsonLd).map((node) => {
+  const { "@context": _context, ...rest } = node;
+  return rest;
+});
+
+const mergedJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [...siteJsonLd["@graph"], ...pageJsonLdNodes],
 };
 ---
 
@@ -147,7 +175,7 @@ const siteJsonLd = {
       is:raw
       is:inline
       type="application/ld+json"
-      set:html={JSON.stringify(siteJsonLd, null, 2)}
+      set:html={JSON.stringify(mergedJsonLd, null, 2)}
     />
   </head>
   <body>

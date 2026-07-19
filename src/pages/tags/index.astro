@@ -28,11 +28,7 @@ const collectionJsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={{ description: description }}>
-  <script slot="head" is:raw is:inline
-    type="application/ld+json"
-    set:html={JSON.stringify(collectionJsonLd)}
-  />
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: description }} pageJsonLd={collectionJsonLd}>
   <h1>Tags</h1>
 
   <p>Find posts categorized by tags:</p>
