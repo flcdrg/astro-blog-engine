@@ -17,15 +17,60 @@ const allPosts = (await getCollection("blog"))
   )
   .slice(0, 5);
 
+const baseUrl = Astro.site ?? Astro.url;
+const homepageUrl = new URL("/", baseUrl).toString();
+
+const description = "Dave's Daydreams is David Gardiner's blog about .NET, Azure, DevOps, and software engineering, with practical notes, experiments, and occasional personal reflections.";
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${homepageUrl}#collection`,
+      url: homepageUrl,
+      name: pageTitle,
+      description:
+        description,
+      isPartOf: {
+        "@id": `${new URL("/", baseUrl).toString()}#website`,
+      },
+      mainEntity: {
+        "@id": `${homepageUrl}#recent-posts`,
+      },
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${homepageUrl}#recent-posts`,
+      name: "Recent posts",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: allPosts.length,
+      itemListElement: allPosts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: new URL(post.id, baseUrl).toString(),
+        name: post.data.title,
+      })),
+    },
+  ],
+};
+
 const frontmatter = {
   description:
-    "Dave's Daydreams is David Gardiner's blog about .NET, Azure, DevOps, and software engineering, with practical notes, experiments, and occasional personal reflections.",
+    description,
 };
 
 ---
 
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
+  <script
+    slot="head"
+    is:raw
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(homeJsonLd, null, 2)}
+  />
 
   <div slot="site-title">
     <h1>Dave's Daydreams</h1>
