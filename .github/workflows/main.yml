@@ -61,6 +61,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # Fetch all history for lastMod
 
       - name: Setup pnpm cache
         uses: actions/cache@v6
@@ -123,6 +125,17 @@ jobs:
         run: |
           diff -u dist/feed.xml verified/feed.xml.verified.xml
       # end-snippet
+      - name: Verify sitemap
+        id: verify_sitemap
+        if: github.repository == 'flcdrg/astro-blog-engine'
+        run: |
+          pnpm verify:sitemap
+
+      - name: Diff sitemap if error
+        if: failure() && steps.verify_sitemap.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
+        run: |
+          diff -u verified/sitemap-0.xml.verified.xml verified/sitemap-0.xml.received.xml
+
       # begin-snippet: verify-cli-use-with-docker
       - name: Verify post
         run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
@@ -228,7 +241,7 @@ jobs:
         uses: bojieyang/indexnow-action@v3
         with:
           sitemap-location: "https://david.gardiner.net.au/sitemap-0.xml"
-          limit: 1
+          limit: 10
           key-location: "https://david.gardiner.net.au/${{ secrets.INDEXNOW_KEY }}.txt"
           key: ${{ secrets.INDEXNOW_KEY }}
 

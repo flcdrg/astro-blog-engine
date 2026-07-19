@@ -14,6 +14,7 @@
     "lint:fix": "markdownlint-cli2 --fix",
     "snippets": "mdsnippets --target-directory src/posts/2025 && mdsnippets --target-directory src/posts/2026",
     "verify:dist": "verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime \"yyyy-MM-ddTHH:mm:ss.fffZ\" ",
+    "verify:sitemap": "pwsh -NoProfile -Command '([xml](Get-Content ./dist/sitemap-0.xml)).Save(\"./dist/sitemap-0.xml\")'; verify --file dist/sitemap-0.xml --verified-dir verified --scrub-inline-datetime \"yyyy-MM-ddTHH:mm:ss.fffZ\" ",
     "verify:post": "verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
     "verify:index": "verify --file ./dist/index.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
     "verify": "pnpm verify:dist && pnpm verify:post && pnpm verify:index"
