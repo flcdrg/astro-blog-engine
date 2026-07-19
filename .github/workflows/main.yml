@@ -112,6 +112,8 @@ jobs:
         run: dotnet tool install --global Verify.Cli
 
       - name: Verify Feed
+        # Skip feed verification in blog repository as it will change frequently
+        if: github.repository == 'flcdrg/astro-blog-engine'
         run: |
           verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
       # end-snippet
@@ -169,6 +171,8 @@ jobs:
     environment:
       name: production
       url: ${{ steps.deploy.outputs.deployment-url }}
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
 
     if: github.ref == 'refs/heads/main'
 
@@ -194,6 +198,11 @@ jobs:
           name: dist
           path: dist
 
+      - name: Setup IndexNow key
+        # Generate files dynamically to prevent them from being leaked in public repositories.
+        # This example will put the file in the root directory of the site.You may change the location by yourself.
+        run: echo ${{ secrets.INDEXNOW_KEY }} > dist/${{ secrets.INDEXNOW_KEY }}.txt
+
       - name: Download wrangler.jsonc
         uses: actions/download-artifact@v8
         with:
@@ -208,6 +217,20 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  indexnow:
+    runs-on: ubuntu-latest
+    needs: publish_to_cloudflare
+    name: IndexNow
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: indexnow-action
+        uses: bojieyang/indexnow-action@v3
+        with:
+          sitemap-location: "https://david.gardiner.net.au/sitemap-0.xml"
+          limit: 1
+          key-location: "https://david.gardiner.net.au/${{ secrets.INDEXNOW_KEY }}.txt"
+          key: ${{ secrets.INDEXNOW_KEY }}
 
   publish_to_cloudflare_pr:
     runs-on: ubuntu-latest
@@ -290,6 +313,7 @@ jobs:
           name: verified-http-traces
           path: verified
           retention-days: 2
+
   update_readme:
     runs-on: ubuntu-latest
     needs: publish_to_cloudflare
@@ -303,7 +327,7 @@ jobs:
           workflow: Update
           ref: ${{ github.event.ref }}
           repo: flcdrg/flcdrg
-          token: ${{ secrets.GH_PAGES_TOKEN }}
+          token: ${{ secrets.GH_FLCDRG_PROFILE }}
 
   feedburner:
     runs-on: ubuntu-latest

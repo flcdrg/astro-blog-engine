@@ -12,6 +12,7 @@
     "validate-frontmatter:windows": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content $_.FullName -Raw) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\"",
     "lint": "markdownlint-cli2",
     "lint:fix": "markdownlint-cli2 --fix",
+    "snippets": "mdsnippets --target-directory src/posts/2025 && mdsnippets --target-directory src/posts/2026",
     "verify:dist": "verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime \"yyyy-MM-ddTHH:mm:ss.fffZ\" ",
     "verify:post": "verify --file dist/2025/07/azure-pipeline-template-expression.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
     "verify:index": "verify --file ./dist/index.html --verified-dir verified --scrub-inline-pattern '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")' --scrub-inline-pattern '(?<prefix>title=\")[^\"]+(?<suffix>\")' --scrub-inline-remove ' data-image-component=\"true\"' --scrub-inline-pattern '(?<prefix>meta name=\"generator\" content=\"Astro v)[\\d\\.]+(?<suffix>\")'",
