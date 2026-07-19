@@ -40,15 +40,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
-    {
-      jsonLd && (
-        <script slot="head" is:raw is:inline
-          type="application/ld+json"
-          set:html={JSON.stringify(jsonLd)}
-        />
-      )
-    }
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={jsonLd}>
 <Image src={profilePicture} alt="Photo of David Gardiner" width="300" height="300" loading="eager" class="profile" />
 <h1>About David</h1>
 

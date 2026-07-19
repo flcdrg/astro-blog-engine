@@ -62,15 +62,8 @@ const frontmatter = {
 
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={homeJsonLd}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
-  <script
-    slot="head"
-    is:raw
-    is:inline
-    type="application/ld+json"
-    set:html={JSON.stringify(homeJsonLd, null, 2)}
-  />
 
   <div slot="site-title">
     <h1>Dave's Daydreams</h1>
