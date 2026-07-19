@@ -2,7 +2,7 @@
 title: .NET Code Coverage in Azure DevOps and SonarCloud
 date: '2024-12-15T22:00:00.000+10:30'
 image: ../../assets/2020/05/azure-pipelines-logo.png
-description: Using SonarCloud to display code coverage with a .NET application managed with Azure DevOps
+description: How to publish .NET code coverage from Azure Pipelines to both Azure DevOps and SonarQube Cloud, including setup steps, tasks, and key configuration points.
 tags:
 - Azure DevOps
 - Azure Pipelines

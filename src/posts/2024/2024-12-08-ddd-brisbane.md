@@ -2,7 +2,7 @@
 title: DDD Brisbane 2024
 date: '2024-12-08T22:00:00.000+10:30'
 image: ../../assets/2024/12/ddd-bne-logo.png
-description: A trip report from speaking at DDD Brisbane 2024 and reflections on the event.
+description: Reflections from speaking and volunteering at DDD Brisbane 2024, including event highlights, keynote impressions, and behind-the-scenes conference moments.
 tags:
 - Conferences
 - Talks

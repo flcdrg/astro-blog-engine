@@ -3,7 +3,7 @@ title: Passing arguments to npm in PowerShell
 date: '2025-01-31T12:00:00.000+10:30'
 image: ../../assets/2025/01/npm.png
 imageAlt: "NPM logo"
-description: 'How to pass arguments to npm scripts from PowerShell without the shell swallowing them.'
+description: 'Why npm command arguments can be misinterpreted by PowerShell, and how to pass them correctly for commands like npm create astro@latest.'
 tags:
 - PowerShell
 ---

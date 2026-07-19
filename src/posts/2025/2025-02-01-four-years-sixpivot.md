@@ -3,7 +3,7 @@ title: 4 years at SixPivot
 date: '2025-02-01T10:30:00.000+10:30'
 image: ../../assets/2024/02/sixpivot-logo.png
 imageAlt: SixPivot logo
-description: 'A reflection on four years at SixPivot and the changes along the way.'
+description: 'A personal reflection on four years at SixPivot, including remote work experience, team culture, professional growth, and upcoming changes.'
 tags:
 - Work
 ---

@@ -18,16 +18,17 @@ const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)
 );
 
+const description = "Browse all blog tags to find posts from David grouped by topic, with counts for each tag.";
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "Blog Tags",
-  description: "Browse blog posts by tag",
+  description: description,
   url: getCanonicalUrl(Astro.url, Astro.site),
 };
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "Browse blog posts by tag" }}>
+<BaseLayout pageTitle={pageTitle} frontmatter={{ description: description }}>
   <script slot="head" is:raw is:inline
     type="application/ld+json"
     set:html={JSON.stringify(collectionJsonLd)}

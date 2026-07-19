@@ -3,7 +3,12 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import profilePicture from '../assets/david-gardiner-1x1.jpg';
 
-const pageTitle = "About David";
+const pageTitle = "About David Gardiner";
+
+const frontmatter = {
+  description:
+    "Profile of David Gardiner, an Adelaide-based senior developer at SixPivot, Microsoft MVP, community organiser, and writer on .NET, Azure, and DevOps.",
+};
 
 const jsonLd = {
     "@context": "https://schema.org",
@@ -35,7 +40,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={{ description: "About David Gardiner, Senior Developer at SixPivot and organiser of DDD Adelaide" }}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
     {
       jsonLd && (
         <script slot="head" is:raw is:inline
