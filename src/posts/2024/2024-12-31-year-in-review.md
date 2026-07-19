@@ -1,5 +1,5 @@
 ---
-title: 2024 in review
+title: 2024 year in review
 date: '2024-12-31T17:00:00.000+10:30'
 #image: ../../assets
 description: A personal review of 2024 with key milestones, community activities, and takeaways.
