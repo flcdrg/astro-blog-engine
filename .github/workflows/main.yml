@@ -212,6 +212,7 @@ jobs:
           path: dist
 
       - name: Setup IndexNow key
+        if: github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
         # Generate files dynamically to prevent them from being leaked in public repositories.
         # This example will put the file in the root directory of the site.You may change the location by yourself.
         run: echo ${{ secrets.INDEXNOW_KEY }} > dist/${{ secrets.INDEXNOW_KEY }}.txt
@@ -235,7 +236,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish_to_cloudflare
     name: IndexNow
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
     steps:
       - name: indexnow-action
         uses: bojieyang/indexnow-action@v3
