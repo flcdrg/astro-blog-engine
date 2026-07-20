@@ -111,6 +111,8 @@ Use this skill when the user asks to:
 
 ## Metadata Quality Rules
 
+- If a `title` or `description` value contains a colon (`:`), wrap the value in quotes to avoid YAML parsing issues.
+
 Titles:
 
 - At least 15 characters, but at most 70 characters.

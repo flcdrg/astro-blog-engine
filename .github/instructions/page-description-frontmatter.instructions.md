@@ -10,6 +10,7 @@ applyTo: "src/pages/**/*.astro, src/posts/**/*.{md,mdx}, _templates/post.md"
 - For Astro pages in src/pages, define a pageTitle constant and a frontmatter object with a description field, then pass both to BaseLayout.
 - For blog posts in src/posts, include title and description fields in YAML frontmatter.
 - Do not use template placeholders (for example "summary of post"), TODO markers, or commented-out title or description lines.
+- If a title or description value contains a colon (`:`), wrap the full value in quotes to avoid YAML parsing issues.
 - Write titles that are specific, reader-facing, and at least 15 characters long, and at most 70 characters.
 - Avoid vague titles such as "Update", "Notes", "About", or "Untitled" unless expanded with specific context.
 - Write the description as one concise sentence that accurately summarises the page or post. It does not need to end with a period.
