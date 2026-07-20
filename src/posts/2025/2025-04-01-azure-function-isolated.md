@@ -1,5 +1,5 @@
 ---
-title: ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .NET Azure Functions
+title: Choosing an Azure Functions isolated worker host builder
 date: '2025-04-01T21:30:00.000+10:30'
 image: ../../assets/2021/08/azure-function.png
 imageAlt: Azure Functions logo
