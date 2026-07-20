@@ -4,6 +4,10 @@ name: Submit all Wayback Links
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   generate_report:
     runs-on: ubuntu-latest
