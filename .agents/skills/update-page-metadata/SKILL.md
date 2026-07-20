@@ -56,9 +56,13 @@ Use this skill when the user asks to:
    ```
 
 4. Decide whether each candidate truly needs a fix:
-   - Fix: missing title or description, title under 15 characters, description under 25 characters, placeholder metadata, commented-out metadata, description repeating the title, description copied from old link text, vague description, or description that does not stand alone.
-   - Fix after hard issues are clean: descriptions over 160 characters when the user asks to fix a folder or year, so the full scanner is clean rather than only the hard-only scan.
-   - Usually leave alone: concise historical notes that are accurate, specific, and useful even if not exactly 150-160 characters.
+
+   | Condition | Action | Notes |
+   | --- | --- | --- |
+   | Missing title or description, title under 15 characters, description under 25 characters, placeholder metadata, commented-out metadata, description repeating the title, description copied from old link text, vague description, or description that does not stand alone. | Fix. | Treat these as hard metadata quality issues. |
+   | Title over 70 characters, description over 160 characters when the user asks to fix a folder or year. | Fix after hard issues are clean. | This takes precedence over leaving accurate historical notes alone; shorten while preserving specificity and accuracy. |
+   | Accurate, specific, useful historical note with metadata inside the required limits. | Usually leave alone. | Do not rewrite solely to reach 150-160 characters. |
+
 5. Draft replacements from the actual post content, not just the filename.
 6. Apply changes with the JSON apply script for any batch or any older imported Blogger post. Use `apply_patch` only for one or two simple, freshly inspected files:
 
@@ -71,6 +75,8 @@ Use this skill when the user asks to:
    ```bash
    node .agents/skills/update-page-metadata/scripts/scan-post-metadata.mjs src/posts/2005 --hard-only --strict
    ```
+
+   If any script exits with a non-zero code or reports an error, stop the workflow, report the exact error output to the user, and do not proceed to the next step until the issue is resolved.
 
 8. Run full advisory validation when the hard-failure check is clean:
 
@@ -92,11 +98,10 @@ Use this skill when the user asks to:
 
 ## Decision Points
 
-- If the scanner output is small, read each flagged file before editing.
-- If the scanner output is large, use `--summary` to prioritise by issue tag and year, then use `--grouped` or `get-post-metadata-context.mjs --only-issues` before editing in batches.
+- If the scanner flags fewer than 10 files, read each flagged file before editing.
+- If the scanner flags 10 or more files, use `--summary` to prioritise by issue tag and year, then use `--grouped` or `get-post-metadata-context.mjs --only-issues` before editing in batches.
 - Avoid inline shell `node -e` processing for scanner results; use built-in scanner flags such as `--json`, `--summary`, and `--grouped` so zsh does not interpolate template literals or `${...}` expressions.
 - If the target is an imported Blogger-era folder, prefer JSON updates even for moderate batches because frontmatter fields may have unusual ordering.
-- Use a two-phase batch for large year folders: fix hard issues first, validate with `--hard-only --strict`, then tighten `description.long` advisories and validate with the full `--strict` scan.
 - Keep temporary metadata update JSON files outside `src/posts`, apply them with the script, and delete them after validation.
 - If a post is only a link note, write metadata that says what the linked resource is and why it was noted.
 - If a title is copied from an external article and includes source, author, or date clutter, shorten it to a clean reader-facing title.
@@ -108,7 +113,7 @@ Use this skill when the user asks to:
 
 Titles:
 
-- At least 15 characters.
+- At least 15 characters, but at most 70 characters.
 - Specific enough to identify the topic without relying on the URL.
 - Avoid vague titles such as `Notes`, `Update`, `BBS`, `Ouch!`, or acronyms without context.
 - Preserve official product and event names.
@@ -144,3 +149,4 @@ Use this shape with `apply-post-metadata.mjs`:
 ```
 
 Only include fields that should change. The script refuses to edit files without valid opening and closing frontmatter delimiters.
+If the apply script skips a file due to missing frontmatter delimiters, flag it to the user with the file path and do not attempt a manual patch without first verifying and repairing the delimiters.

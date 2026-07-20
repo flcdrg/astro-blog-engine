@@ -762,8 +762,8 @@ choco feature enable -n=useRememberedArgumentsForUpgrades
   <entry>
     <id>https://david.gardiner.net.au/2025/04/azure-function-isolated</id>
     <updated>2025-04-01T21:30:00.000+10:30</updated>
-    <title>ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .NET Azure Functions</title>
-    <link href="https://david.gardiner.net.au/2025/04/azure-function-isolated" rel="alternate" type="text/html" title="ConfigureFunctionsWorkerDefaults vs ConfigureFunctionsWebApplication in .NET Azure Functions"/>
+    <title>Choosing an Azure Functions isolated worker host builder</title>
+    <link href="https://david.gardiner.net.au/2025/04/azure-function-isolated" rel="alternate" type="text/html" title="Choosing an Azure Functions isolated worker host builder"/>
     <category term=".NET"/>
     <category term="Azure Functions"/>
     <published>2025-04-01T21:30:00.000+10:30</published>

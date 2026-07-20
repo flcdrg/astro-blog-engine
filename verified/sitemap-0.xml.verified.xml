@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/01/cfs-azure-function</loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/03/collection-expressions</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/03/experimental-attribute</loc>
@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/03/inline-arrays</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/03/interceptors</loc>
@@ -78,15 +78,15 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/03/ref-readonly</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/04/paste-markdown-confluence</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/05/aspnet-development-environments</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/05/docker-run-mount</loc>
@@ -94,7 +94,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/08/fttp</loc>
-    <lastmod>DateTime_4</lastmod>
+    <lastmod>DateTime_5</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/08/leaptel</loc>
@@ -102,23 +102,23 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/09/fttp2</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/11/ddd-adelaide-2024</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/12/ddd-brisbane</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/12/sonarcloud</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2024/12/year-in-review</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025</loc>
@@ -130,11 +130,11 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/01/blog-engines</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/01/npm-and-powershell</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/02/azure-sql-auditing</loc>
@@ -150,7 +150,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/02/four-years-sixpivot</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/02/functions-serilog-appinsights</loc>
@@ -162,11 +162,11 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/04/azure-function-isolated</loc>
-    <lastmod>DateTime_2</lastmod>
+    <lastmod>DateTime_1</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/04/edifier-speakers</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/04/reinstalling-laptop</loc>
@@ -174,27 +174,27 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2025/04/touchpad-settings</loc>
-    <lastmod>DateTime_3</lastmod>
-  </url>
-  <url>
-    <loc>https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals</loc>
-    <lastmod>DateTime_5</lastmod>
-  </url>
-  <url>
-    <loc>https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression</loc>
     <lastmod>DateTime_4</lastmod>
   </url>
   <url>
-    <loc>https://david.gardiner.net.au/2026</loc>
+    <loc>https://david.gardiner.net.au/2025/06/azure-pipeline-conditionals</loc>
     <lastmod>DateTime_6</lastmod>
+  </url>
+  <url>
+    <loc>https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression</loc>
+    <lastmod>DateTime_5</lastmod>
+  </url>
+  <url>
+    <loc>https://david.gardiner.net.au/2026</loc>
+    <lastmod>DateTime_7</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/2026/06/switchy-switch</loc>
-    <lastmod>DateTime_6</lastmod>
+    <lastmod>DateTime_7</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/about</loc>
-    <lastmod>DateTime_7</lastmod>
+    <lastmod>DateTime_8</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/archive</loc>
@@ -209,7 +209,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/.NET</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_1</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/ADNUG</loc>
@@ -221,19 +221,19 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Azure%20DevOps</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Azure%20Functions</loc>
-    <lastmod>DateTime_2</lastmod>
+    <lastmod>DateTime_1</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Azure%20Pipelines</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Blogging</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Chocolatey</loc>
@@ -241,7 +241,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Conferences</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/DevOps</loc>
@@ -253,7 +253,7 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Gardening</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/GitHub%20Actions</loc>
@@ -261,15 +261,15 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Hardware</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Internet</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Life</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/MVP%20Summit</loc>
@@ -277,15 +277,15 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Networking</loc>
-    <lastmod>DateTime_4</lastmod>
+    <lastmod>DateTime_5</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/PowerShell</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Software</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/SQL</loc>
@@ -293,11 +293,11 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Synology</loc>
-    <lastmod>DateTime_6</lastmod>
+    <lastmod>DateTime_7</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Talks</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Terraform</loc>
@@ -313,10 +313,10 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Windows%2011</loc>
-    <lastmod>DateTime_3</lastmod>
+    <lastmod>DateTime_4</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/tags/Work</loc>
-    <lastmod>DateTime_1</lastmod>
+    <lastmod>DateTime_3</lastmod>
   </url>
 </urlset>
