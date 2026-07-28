@@ -28,6 +28,9 @@ const title = frontmatter.title;
 
 const canonicalUrl = getCanonicalUrl(Astro.url, Astro.site);
 const canonicalUrlString = canonicalUrl?.toString();
+const shouldRenderDisqus =
+  process.env.GITHUB_REF === "refs/heads/main" &&
+  process.env.GITHUB_REPOSITORY !== "flcdrg/astro-blog-engine";
 
 const getAbsoluteUrl = (path: string) => new URL(path, Astro.site ?? Astro.url).toString();
 
@@ -165,8 +168,10 @@ const noindex = wordCount !== undefined && wordCount < 100;
 
   <slot />
 
-  <Disqus
-    embed="https://davidgardiner.disqus.com/embed.js"
-    url={canonicalUrlString ?? Astro.url.href}
-  />
+  {shouldRenderDisqus && (
+    <Disqus
+      embed="https://davidgardiner.disqus.com/embed.js"
+      url={canonicalUrlString ?? Astro.url.href}
+    />
+  )}
 </BaseLayout>
