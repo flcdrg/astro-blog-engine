@@ -319,58 +319,7 @@ Loop expressions are a powerful technique that can be used to reduce duplication
 
     
 
-  <div id="disqus_thread"></div>
-<script>(function(){const url = "https://david.gardiner.net.au/2025/07/azure-pipeline-template-expression";
-const embed = "https://davidgardiner.disqus.com/embed.js";
-
-  if (url)
-    window.disqus_config = function () {
-      this.page.url = url;
-      this.page.identifier = url;
-    };
-  if (!window.DisqusWidget) {
-    window.DisqusWidget = {
-      overwriteGlobalSelectors: function () {
-        window.$disqus = document.querySelector("#disqus_thread");
-      },
-      init: function () {
-        this.overwriteGlobalSelectors();
-        this.addListeners();
-        this.initDisqus();
-      },
-      addListeners: function () {
-        document.addEventListener("astro:page-load", () => {
-          console.log("astro:page-load");
-          this.overwriteGlobalSelectors();
-          this.initDisqus();
-        });
-      },
-      initDisqus: () => {
-        if (window.$disqus === null) {
-          return;
-        }
-
-        if (window.DISQUS) {
-          window.DISQUS.reset({
-            reload: true,
-          });
-          return;
-        }
-
-        (function () {
-          const d = document,
-            s = d.createElement("script");
-          s.src = embed;
-          s.setAttribute("data-timestamp", String(+new Date()));
-          (d.head || d.body).appendChild(s);
-        })();
-      },
-    };
-
-    window.DisqusWidget.init();
-  }
-})();</script>
-
+  
     </main>
     <footer data-astro-cid-jo6i4kqk>
     <ul class="social-media-list" data-astro-cid-jo6i4kqk>
