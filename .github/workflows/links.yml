@@ -40,8 +40,8 @@ jobs:
               $pageName = $page.Name
               $pageErrors = $page.Value
               
-              # Filter the errors for this page to only include those with status code 404
-              $filteredErrors = $pageErrors | Where-Object { $_.status.code -eq 404 }
+              # Filter the errors for this page to only include specific errors
+              $filteredErrors = $pageErrors | Where-Object { -not $_.status.code -or ($_.status.code -ge 400 -and $_.status.code -lt 429) }
               
               # Only add the page to the filtered map if it has 404 errors
               if ($filteredErrors -and $filteredErrors.Count -gt 0) {

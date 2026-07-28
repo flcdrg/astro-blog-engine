@@ -15,8 +15,9 @@ export async function postProcessSitemap({
   const distDir = dir instanceof URL ? fileURLToPath(dir) : dir;
   const sitemapPath = join(distDir, "sitemap-0.xml");
   const content = await readFile(sitemapPath, "utf8");
+  const withoutNoindex = await removeNoindexPages(content, distDir, siteRoot);
   const withLinkedPageLastmod = await inferLastModifiedFromLinkedPages(
-    content,
+    withoutNoindex,
     distDir,
     siteRoot,
   );
@@ -31,6 +32,42 @@ export async function postProcessSitemap({
       `[sitemap-root-trailing-slash] Updated sitemap-0.xml post-processing`,
     );
   }
+}
+
+async function removeNoindexPages(
+  sitemapContent: string,
+  distDir: string,
+  siteRoot: string,
+): Promise<string> {
+  const siteRootUrl = new URL(siteRoot);
+  const entries = getSitemapEntries(sitemapContent);
+  const noindexLocs = new Set<string>();
+
+  for (const entry of entries) {
+    const htmlPath = getBuiltHtmlPathForUrl(entry.loc, distDir, siteRootUrl);
+    if (!htmlPath || !existsSync(htmlPath)) {
+      continue;
+    }
+    const html = await readFile(htmlPath, "utf8");
+    if (/noindex/.test(html) && /<meta[^>]+name=["']robots["'][^>]*>/.test(html)) {
+      noindexLocs.add(entry.loc);
+    }
+  }
+
+  if (noindexLocs.size === 0) {
+    return sitemapContent;
+  }
+
+  const filtered = sitemapContent.replace(/<url>\s*([\s\S]*?)\s*<\/url>/g, (block) => {
+    const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    return loc && noindexLocs.has(loc) ? "" : block;
+  });
+
+  console.log(
+    `[sitemap-noindex-filter] Removed ${noindexLocs.size} noindex page(s) from sitemap`,
+  );
+
+  return filtered;
 }
 
 async function inferLastModifiedFromLinkedPages(

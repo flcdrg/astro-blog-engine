@@ -52,6 +52,27 @@ jobs:
                         continue
                       }
 
+                      # Skip replacements that just redirect to https://www.microsoft.com/en-au or https://www.microsoft.com/en-us (they are likely a broken link that should use archive.org instead)
+                      if ($finalUrl -eq 'https://www.microsoft.com/en-au' -or $finalUrl -eq 'https://www.microsoft.com/en-us' -or $finalUrl -eq 'https://learn.microsoft.com/en-us/' -or $finalUrl -eq 'https://www.bing.com/') {
+                        continue
+                      }
+
+                      # Skip replacements that redirect to URLs starting with https://learn.microsoft.com/en-us/archive/blogs or https://devblogs.microsoft.com/ These will need manual fixing
+                      if ($finalUrl -match '^https://learn\.microsoft\.com/en-us/archive/blogs' -or $finalUrl -match '^https://devblogs\.microsoft\.com/') {
+                        continue
+                      }
+
+                      # Remove trailing '&redirectedfrom=MSDN' from final URLs
+                      $finalUrl = $finalUrl -replace '&redirectedfrom=MSDN$', ''
+
+                      # And with ?redirectedfrom=MSDN
+                      $finalUrl = $finalUrl -replace '\?redirectedfrom=MSDN$', ''
+
+                      # Update replacements that start with 'https://learn.microsoft.com/en-us' or 'https://learn.microsoft.com/en-us' to remove the language segment (so it will redirect to the end user's preferred language)
+                      if ($originalUrl -match '^https://learn\.microsoft\.com/(en-us|en-au)(/|$)') {
+                          $originalUrl = $originalUrl -replace '^https://learn\.microsoft\.com/(en-us|en-au)(/|$)', 'https://learn.microsoft.com/$2'
+                      }
+
                       if ($originalUrl -ne $finalUrl) {
                           $replacements[$originalUrl] = $finalUrl
                       }

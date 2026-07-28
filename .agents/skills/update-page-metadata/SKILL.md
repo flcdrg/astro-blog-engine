@@ -96,6 +96,8 @@ Use this skill when the user asks to:
 
 11. Run diagnostics on edited files or folders with the editor error tool when available.
 
+12. Keep YAML frontmatter values on a single line. When a title or description contains apostrophes, colons, or other punctuation that would make a plain scalar ambiguous, use a quoted scalar and escape it correctly rather than wrapping the value onto a second line.
+
 ## Decision Points
 
 - If the scanner flags fewer than 10 files, read each flagged file before editing.
@@ -107,6 +109,7 @@ Use this skill when the user asks to:
 - If a title is copied from an external article and includes source, author, or date clutter, shorten it to a clean reader-facing title.
 - If a description is copied from a download page or article quote, replace it with a summary sentence.
 - If metadata uses YAML block scalars already, preserve the surrounding frontmatter style unless a one-line value is clearly cleaner.
+- If a metadata field needs quoting, prefer a single quoted scalar if the value contains double quotes, and a double quoted scalar if the value contains apostrophes; never split a scalar across multiple lines.
 - If a manual patch touches frontmatter delimiters or produces an auto-corrected edit, inspect that file immediately and run the hard-failure scanner before continuing.
 
 ## Metadata Quality Rules
