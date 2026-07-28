@@ -11,14 +11,16 @@ interface Props {
     description?: undefined | string;
     tags: string[];
     imageAlt?: string | undefined;
+    modified_time?: string | undefined;
     image?: {
       src: string;
       width: number;
       height: number;
     } | undefined;
   };
+  wordCount?: number | undefined;
 }
-const { frontmatter } = Astro.props;
+const { frontmatter, wordCount } = Astro.props;
 
 const description = frontmatter.description;
 const image = frontmatter.image;
@@ -119,12 +121,14 @@ const blogJsonLd = {
     },
   },
   datePublished: frontmatter.date,
-  // dateModified: modDatetime?.toISOString(),
+  dateModified: frontmatter.modified_time ?? frontmatter.date,
   keywords: frontmatter.tags?.join(", "),
   inLanguage: "en-AU",
 };
 
 const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : []), ...tagBreadcrumbs];
+
+const noindex = wordCount !== undefined && wordCount < 100;
 
 ---
 
@@ -139,6 +143,7 @@ const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : 
   }} 
   canonicalUrl={canonicalUrlString}
   pageJsonLd={postJsonLd}
+  noindex={noindex}
 >
   <slot name="head" slot="head" />
   
@@ -162,6 +167,6 @@ const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : 
 
   <Disqus
     embed="https://davidgardiner.disqus.com/embed.js"
-    url={Astro.url.toString()}
+    url={canonicalUrlString ?? Astro.url.href}
   />
 </BaseLayout>

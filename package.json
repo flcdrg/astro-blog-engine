@@ -7,6 +7,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "lychee": "docker run --rm -v \"$PWD:/input\" -w /input -e GITHUB_TOKEN lycheeverse/lychee --root-dir /input/dist 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --max-concurrency 20 --user-agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0\" --fallback-extensions html -v --cache-exclude-status 429 --insecure --accept 200..=204 --no-progress --format json --output output.json",
     "metadata:scan": "node .agents/skills/update-page-metadata/scripts/scan-post-metadata.mjs src/posts",
     "validate-frontmatter": "run-script-os",
     "validate-frontmatter:default": "pwsh -noprofile -Command \"if (Get-ChildItem -Path ./src/posts -Filter '*.md' -Recurse | Where-Object { (Get-Content -Raw \\$_.FullName) -match '^(description: summary of post|image: /assets|imageAlt: image description|title: Blog post title)$' }) { Write-Host 'Front matter has not been updated'; exit 1 } else { Write-Host 'All front matter is properly updated' }\"",

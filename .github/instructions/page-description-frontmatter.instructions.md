@@ -9,6 +9,7 @@ applyTo: "src/pages/**/*.astro, src/posts/**/*.{md,mdx}, _templates/post.md"
 - Preserve YAML frontmatter delimiters: Markdown posts and templates must start with an opening `---` line and keep the closing `---` line before the body content.
 - For Astro pages in src/pages, define a pageTitle constant and a frontmatter object with a description field, then pass both to BaseLayout.
 - For blog posts in src/posts, include title and description fields in YAML frontmatter.
+- Keep title and description values on a single line. If quoting is needed, use a YAML-safe quoted scalar and do not wrap the value onto a continuation line.
 - Do not use template placeholders (for example "summary of post"), TODO markers, or commented-out title or description lines.
 - If a title or description value contains a colon (`:`), wrap the full value in quotes to avoid YAML parsing issues.
 - Write titles that are specific, reader-facing, and at least 15 characters long, and at most 70 characters.

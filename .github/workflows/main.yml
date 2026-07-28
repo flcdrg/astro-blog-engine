@@ -116,17 +116,19 @@ jobs:
       - name: Verify Feed
         # Skip feed verification in blog repository as it will change frequently
         if: github.repository == 'flcdrg/astro-blog-engine'
+        id: verify_feed
         run: |
           verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
       # end-snippet
       # begin-snippet: verify-cli-diff-in-ci
       - name: Diff files if error
-        if: failure()
+        if: failure() && steps.verify_feed.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
         run: |
           diff -u dist/feed.xml verified/feed.xml.verified.xml
       # end-snippet
       - name: Verify sitemap
         id: verify_sitemap
+        # Skip sitemap verification in blog repository as it will be different
         if: github.repository == 'flcdrg/astro-blog-engine'
         run: |
           pnpm verify:sitemap
@@ -138,11 +140,12 @@ jobs:
 
       # begin-snippet: verify-cli-use-with-docker
       - name: Verify post
+        id: verify_post
         run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
       # end-snippet
 
       - name: Diff post if error
-        if: failure()
+        if: failure() && steps.verify_post.outcome == 'failure'
         run: |
           ls -al verified/
           echo ""
@@ -151,11 +154,12 @@ jobs:
       # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
       - name: Verify home
         if: github.repository == 'flcdrg/astro-blog-engine'
+        id: verify_home
         run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/index.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
       # end-snippet
 
       - name: Diff home if error
-        if: failure() && github.repository == 'flcdrg/astro-blog-engine'
+        if: failure() && steps.verify_home.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
         run: |
           ls -al verified/
           echo ""
@@ -242,7 +246,7 @@ jobs:
         uses: bojieyang/indexnow-action@v3
         with:
           sitemap-location: "https://david.gardiner.net.au/sitemap-0.xml"
-          limit: 10
+          limit: 50
           key-location: "https://david.gardiner.net.au/${{ secrets.INDEXNOW_KEY }}.txt"
           key: ${{ secrets.INDEXNOW_KEY }}
 

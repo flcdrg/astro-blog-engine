@@ -4,3 +4,11 @@
 ^https://marketplace\.visualstudio\.com/.*
 ^https://dev\.azure\.com/*
 ^https://web\.archive\.org/*
+^https?://wcagdatagrid\.sourceforge\.net/.*
+^https?://(www\.)?medium\.com/.*
+^https?://sa\.uca\.org\.au/.*
+^https?://leaptel\.com\.au/.*
+^https?://(www\.)?timeanddate\.com/.*
+^https?://(www\.)?npmjs\.com/package/(astrojs-atom|run-script-os)(/.*)?$
+^https?://zsh\.sourceforge\.io/.*
+^https?://(www\.)?intel\.com/.*
