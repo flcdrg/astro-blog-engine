@@ -49,7 +49,7 @@
     "astro-canonical": "^1.1.0",
     "astro-mermaid": "^2.1.0",
     "markdownlint-cli2": "^0.23.2",
-    "mermaid": "^11.16.0",
+    "mermaid": "^11.16.1",
     "run-script-os": "^1.1.6",
     "wrangler": "^4.115.0"
   }
