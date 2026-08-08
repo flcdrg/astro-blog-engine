@@ -48,8 +48,8 @@ importers:
         specifier: ^18.0.7
         version: 18.0.7
       node-html-parser:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^9.0.1
+        version: 9.0.1
       sanitize-html:
         specifier: ^2.17.6
         version: 2.17.6
@@ -2365,8 +2365,8 @@ packages:
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
 
-  node-html-parser@9.0.0:
-    resolution: {integrity: sha512-MhdaHPyxnyYu/sf0TpiRvDnTrkum0UKHC7FdbDGIUQNlx3I7xzwXoyV0eMUMv/XU+lkJT1glOUzpDPq7b2p1Ew==}
+  node-html-parser@9.0.1:
+    resolution: {integrity: sha512-QrdiYYm1NnLRXsMXThUgVcF/syWfWIgHFmy8hylWMGFbHFtnRuXLBxxGQvIm3xaIJMUDJ0ayOmT/FGJYT3pZIw==}
 
   node-mock-http@1.0.5:
     resolution: {integrity: sha512-KQyt/wLjG3TAc7DOUhpqWzgd4ERxR80JOlTK5VE5R1S12IaPVN5qkj4klBce9HPG1Njuup4Sb5bljaT34lIyjw==}
@@ -5354,7 +5354,7 @@ snapshots:
 
   node-fetch-native@1.6.7: {}
 
-  node-html-parser@9.0.0:
+  node-html-parser@9.0.1:
     dependencies:
       css-select: 5.2.2
       entities: 8.0.0
