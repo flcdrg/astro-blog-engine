@@ -28,8 +28,8 @@
     "@fortawesome/fontawesome-svg-core": "^7.3.1",
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
-    "@types/luxon": "^3.7.3",
-    "astro": "^7.1.6",
+    "@types/luxon": "^3.7.4",
+    "astro": "^7.2.0",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.29",
     "luxon": "^3.7.2",
@@ -42,7 +42,7 @@
   "engines": {
     "node": ">=24 <25"
   },
-  "packageManager": "pnpm@11.17.0+sha512.cca3cea332ad254bb84145f966d19f4879615210346fc92c79a047f23a0d7b3cca3c3792f0076ba1f1831d277efbcf0a9119b31a9a60eca7fb3d6231f331ef72",
+  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
@@ -51,6 +51,6 @@
     "markdownlint-cli2": "^0.23.2",
     "mermaid": "^11.16.1",
     "run-script-os": "^1.1.6",
-    "wrangler": "^4.118.0"
+    "wrangler": "^4.120.0"
   }
 }
