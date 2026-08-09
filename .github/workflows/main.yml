@@ -366,9 +366,7 @@ jobs:
           # Robots.txt defaults to disallow, which is not what we want for the lighthouse test
           rm dist/robots.txt
 
-          npm install -g @lhci/cli@0.14.x
-
-          lhci autorun --collect.url="${{ steps.extract-url.outputs.latest-url }}" --collect.url="http://localhost/index.html" --collect.url="http://localhost/speaking.html" --collect.url="http://localhost/2025.html"
+          npx @lhci/cli@0.14.x autorun --collect.url="${{ steps.extract-url.outputs.latest-url }}" --collect.url="http://localhost/index.html" --collect.url="http://localhost/speaking.html" --collect.url="http://localhost/2025.html"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
