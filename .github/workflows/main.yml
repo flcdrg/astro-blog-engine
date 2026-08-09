@@ -36,16 +36,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.10
-
-      - name: Use Node.js
-        uses: actions/setup-node@v7
+      - name: Pnpm Setup
+        uses: pnpm/setup@v1
         with:
-          node-version-file: package.json
-
-      - run: pnpm install
-        name: Install dependencies
+          package-json-file: package.json
+          runtime: node
 
       - run: pnpm run validate-frontmatter
         name: Check front matter
@@ -64,15 +59,6 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for lastMod
 
-      - name: Setup pnpm cache
-        uses: actions/cache@v6
-        with:
-          path: .astro
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-pnpm
-
       - name: Setup dist cache
         uses: actions/cache@v6
         with:
@@ -82,17 +68,12 @@ jobs:
             ${{ runner.os }}-dist-${{ hashFiles('pnpm-lock.yaml') }}
             ${{ runner.os }}-dist
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.10
-
-      - name: Use Node.js
-        uses: actions/setup-node@v7
+      - name: Pnpm Setup
+        uses: pnpm/setup@v1
         with:
-          node-version-file: package.json
-          cache: "pnpm"
-          cache-dependency-path: "pnpm-lock.yaml"
-
-      - run: pnpm install
+          package-json-file: package.json
+          runtime: node
+          cache: true
 
       # PR builds use dev mode
       - name: Build PR
@@ -199,15 +180,11 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Install Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.x
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.10
-        with:
-          version: 11.x
+      - name: Pnpm Setup
+        uses: pnpm/setup@v1
+        with:          
+          runtime: node@24
+          install: false
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -269,13 +246,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Install Node.js
-        uses: actions/setup-node@v7
+      - name: Pnpm Setup
+        uses: pnpm/setup@v1
         with:
-          node-version-file: package.json
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.10
+          package-json-file: package.json
+          runtime: node
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -364,13 +339,11 @@ jobs:
           name: dist
           path: dist
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.10
-
-      - name: Install Node.js
-        uses: actions/setup-node@v7
+      - name: Pnpm Setup
+        uses: pnpm/setup@v1
         with:
-          node-version: 24.x
+          package-json-file: package.json
+          runtime: node
 
       - name: Extract latest post URL from feed
         id: extract-url
