@@ -24,6 +24,15 @@ pnpm verify                 # run all Verify.Cli snapshot checks (verify:dist, v
 
 The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the `verify` (Verify.Cli) tool to be installed.
 
+## Agent workflow guardrails
+
+- Quote any path containing square brackets when using shell commands (for example `src/pages/[...slug].astro`, `src/pages/[year]/index.astro`, and `src/pages/tags/[tag].astro`), or temporarily disable globbing for that command.
+- For metadata requests that span multiple pages or posts, do one scan-first pass and return a consolidated patch rather than a sequence of small per-page edits.
+- For JSON-LD and rich-results troubleshooting, validate in this order: generated `dist/*.html`, live page HTML, then external validator output. Treat tool disagreement as non-blocking unless the generated markup differs.
+- Keep the single JSON-LD script per page pattern. Prefer page-specific JSON-LD data passed into the layout over emitting multiple unrelated script blocks per page.
+- For content or instruction-only changes, avoid commands that can mutate dependency state (`pnpm install`, upgrades, lockfile regeneration) unless explicitly requested. If unexpected dependency changes appear, stop immediately and ask how to proceed.
+- After edits, run the smallest relevant verification set and report results: metadata-only (`pnpm run validate-frontmatter`), route/layout/head changes (`pnpm build`), snapshot-sensitive output (`pnpm verify` when requested).
+
 ## Architecture
 
 ### Content collection
