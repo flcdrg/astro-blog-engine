@@ -131,7 +131,19 @@ const blogJsonLd = {
 
 const postJsonLd = [blogJsonLd, ...(archiveBreadcrumbs ? [archiveBreadcrumbs] : []), ...tagBreadcrumbs];
 
-const noindex = wordCount !== undefined && wordCount < 100;
+const indexWordThreshold = 100;
+const postYear = Number(frontmatter.date.slice(0, 4));
+const isPostFrom2025Onwards = Number.isFinite(postYear) && postYear >= 2025;
+const isBelowIndexWordThreshold =
+  wordCount !== undefined && wordCount < indexWordThreshold;
+
+if (isBelowIndexWordThreshold && isPostFrom2025Onwards) {
+  console.warn(
+    `[indexing-threshold] ${Astro.url.pathname} has ${wordCount} words (threshold: ${indexWordThreshold}) and may risk not being indexed.`,
+  );
+}
+
+const noindex = isBelowIndexWordThreshold && !isPostFrom2025Onwards;
 
 ---
 
