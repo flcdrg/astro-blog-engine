@@ -28,7 +28,7 @@ jobs:
           contains(steps.metadata.outputs.dependency-names, 'actions/cache') ||
           contains(steps.metadata.outputs.dependency-names, 'actions/setup-node') ||
           contains(steps.metadata.outputs.dependency-names, 'actions/setup-dotnet') ||
-          contains(steps.metadata.outputs.dependency-names, 'pnpm/action-setup') ||
+          contains(steps.metadata.outputs.dependency-names, 'pnpm/setup') ||
           contains(steps.metadata.outputs.dependency-names, 'dependabot/fetch-metadata') ||
           contains(steps.metadata.outputs.dependency-names, 'dawidd6/action-download-artifact') ||
           contains(steps.metadata.outputs.dependency-names, 'flcdrg/replace-multiple-action') ||
