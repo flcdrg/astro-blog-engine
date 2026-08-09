@@ -183,6 +183,7 @@ jobs:
       - name: Pnpm Setup
         uses: pnpm/setup@v1
         with:          
+          version: 11
           runtime: node@24
           install: false
 
