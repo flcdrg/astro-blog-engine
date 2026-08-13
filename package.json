@@ -29,7 +29,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@types/luxon": "^3.7.4",
-    "astro": "^7.2.0",
+    "astro": "^7.2.1",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.29",
     "luxon": "^3.7.2",
@@ -42,7 +42,7 @@
   "engines": {
     "node": ">=24 <25"
   },
-  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
+  "packageManager": "pnpm@11.21.0+sha512.521705bce689924eac72f5a3587122f362689ef6571e55ba80076fd637c11132ecffada26fad4ea79c485bfddbfd3d5a2a5b05805a77e893de71ec8a6cca3bb1",
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/sanitize-html": "^2.16.1",
@@ -51,6 +51,6 @@
     "markdownlint-cli2": "^0.23.2",
     "mermaid": "^11.16.1",
     "run-script-os": "^1.1.6",
-    "wrangler": "^4.120.0"
+    "wrangler": "^4.121.0"
   }
 }

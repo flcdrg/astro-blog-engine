@@ -20,7 +20,7 @@ const allPosts = (await getCollection("blog"))
 const baseUrl = Astro.site ?? Astro.url;
 const homepageUrl = new URL("/", baseUrl).toString();
 
-const description = "Dave's Daydreams is David Gardiner's blog about .NET, Azure, DevOps, and software engineering, with practical notes, experiments, and occasional personal reflections.";
+const description = "Dave's Daydreams is David Gardiner's blog about .NET, Azure, DevOps, software engineering, practical experiments, and personal reflections.";
 
 const homeJsonLd = {
   "@context": "https://schema.org",
@@ -62,7 +62,7 @@ const frontmatter = {
 
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={homeJsonLd}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={homeJsonLd} canonicalUrl={homepageUrl}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
 
   <div slot="site-title">

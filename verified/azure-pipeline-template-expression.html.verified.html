@@ -61,7 +61,10 @@ and see some common examples of their usage.">
       },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://david.gardiner.net.au/tags/{search_term_string}",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://david.gardiner.net.au/tags/{search_term_string}"
+        },
         "query-input": "required name=search_term_string"
       }
     },
