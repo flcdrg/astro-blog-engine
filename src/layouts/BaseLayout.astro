@@ -58,7 +58,10 @@ const siteJsonLd = {
       publisher: { "@id": `${Astro.site}#organization` },
       potentialAction: {
         "@type": "SearchAction",
-        target: `${Astro.site}tags/{search_term_string}`,
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${Astro.site}tags/{search_term_string}`,
+        },
         "query-input": "required name=search_term_string",
       },
     },
@@ -123,11 +126,7 @@ const mergedJsonLd = {
         <meta name="og:type" property="og:type" content={frontmatter.tags ? "article" : "website"} />
       )
     }
-    {
-      canonicalUrl && (
-        <meta name="og:url" property="og:url" content={canonicalUrl} />
-      )
-    }
+    <meta name="og:url" property="og:url" content={canonicalUrl ?? getCanonicalUrl(Astro.url, Astro.site)?.toString()} />
     {
       absoluteImageUrl && (
         <meta name="og:image" property="og:image" content={absoluteImageUrl} />
