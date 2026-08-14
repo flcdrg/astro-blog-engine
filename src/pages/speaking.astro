@@ -3,9 +3,15 @@ import { Image } from 'astro:assets';
 import david  from '../assets/2024/12/ddd-bne-david-presenting.jpg';
 import talks from '../data/speaking.json';
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "Speaking and Presentations";
+const frontmatter = {
+	description:
+		"Talks and presentations by David Gardiner, including conference sessions, user group talks, and links to slides, recordings, and related resources.",
+};
 ---
 
-<BaseLayout pageTitle="Speaking and Presentations" frontmatter={{ description: "Talks and presentations by David Gardiner, including conference sessions, user group talks, and links to slides, recordings, and related resources." }}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
 
 <h1>Talks and presentations</h1>
 

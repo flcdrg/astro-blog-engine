@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import onlyCurrent from "../../scripts/filters";
 import { getCanonicalUrl } from "../../scripts/canonical";
-const pageTitle = "Tags";
+const pageTitle = "Blog Tags Archive";
 const allPosts = (await getCollection("blog")).filter(onlyCurrent);
 
 // Collate all tags from all posts and count posts per tag
@@ -18,7 +18,7 @@ const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)
 );
 
-const description = "Browse all blog tags to find posts from David grouped by topic, with counts for each tag.";
+const description = "Browse all Dave's Daydreams blog tags to find posts grouped by topic, with counts for each tag and links to tagged archives.";
 const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -26,12 +26,16 @@ const collectionJsonLd = {
   description: description,
   url: getCanonicalUrl(Astro.url, Astro.site),
 };
+
+const frontmatter = {
+  description,
+};
 ---
 
-<BaseLayout pageTitle={pageTitle} frontmatter={{ description: description }} pageJsonLd={collectionJsonLd}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={collectionJsonLd}>
   <h1>Tags</h1>
 
-  <p>Find posts categorized by tags:</p>
+  <p>Find posts categorised by tags:</p>
   <div class="tags">
     {
       tags.map(([tag, count]) => (
