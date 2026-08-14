@@ -79,7 +79,7 @@ const frontmatter = {
     allPosts.map(async (post) => (
       <section>
         <h2>
-          <BlogPost url={post.id} title={post.data.title} />
+          <BlogPost url={`/${post.id}`} title={post.data.title} />
         </h2>
         <p>
           <DateTimeComponent date={post.data.date} />{" "}
@@ -94,7 +94,7 @@ const frontmatter = {
           body={post.data.description || post.body}
           length={500}
         />{" "}
-        <a href={encodeURI(post.id)}>Read more...</a>
+        <a href={`/${encodeURI(post.id)}`}>Read more...</a>
         <div style="clear: both" />
         <div class="tags">
           {post.data.tags.map((tag: string) => (

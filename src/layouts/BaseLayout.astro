@@ -56,14 +56,6 @@ const siteJsonLd = {
       name: "Dave's Daydreams",
       description: "Blog by David Gardiner",
       publisher: { "@id": `${Astro.site}#organization` },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: `${Astro.site}tags/{search_term_string}`,
-        },
-        "query-input": "required name=search_term_string",
-      },
     },
   ],
 };
@@ -126,6 +118,7 @@ const mergedJsonLd = {
         <meta name="og:type" property="og:type" content={frontmatter.tags ? "article" : "website"} />
       )
     }
+    <meta name="og:site_name" property="og:site_name" content="Dave's Daydreams" />
     <meta name="og:url" property="og:url" content={canonicalUrl ?? getCanonicalUrl(Astro.url, Astro.site)?.toString()} />
     {
       absoluteImageUrl && (
