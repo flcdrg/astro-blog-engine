@@ -41,11 +41,14 @@ if (!post) {
 }
 
 const { Content } = await render(post);
+
+// Compute word count from raw markdown body (used for noindex decision on thin content)
+const wordCount = post.body ? post.body.trim().split(/\s+/).filter(Boolean).length : 0;
 ---
 
 {
   post && (
-    <MarkdownPostLayout frontmatter={post.data}>
+    <MarkdownPostLayout frontmatter={post.data} wordCount={wordCount}>
       <Content />
     </MarkdownPostLayout>
   )

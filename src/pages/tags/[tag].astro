@@ -39,9 +39,13 @@ const { tag } = Astro.params as Params;
 const { posts } = Astro.props as Props;
 
 const feedUrl = `/tags/${encodeURIComponent(tag)}.xml`;
+const pageTitle = `Blog posts tagged ${tag}`;
+const frontmatter = {
+  description: `Browse Dave's Daydreams posts tagged ${tag}, including articles, notes, and updates connected to this topic.`,
+};
 ---
 
-<BaseLayout pageTitle={tag} frontmatter={{ description: `Browse David's posts tagged '${tag}', with articles, notes, and updates focused on ${tag}.` }}>
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter}>
   <link
     rel="alternate"
     type="application/atom+xml"
