@@ -101,7 +101,7 @@ const frontmatter = {
         <p>
           <DateTimeComponent date={post.data.date} />{" "}
         </p>
-        {post.data.image && (
+        {post.data.image && !post.data.hideImageOnHome && (
           <CustomImage
             desktopImgUrl={post.data.image!}
             alt={post.data.imageAlt}
