@@ -25,6 +25,7 @@ const blog = defineCollection({
       tags: z.array(z.string()).default(["others"]),
       image: image().optional(),
       imageAlt: z.string().optional(),
+      hideImageOnHome: z.boolean().optional(),
       description: z.string().trim().optional(),
       modified_time: z.string().optional(),
     }),
