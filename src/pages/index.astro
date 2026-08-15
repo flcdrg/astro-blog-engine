@@ -1,8 +1,7 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
-import BlogPostExcerpt from "../components/BlogPostExcerpt.astro";
 import CustomImage from "../components/CustomImage.astro";
 import DateTimeComponent from "../components/DateTimeComponent.astro";
 import onlyCurrent from "../scripts/filters";
@@ -14,8 +13,21 @@ const allPosts = (await getCollection("blog"))
   .sort(
     (a: any, b: any) =>
       new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-  )
-  .slice(0, 5);
+  );
+
+const totalPostCount = allPosts.length;
+const latestFullPosts = allPosts.slice(0, 2);
+const moreRecentPosts = allPosts.slice(2, 10);
+const displayedPosts = [...latestFullPosts, ...moreRecentPosts];
+const recentArchiveYears = [
+  ...new Set(allPosts.map((post) => post.id.split("/")[0]).filter(Boolean)),
+].slice(0, 3);
+const latestFullPostEntries = await Promise.all(
+  latestFullPosts.map(async (post) => {
+    const { Content } = await render(post);
+    return { post, Content };
+  }),
+);
 
 const baseUrl = Astro.site ?? Astro.url;
 const homepageUrl = new URL("/", baseUrl).toString();
@@ -43,13 +55,20 @@ const homeJsonLd = {
       "@type": "ItemList",
       "@id": `${homepageUrl}#recent-posts`,
       name: "Recent posts",
+      description: "The latest two posts are shown in full, with additional recent posts listed below.",
       itemListOrder: "https://schema.org/ItemListOrderDescending",
-      numberOfItems: allPosts.length,
-      itemListElement: allPosts.map((post, index) => ({
+      numberOfItems: displayedPosts.length,
+      itemListElement: displayedPosts.map((post, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: new URL(post.id, baseUrl).toString(),
-        name: post.data.title,
+        item: {
+          "@type": "BlogPosting",
+          "@id": new URL(post.id, baseUrl).toString(),
+          url: new URL(post.id, baseUrl).toString(),
+          headline: post.data.title,
+          description: post.data.description?.replace(/\s+/g, " ").trim() || undefined,
+          datePublished: post.data.date,
+        },
       })),
     },
   ],
@@ -73,10 +92,8 @@ const frontmatter = {
     </p>
   </div>
 
-  <p>Recent posts:</p>
-
   {
-    allPosts.map(async (post) => (
+    latestFullPostEntries.map(({ post, Content }) => (
       <section>
         <h2>
           <BlogPost url={`/${post.id}`} title={post.data.title} />
@@ -90,11 +107,9 @@ const frontmatter = {
             alt={post.data.imageAlt}
           />
         )}
-        <BlogPostExcerpt
-          body={post.data.description || post.body}
-          length={500}
-        />{" "}
-        <a href={`/${encodeURI(post.id)}`}>Read more...</a>
+        <article data-full-post-content>
+          <Content />
+        </article>
         <div style="clear: both" />
         <div class="tags">
           {post.data.tags.map((tag: string) => (
@@ -107,7 +122,38 @@ const frontmatter = {
     ))
   }
 
-  <p>Older posts can be found in the <a href="/archive">archive</a>.</p>
+  {moreRecentPosts.length > 0 && (
+    <>
+      <h2>More recent posts</h2>
+      <ul>
+        {moreRecentPosts.map((post) => (
+          <li>
+            <a href={`/${encodeURI(post.id)}`}>{post.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  <h2>Older posts</h2>
+  <p>
+    All posts (currently {totalPostCount}) can be found in the <a href="/archive">archive</a>. {recentArchiveYears.length > 0 && (
+      <>
+        {" "}Jump to recent years in{" "}
+        {recentArchiveYears.map((year, index) => (
+          <>
+            <a href={`/${year}`}>{year}</a>
+            {index < recentArchiveYears.length - 2
+              ? ", "
+              : index === recentArchiveYears.length - 2
+                ? " and "
+                : ""}
+          </>
+        ))}
+        .
+      </>
+    )}
+  </p>
 </BaseLayout>
 
 <style>

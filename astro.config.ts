@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import astroCanonical from "./scripts/astroCanonical";
 import { updateSitemapItemLastModified } from "./scripts/sitemapLastModified";
 import { postProcessSitemap } from "./scripts/sitemapPostProcess";
+import { postProcessHomepage } from "./scripts/homepagePostProcess";
 import mermaid from "astro-mermaid";
 
 // https://astro.build/config
@@ -22,7 +23,7 @@ export default defineConfig({
       },
     }),
     {
-      name: "sitemap-root-trailing-slash",
+      name: "blog-post-processing",
       hooks: {
         "astro:build:done": async ({ dir }) => {
           await postProcessSitemap({
@@ -31,6 +32,7 @@ export default defineConfig({
               process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au"
             ).replace(/\/$/, ""),
           });
+          await postProcessHomepage({ dir });
         },
       },
     },
