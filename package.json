@@ -51,6 +51,6 @@
     "markdownlint-cli2": "^0.23.2",
     "mermaid": "^11.16.1",
     "run-script-os": "^1.1.6",
-    "wrangler": "^4.121.0"
+    "wrangler": "^4.124.0"
   }
 }
