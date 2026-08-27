@@ -28,6 +28,7 @@ const blog = defineCollection({
       hideImageOnHome: z.boolean().optional(),
       description: z.string().trim().optional(),
       modified_time: z.string().optional(),
+      index: z.boolean().optional(),
     }),
 });
 
