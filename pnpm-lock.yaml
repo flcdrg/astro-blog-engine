@@ -67,8 +67,8 @@ importers:
         specifier: ^2.16.1
         version: 2.16.1
       astro-canonical:
-        specifier: ^1.1.0
-        version: 1.1.0(astro@7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0))
+        specifier: ^1.1.1
+        version: 1.1.1(astro@7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0))
       astro-mermaid:
         specifier: ^2.1.0
         version: 2.1.0(astro@7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0))(mermaid@11.17.2)
@@ -1460,8 +1460,8 @@ packages:
     resolution: {integrity: sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==}
     engines: {node: '>= 0.4'}
 
-  astro-canonical@1.1.0:
-    resolution: {integrity: sha512-wcIfOpUQgt/+sPEdvbgSLuHtmDrbZ7DaB/4bzpaOyn9oHsLMJ9lYBt1/6JXfI1/DqE1ZWcDJbFyUCmDMJDuaHQ==}
+  astro-canonical@1.1.1:
+    resolution: {integrity: sha512-m5YSEVLQJ7j845awUNkd92P+MdTUTkO528QC+9EygSKTdtfJH1wZLeOo3a2CoN356qUmymiQmoGphV71ECz3cg==}
     peerDependencies:
       astro: ^4.0.0 || ^5.0.0 || ^6.0.0
 
@@ -4209,7 +4209,7 @@ snapshots:
 
   aria-query@5.3.2: {}
 
-  astro-canonical@1.1.0(astro@7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0)):
+  astro-canonical@1.1.1(astro@7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0)):
     dependencies:
       astro: 7.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@netlify/blobs@8.2.0)(@types/node@26.2.0)(jiti@2.4.2)(yaml@2.9.0)
 
