@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/markdown-it": "^14.2.0",
     "@types/sanitize-html": "^2.16.1",
-    "astro-canonical": "^1.1.0",
+    "astro-canonical": "^1.1.1",
     "astro-mermaid": "^2.1.0",
     "markdownlint-cli2": "^0.23.2",
     "mermaid": "^11.17.2",
