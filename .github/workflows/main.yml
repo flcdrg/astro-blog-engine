@@ -131,7 +131,7 @@ jobs:
         run: |
           ls -al verified/
           echo ""
-          diff -u verified/index.html.received.html verified/index.html.verified.html
+          diff -u verified/azure-pipeline-template-expression.html.verified.html verified/azure-pipeline-template-expression.html.received.html
 
       # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
       - name: Verify home
