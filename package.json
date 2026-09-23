@@ -29,11 +29,11 @@
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@types/luxon": "^3.7.5",
-    "astro": "^7.3.2",
+    "astro": "^7.3.3",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.29",
     "luxon": "^3.7.2",
-    "marked": "^18.0.13",
+    "marked": "^18.0.14",
     "node-html-parser": "^9.0.4",
     "sanitize-html": "^2.17.7",
     "sharp": "^0.35.4",
@@ -48,9 +48,9 @@
     "@types/sanitize-html": "^2.16.1",
     "astro-canonical": "^1.1.1",
     "astro-mermaid": "^2.1.0",
-    "markdownlint-cli2": "^0.23.2",
+    "markdownlint-cli2": "^0.23.3",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
-    "wrangler": "^4.132.0"
+    "wrangler": "^4.136.2"
   }
 }
