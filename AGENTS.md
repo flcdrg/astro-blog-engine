@@ -53,14 +53,16 @@ The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the 
 
 - `src/layouts/BaseLayout.astro` — root layout; handles `<head>`, nav, footer, canonical link, and site-wide JSON-LD. The JSON-LD is an `@graph` containing an `Organization` (with `sameAs` social links) and a `WebSite` (with a `SearchAction` pointing at `/tags/{search_term_string}`).
 - `src/layouts/MarkdownPostLayout.astro` — wraps blog post content; adds Disqus comments and post-specific JSON-LD: a `BlogPosting` plus one or more `BreadcrumbList` trails — a primary archive trail (`Archive → Year → Post`) and a secondary trail per tag (`Tags → Tag → Post`). Breadcrumb trails deliberately omit the site root.
+- Posts render up to three related posts (by shared tags) and previous/next links. Both are computed in `src/pages/[...slug].astro` and only link to indexable posts (see `src/scripts/indexing.ts`).
 - `BaseLayout` exposes a `site-title` slot (default: `<SiteTitle />`). Only `index.astro` overrides it.
 - `BaseLayout` also exposes a `head` slot for extra `<head>` content.
 - Google Analytics (gtag) is only injected when the resolved `Astro.site` host is `david.gardiner.net.au`, so preview deploys don't emit analytics.
+- `public/_headers` sends `X-Robots-Tag: noindex` for `*.workers.dev` hosts (production and preview URLs).
 
 ### Sitemap (`astro.config.ts`)
 
-- The `serialize` callback strips trailing slashes from all URLs and injects `lastmod` from `git log` for blog posts, `/about`, and `/speaking`.
-- Post git dates are resolved by reconstructing the file path from the URL pattern `/YYYY/MM/slug`.
+- The `serialize` callback strips trailing slashes from all URLs and injects `lastmod`. For blog posts it is the later of the front matter `date` and `modified_time` (not git history, which bulk edits make inaccurate); `/about` and `/speaking` use `git log`.
+- Post files are resolved by reconstructing the file path from the URL pattern `/YYYY/MM/slug`.
 - Site URL defaults to `https://david.gardiner.net.au`; overridden by `DEPLOY_PRIME_URL` env var.
 
 ### Dates

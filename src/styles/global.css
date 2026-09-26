@@ -188,6 +188,43 @@ p {
   color: #f0f0f0; /* Dark mode tag text color - improved contrast */
 }
 
+/* Related posts and previous/next navigation */
+.related-posts,
+.post-navigation {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: dotted 1px #a1a1a1;
+}
+
+.post-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.post-navigation a {
+  display: flex;
+  flex-direction: column;
+  max-width: 45%;
+}
+
+.post-navigation-next {
+  margin-left: auto;
+  text-align: right;
+}
+
+.post-navigation span {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .post-navigation a {
+    max-width: 100%;
+  }
+}
+
 .dark .site-subtitle {
   color: #e8e8e8; /* Dark mode subtitle color */
 }
