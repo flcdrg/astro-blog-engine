@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { existsSync, globSync } from "node:fs";
+import { existsSync, globSync, readFileSync } from "node:fs";
 import { join, resolve } from "path";
 
 import type { SitemapItem } from "@astrojs/sitemap";
@@ -44,13 +44,39 @@ function updatePostLastModified(
     if (files.length > 0 && files[0]) {
       const filePath = join(postsDir, files[0]);
 
-      updateLastModifiedFromGit(filePath, item);
+      // Git commit dates change with bulk edits, so use the post's own dates
+      const lastModified = getPostLastModified(filePath);
+      if (lastModified) {
+        item.lastmod = lastModified;
+      }
     }
   } catch (err) {
     console.error(
       `Error finding file for ${item.url}: ${err instanceof Error ? err.message : String(err)}`,
     );
   }
+}
+
+function getPostLastModified(filePath: string): string | undefined {
+  const frontmatter = readFileSync(filePath, "utf8").match(
+    /^---\r?\n([\s\S]*?)\r?\n---/,
+  )?.[1];
+
+  if (!frontmatter) {
+    return undefined;
+  }
+
+  const timestamps = ["date", "modified_time"]
+    .map(
+      (key) =>
+        frontmatter.match(new RegExp(`^${key}:\\s*['"]?([^'"\\r\\n]+)`, "m"))?.[1],
+    )
+    .map((value) => (value ? Date.parse(value.trim()) : NaN))
+    .filter((ms) => Number.isFinite(ms));
+
+  return timestamps.length > 0
+    ? new Date(Math.max(...timestamps)).toISOString()
+    : undefined;
 }
 
 function updateLastModifiedFromGit(filePath: string, item: SitemapItem) {

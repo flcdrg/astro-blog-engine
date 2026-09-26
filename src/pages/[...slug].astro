@@ -8,6 +8,9 @@ import type {
   GetStaticPaths,
 } from "astro";
 import onlyCurrent from "../scripts/filters";
+import { countWords, isPostNoindex } from "../scripts/indexing";
+
+type PostLink = { id: string; title: string };
 
 export const getStaticPaths = (async () => {
   const posts = (await getCollection("blog"))
@@ -17,14 +20,55 @@ export const getStaticPaths = (async () => {
         DateTime.fromISO(b.data.date).toMillis();
     });
 
+  const toLink = (post: (typeof posts)[number]): PostLink => ({
+    id: post.id,
+    title: post.data.title,
+  });
+
+  const indexable = posts.filter((post) => !isPostNoindex(post.data, countWords(post.body)));
+  const indexablePosition = new Map(indexable.map((post, i) => [post.id, i]));
+  const postTime = (post: (typeof posts)[number]) => DateTime.fromISO(post.data.date).toMillis();
+
+  const getRelated = (post: (typeof posts)[number]): PostLink[] => {
+    const tags = new Set(post.data.tags.filter((tag) => tag !== "others"));
+    if (tags.size === 0) {
+      return [];
+    }
+
+    return indexable
+      .filter((candidate) => candidate.id !== post.id)
+      .map((candidate) => ({
+        candidate,
+        shared: candidate.data.tags.filter((tag) => tags.has(tag)).length,
+      }))
+      .filter(({ shared }) => shared > 0)
+      .sort((a, b) => b.shared - a.shared || postTime(b.candidate) - postTime(a.candidate))
+      .slice(0, 3)
+      .map(({ candidate }) => toLink(candidate));
+  };
+
+  let previousIndexable: (typeof posts)[number] | undefined;
+
   return posts.map((post) => {
+    const position = indexablePosition.get(post.id);
+    const previous = previousIndexable;
+    const next = position !== undefined
+      ? indexable[position + 1]
+      : indexable.find((candidate) => postTime(candidate) > postTime(post));
+
+    if (position !== undefined) {
+      previousIndexable = post;
+    }
 
     return ({
       params: {
         slug: post.id
       },
       props: {
-        post: post
+        post: post,
+        previous: previous ? toLink(previous) : undefined,
+        next: next ? toLink(next) : undefined,
+        related: getRelated(post),
       },
     });
   });
@@ -33,7 +77,7 @@ export const getStaticPaths = (async () => {
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { post } = Astro.props as Props;
+const { post, previous, next, related } = Astro.props as Props;
 const { } = Astro.params as Params;
 
 if (!post) {
@@ -43,12 +87,12 @@ if (!post) {
 const { Content } = await render(post);
 
 // Compute word count from raw markdown body (used for noindex decision on thin content)
-const wordCount = post.body ? post.body.trim().split(/\s+/).filter(Boolean).length : 0;
+const wordCount = countWords(post.body);
 ---
 
 {
   post && (
-    <MarkdownPostLayout frontmatter={post.data} wordCount={wordCount}>
+    <MarkdownPostLayout frontmatter={post.data} wordCount={wordCount} previous={previous} next={next} related={related}>
       <Content />
     </MarkdownPostLayout>
   )

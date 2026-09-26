@@ -1,0 +1,6 @@
+# Keep workers.dev production and preview hostnames out of search indexes
+https://:project.workers.dev/*
+	X-Robots-Tag: noindex
+
+https://:version.:project.workers.dev/*
+	X-Robots-Tag: noindex
