@@ -181,7 +181,7 @@ jobs:
     steps:
       - name: Pnpm Setup
         uses: pnpm/setup@v3
-        with:          
+        with:
           version: 11
           runtime: node@24
           install: false
@@ -320,6 +320,21 @@ jobs:
           ref: ${{ github.event.ref }}
           repo: flcdrg/flcdrg
           token: ${{ secrets.GH_FLCDRG_PROFILE }}
+
+  ping_superfeedr:
+    runs-on: ubuntu-latest
+    needs: publish_to_cloudflare
+    name: Ping Superfeedr
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
+
+    steps:
+      - shell: pwsh
+        run: |
+          $url = "https://david.gardiner.net.au/feed.xml"
+          Write-Host "Pinging Superfeedr with URL: $url"
+
+          $response = Invoke-WebRequest -Method Post -Uri "https://flcdrg.superfeedr.com" -Body @{ "hub.mode" = "publish"; "hub.url" = $url }
+          Write-Host "Response: $($response.StatusCode)"
 
   lighthouse:
     runs-on: ubuntu-latest
