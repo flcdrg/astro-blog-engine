@@ -87,6 +87,7 @@ export async function GET(context: APIContext) {
   }
 
   const atomFeedUrl = new URL("feed.xml", context.site).toString();
+  const webSubHubUrl = "https://pubsubhubbub.superfeedr.com";
 
   return atom({
     id: atomFeedUrl,
@@ -121,6 +122,10 @@ export async function GET(context: APIContext) {
         rel: "self",
         href: atomFeedUrl,
         type: "application/atom+xml",
+      },
+      {
+        rel: "hub",
+        href: webSubHubUrl,
       },
       {
         rel: "alternate",
