@@ -39,7 +39,6 @@ jobs:
       - name: Pnpm Setup
         uses: pnpm/setup@v3
         with:
-          package-json-file: package.json
           runtime: node
 
       - run: pnpm run validate-frontmatter
@@ -71,7 +70,6 @@ jobs:
       - name: Pnpm Setup
         uses: pnpm/setup@v3
         with:
-          package-json-file: package.json
           runtime: node
           cache: true
 
@@ -251,7 +249,6 @@ jobs:
       - name: Pnpm Setup
         uses: pnpm/setup@v3
         with:
-          package-json-file: package.json
           runtime: node
 
       - name: Download dist artifact
@@ -344,7 +341,6 @@ jobs:
       - name: Pnpm Setup
         uses: pnpm/setup@v3
         with:
-          package-json-file: package.json
           runtime: node
 
       - name: Extract latest post URL from feed
