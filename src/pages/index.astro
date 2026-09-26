@@ -79,10 +79,20 @@ const frontmatter = {
     description,
 };
 
+const feedUrl = homepageUrl ? new URL("/feed.xml", homepageUrl).toString() : "/feed.xml";
+
 ---
 
 <BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} pageJsonLd={homeJsonLd} canonicalUrl={homepageUrl}>
   <link rel="sitemap" href="/sitemap-index.xml" slot="head" />
+
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title={`Atom Feed for Dave's Daydreams`}
+    href={feedUrl}
+    slot="head"
+  />
 
   <div slot="site-title">
     <h1>Dave's Daydreams</h1>
