@@ -445,8 +445,8 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: lighthouse-results
-          path: .lighthouseci/links.json
-          retention-days: 7
+          path: .lighthouseci
+          retention-days: 5
 
   linkChecker:
     runs-on: ubuntu-latest
@@ -498,7 +498,7 @@ jobs:
         with:
           name: link-checker-results
           path: output.*
-          retention-days: 7
+          retention-days: 5
 
       - name: Save lychee cache
         uses: actions/cache/save@v6
