@@ -4,25 +4,24 @@ import { getCollection } from "astro:content";
 import sanitizeHtml from "sanitize-html";
 import type { APIContext } from "astro";
 import getExcerpt from "../../scripts/getExcerpt";
-import onlyCurrent from "../../scripts/filters";
+import type { CollectionEntry } from "astro:content";
+import {
+  getCurrentPosts,
+  getUniqueTags,
+  groupPostsByTag,
+  sortPostsByDate,
+} from "../../scripts/posts";
 import { resolveFeedImageSrc } from "../../scripts/resolveFeedImageSrc";
 import { parse as htmlParser } from "node-html-parser";
 import { marked } from "marked";
 
 export async function getStaticPaths() {
-  const allPosts = (await getCollection("blog")).filter(onlyCurrent);
-
-  const uniqueTags = [
-    ...new Set(allPosts.map((post: any) => post.data.tags).flat()),
-  ];
+  const allPosts = getCurrentPosts(await getCollection("blog"));
+  const uniqueTags = getUniqueTags(allPosts);
+  const postsByTag = groupPostsByTag(allPosts);
 
   return uniqueTags.map((tag) => {
-    const filteredPosts = allPosts
-      .filter((post: any) => post.data.tags.includes(tag))
-      .sort(
-        (a: any, b: any) =>
-          new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-      );
+    const filteredPosts = sortPostsByDate(postsByTag.get(tag) ?? [], "descending");
     return {
       params: { tag },
       props: { posts: filteredPosts, tag },
@@ -37,7 +36,7 @@ export async function GET(context: APIContext) {
 
   // Get the tag from the URL params
   const tag = context.params.tag as string;
-  const posts = context.props.posts as any[];
+  const posts = context.props.posts as CollectionEntry<"blog">[];
 
   const postsToInclude = posts.filter((post) => post.body).slice(0, 10); // Get the latest 10 posts
 

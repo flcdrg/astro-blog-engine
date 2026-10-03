@@ -4,7 +4,7 @@ import { getCollection } from "astro:content";
 import sanitizeHtml from "sanitize-html";
 import type { APIContext } from "astro";
 import getExcerpt from "../scripts/getExcerpt";
-import onlyCurrent from "../scripts/filters";
+import { getCurrentPosts, sortPostsByDate } from "../scripts/posts";
 import { resolveFeedImageSrc } from "../scripts/resolveFeedImageSrc";
 import { parse as htmlParser } from "node-html-parser";
 import { marked } from "marked";
@@ -14,10 +14,9 @@ export async function GET(context: APIContext) {
     throw Error("site not set");
   }
 
-  const posts = (await getCollection("blog")).filter(onlyCurrent);
-
-  const sortedPosts = posts.sort(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  const sortedPosts = sortPostsByDate(
+    getCurrentPosts(await getCollection("blog")),
+    "descending",
   );
   const postsToInclude = sortedPosts.filter((post) => post.body).slice(0, 10); // Get the latest 10 posts
 

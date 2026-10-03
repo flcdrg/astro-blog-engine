@@ -1,24 +1,22 @@
 ---
 import { getCollection, render } from "astro:content";
-import { DateTime } from "luxon";
 import MarkdownPostLayout from "../layouts/MarkdownPostLayout.astro";
 import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
   GetStaticPaths,
 } from "astro";
-import onlyCurrent from "../scripts/filters";
 import { countWords, isPostNoindex } from "../scripts/indexing";
+import {
+  getCurrentPosts,
+  getPostDateMillis,
+  sortPostsByDate,
+} from "../scripts/posts";
 
 type PostLink = { id: string; title: string };
 
 export const getStaticPaths = (async () => {
-  const posts = (await getCollection("blog"))
-    .filter(onlyCurrent)
-    .sort((a, b) => {
-      return DateTime.fromISO(a.data.date).toMillis() -
-        DateTime.fromISO(b.data.date).toMillis();
-    });
+  const posts = sortPostsByDate(getCurrentPosts(await getCollection("blog")));
 
   const toLink = (post: (typeof posts)[number]): PostLink => ({
     id: post.id,
@@ -27,7 +25,6 @@ export const getStaticPaths = (async () => {
 
   const indexable = posts.filter((post) => !isPostNoindex(post.data, countWords(post.body)));
   const indexablePosition = new Map(indexable.map((post, i) => [post.id, i]));
-  const postTime = (post: (typeof posts)[number]) => DateTime.fromISO(post.data.date).toMillis();
 
   const getRelated = (post: (typeof posts)[number]): PostLink[] => {
     const tags = new Set(post.data.tags.filter((tag) => tag !== "others"));
@@ -42,7 +39,7 @@ export const getStaticPaths = (async () => {
         shared: candidate.data.tags.filter((tag) => tags.has(tag)).length,
       }))
       .filter(({ shared }) => shared > 0)
-      .sort((a, b) => b.shared - a.shared || postTime(b.candidate) - postTime(a.candidate))
+      .sort((a, b) => b.shared - a.shared || getPostDateMillis(b.candidate) - getPostDateMillis(a.candidate))
       .slice(0, 3)
       .map(({ candidate }) => toLink(candidate));
   };
@@ -54,7 +51,7 @@ export const getStaticPaths = (async () => {
     const previous = previousIndexable;
     const next = position !== undefined
       ? indexable[position + 1]
-      : indexable.find((candidate) => postTime(candidate) > postTime(post));
+      : indexable.find((candidate) => getPostDateMillis(candidate) > getPostDateMillis(post));
 
     if (position !== undefined) {
       previousIndexable = post;
