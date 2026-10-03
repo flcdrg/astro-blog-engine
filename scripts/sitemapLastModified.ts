@@ -13,10 +13,13 @@ export function updateSitemapItemLastModified(item: SitemapItem) {
       updatePostLastModified(item, match[1], match[2], match[3]);
     } else if (item.url.match(/\/about$/)) {
       const filePath = join(process.cwd(), "src", "pages", "about.astro");
-      updateLastModifiedFromGit(filePath, item);
+      updateLastModifiedFromGit([filePath], item);
     } else if (item.url.match(/\/speaking$/)) {
-      const filePath = join(process.cwd(), "src", "pages", "speaking.md");
-      updateLastModifiedFromGit(filePath, item);
+      const filePaths = [
+        join(process.cwd(), "src", "pages", "speaking.astro"),
+        join(process.cwd(), "src", "data", "speaking.json"),
+      ];
+      updateLastModifiedFromGit(filePaths, item);
     }
   } catch (error) {
     console.error(
@@ -79,15 +82,16 @@ function getPostLastModified(filePath: string): string | undefined {
     : undefined;
 }
 
-function updateLastModifiedFromGit(filePath: string, item: SitemapItem) {
-  if (!existsSync(filePath)) {
-    return;
-  }
+function updateLastModifiedFromGit(filePaths: string[], item: SitemapItem) {
+  const timestamps = filePaths
+    .filter(existsSync)
+    .map((filePath) => {
+      const gitCmd = `git log -1 --pretty="format:%cI" "${filePath}"`;
+      return Date.parse(execSync(gitCmd, { encoding: "utf8" }).trim());
+    })
+    .filter((timestamp) => Number.isFinite(timestamp));
 
-  const gitCmd = `git log -1 --pretty="format:%cI" "${filePath}"`;
-  const lastModified = execSync(gitCmd, { encoding: "utf8" }).trim();
-
-  if (lastModified) {
-    item.lastmod = new Date(lastModified).toISOString();
+  if (timestamps.length > 0) {
+    item.lastmod = new Date(Math.max(...timestamps)).toISOString();
   }
 }
