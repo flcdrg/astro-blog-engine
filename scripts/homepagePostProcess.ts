@@ -28,7 +28,7 @@ export async function postProcessHomepage({
   }
 }
 
-function demoteHeadingLevels(html: string): string {
+export function demoteHeadingLevels(html: string): string {
   let demoted = html;
 
   for (let level = 5; level >= 1; level -= 1) {
