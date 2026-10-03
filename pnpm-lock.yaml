@@ -188,8 +188,8 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1
       '@types/luxon':
-        specifier: ^3.7.5
-        version: 3.7.5
+        specifier: ^3.7.6
+        version: 3.7.6
       astro:
         specifier: ^7.3.5
         version: 7.3.5(@types/node@26.6.3)(yaml@2.9.1)
@@ -1558,8 +1558,8 @@ packages:
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
-  '@types/luxon@3.7.5':
-    resolution: {integrity: sha512-jJ41Q4z6ZVO260MNDdHfW7+7a5iMiX8Mr6ZJHcmgrvhZha6dz5704o/lF2kKl6URjH6ivEL97w9xS/MgpJEphg==}
+  '@types/luxon@3.7.6':
+    resolution: {integrity: sha512-6KSjliQAXK8ZLgFQO4B7iE4Rpf/B3rItzCFuXezBY/XIAGxOdLd7vRNK9/StRPwiS/yJsVbB7HKpW46B8tcEuQ==}
 
   '@types/markdown-it@14.2.0':
     resolution: {integrity: sha512-NoQ2yGlLWj4wpxMs+TYmRKk3thDrQ97agr7sFqfLsAlvoS8SNQuTrlObhFqG9iugdTtgOE9jpJ6FNM4ZGsa5xQ==}
@@ -5399,7 +5399,7 @@ snapshots:
 
   '@types/linkify-it@5.0.0': {}
 
-  '@types/luxon@3.7.5': {}
+  '@types/luxon@3.7.6': {}
 
   '@types/markdown-it@14.2.0':
     dependencies:
