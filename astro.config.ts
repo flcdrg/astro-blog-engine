@@ -2,7 +2,7 @@
 import { defineConfig } from "astro/config";
 
 import sitemap from "@astrojs/sitemap";
-import astroCanonical from "./scripts/astroCanonical";
+import astroCanonical from "astro-canonical";
 import { updateSitemapItemLastModified } from "./scripts/sitemapLastModified";
 import { postProcessSitemap } from "./scripts/sitemapPostProcess";
 import { postProcessHomepage } from "./scripts/homepagePostProcess";

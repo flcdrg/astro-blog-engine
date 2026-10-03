@@ -24,7 +24,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "3.7.4",
-    "@digi4care/astro-google-tagmanager": "^2.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.3.1",
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
@@ -42,10 +41,9 @@
   "engines": {
     "node": ">=24 <25"
   },
-  "packageManager": "pnpm@12.7.0+sha512.9c56477e360068d6e9dca6a92efb4e46b3dc5a52fcebf3d84d78b9736c0ded589a561621a52f68219a7a39facc63cdc079c3226ef9c9d5f02b79f74e69a807b6",
+  "packageManager": "pnpm@12.9.0+sha512.8f64efa0b792986ca98ae568791bcd7722807e274c4f0c1d9853c62116495c584119db98762a2a5343b1684d361b9ae26fdd16d551666d7635346d3fae830ddd",
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
-    "@types/markdown-it": "^14.2.0",
     "@types/sanitize-html": "^2.16.2",
     "astro-canonical": "^1.1.1",
     "astro-mermaid": "^2.1.0",

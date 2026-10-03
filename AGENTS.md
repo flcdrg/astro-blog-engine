@@ -47,7 +47,7 @@ The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the 
 - `build.format` is set to `'file'` — pages render as `page.html`, not `page/index.html`. This must not be changed.
 - Because of `build.format: 'file'`, `@astrojs/sitemap` hard-codes a stream-level replacement that strips trailing slashes from all `<loc>` values. A custom inline integration (`blog-post-processing` in `astro.config.ts`) post-processes `dist/sitemap-0.xml` after the build to restore the trailing slash on the root URL only.
 - Canonical URLs are computed in `src/scripts/canonical.ts`: strips `.html` extension, maps `/index` → `/`.
-- The `astroCanonical` integration (`scripts/astroCanonical.ts`) validates every HTML page has a correct canonical tag at build time; the build fails if any are missing or wrong.
+- The `astroCanonical` integration validates every HTML page has a correct canonical tag at build time; the build fails if any are missing or wrong.
 
 ### Layouts and slots
 
