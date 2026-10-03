@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Download Latest Artifact
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         with:
           name: link-checker-results
           workflow: main.yml
