@@ -9,7 +9,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -22,3 +22,7 @@ updates:
       fortawesome:
         patterns:
           - "@fortawesome/*"
+      astro:
+        patterns:
+          - "astro*"
+          - "@astrojs/*"

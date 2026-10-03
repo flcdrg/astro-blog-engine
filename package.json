@@ -34,7 +34,7 @@
     "luxon": "^3.7.2",
     "marked": "^18.0.14",
     "node-html-parser": "^9.0.4",
-    "sanitize-html": "^2.17.7",
+    "sanitize-html": "^2.18.0",
     "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
@@ -50,6 +50,6 @@
     "markdownlint-cli2": "^0.23.3",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
-    "wrangler": "^4.144.0"
+    "wrangler": "^4.146.0"
   }
 }
