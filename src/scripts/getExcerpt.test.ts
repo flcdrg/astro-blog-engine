@@ -26,4 +26,8 @@ describe("getExcerpt", () => {
   it("returns an empty excerpt when there are no paragraph elements", () => {
     expect(getExcerpt("<div>not a paragraph</div>", 100)).toBe("");
   });
+
+  it("returns an empty excerpt for empty input", () => {
+    expect(getExcerpt("", 100)).toBe("");
+  });
 });

@@ -1,11 +1,10 @@
 export default function getExcerpt(content: string, length: number) {
-  var excerptParagraphs = [];
-  var currentLength = 0;
-  var paragraphs = content.match(/<p>.*?<\/p>/gs) || [];
-  for (var _i = 0, paragraphs_1 = paragraphs; _i < paragraphs_1.length; _i++) {
-    var paragraph = paragraphs_1[_i];
+  const excerptParagraphs: string[] = [];
+  let currentLength = 0;
+  const paragraphs = content.match(/<p>.*?<\/p>/gs) || [];
+  for (const paragraph of paragraphs) {
     // Strip HTML from the paragraph
-    var text = paragraph?.replace(/(<([^>]+)>)/gi, "") ?? "";
+    const text = paragraph.replace(/(<([^>]+)>)/gi, "");
     if (currentLength > 0 && currentLength + text.length > length) {
       break;
     }
