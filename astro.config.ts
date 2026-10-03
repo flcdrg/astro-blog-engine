@@ -8,10 +8,11 @@ import { postProcessSitemap } from "./scripts/sitemapPostProcess";
 import { postProcessHomepage } from "./scripts/homepagePostProcess";
 import mermaid from "astro-mermaid";
 
+const siteUrl = process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au";
 // https://astro.build/config
 export default defineConfig({
   compressHTML: false,
-  site: process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au",
+  site: siteUrl,
   integrations: [
     sitemap({
       serialize(item) {
@@ -29,7 +30,7 @@ export default defineConfig({
           await postProcessSitemap({
             dir,
             siteRoot: (
-              process.env.DEPLOY_PRIME_URL || "https://david.gardiner.net.au"
+              siteUrl
             ).replace(/\/$/, ""),
           });
           await postProcessHomepage({ dir });
