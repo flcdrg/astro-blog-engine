@@ -62,7 +62,9 @@ describe("feed helpers", () => {
         '<img src="https://example.com/_astro/image.png" alt="Example" />',
       ),
     });
-    expect(entry.content.value).not.toContain("<script>");
+    expect(entry.content).not.toMatchObject({
+      value: expect.stringContaining("<script>"),
+    });
   });
 
   it("uses the newest modified or published date for the feed update time", () => {
@@ -76,7 +78,7 @@ describe("feed helpers", () => {
       }),
     ];
 
-    expect(getFeedUpdatedDate(posts)).toBe("2026-04-01T00:00:00+00:00");
+    expect(getFeedUpdatedDate(posts)).toBe("2026-04-01T00:00:00.000Z");
     expect(getFeedUpdatedDate([])).toBe("1970-01-01T00:00:00.000Z");
   });
 });

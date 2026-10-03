@@ -37,7 +37,8 @@ export function getFeedUpdatedDate(posts: BlogPost[]): string {
   }, undefined);
 
   return newestPost
-    ? getPostUpdatedDate(newestPost)
+    ? DateTime.fromISO(getPostUpdatedDate(newestPost)).toUTC().toISO() ??
+        "1970-01-01T00:00:00.000Z"
     : "1970-01-01T00:00:00.000Z";
 }
 
