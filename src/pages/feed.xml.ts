@@ -1,13 +1,9 @@
 import atom from "astrojs-atom";
 import type { AtomEntry } from "astrojs-atom";
 import { getCollection } from "astro:content";
-import sanitizeHtml from "sanitize-html";
 import type { APIContext } from "astro";
-import getExcerpt from "../scripts/getExcerpt";
 import { getCurrentPosts, sortPostsByDate } from "../scripts/posts";
-import { resolveFeedImageSrc } from "../scripts/resolveFeedImageSrc";
-import { parse as htmlParser } from "node-html-parser";
-import { marked } from "marked";
+import { buildFeedEntry, getFeedUpdatedDate } from "../scripts/feed";
 
 export async function GET(context: APIContext) {
   if (!context.site) {
@@ -29,60 +25,7 @@ export async function GET(context: APIContext) {
   const feed: AtomEntry[] = [];
 
   for (const post of postsToInclude) {
-    // convert markdown to html string
-    const body = await marked.parse(post.body!);
-
-    // convert html string to DOM-like structure
-    const html = htmlParser.parse(body, { comment: false });
-    // hold all img tags in variable images
-    const images = html.querySelectorAll("img");
-
-    for (const img of images) {
-      const src = img.getAttribute("src")!;
-
-      const resolvedSrc = await resolveFeedImageSrc(src, context.site);
-
-      if (resolvedSrc) {
-        img.setAttribute("src", resolvedSrc);
-      }
-    }
-
-    const htmlContent = sanitizeHtml(html.toString(), {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-    });
-
-    feed.push({
-      id: `${new URL(post.id, context.site).toString()}`,
-      updated: post.data.date,
-      published: post.data.date,
-      title: post.data.title,
-      content: {
-        type: "html",
-        value: htmlContent,
-      },
-      summary: {
-        type: "html",
-        value: post.data.description || getExcerpt(htmlContent, 500),
-      },
-      category: post.data.tags.map((tag) => ({
-        term: tag,
-      })),
-      link: [
-        {
-          rel: "alternate",
-          href: new URL(post.id, context.site).toString(),
-          type: "text/html",
-          title: post.data.title,
-        },
-      ],
-      thumbnail: post.data.image
-        ? {
-            url: `${new URL(post.data.image.src, context.site).toString()}`,
-            width: post.data.image.width,
-            height: post.data.image.height,
-          }
-        : undefined,
-    });
+    feed.push(await buildFeedEntry(post, context.site));
   }
 
   const atomFeedUrl = new URL("feed.xml", context.site).toString();
@@ -99,7 +42,7 @@ export async function GET(context: APIContext) {
         name: "David Gardiner",
       },
     ],
-    updated: new Date().toISOString(),
+    updated: getFeedUpdatedDate(postsToInclude),
     subtitle:
       "A blog of software development, .NET and other interesting things",
     generator: {
