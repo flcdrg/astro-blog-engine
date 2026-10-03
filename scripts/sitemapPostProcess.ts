@@ -34,7 +34,7 @@ export async function postProcessSitemap({
   }
 }
 
-async function removeNoindexPages(
+export async function removeNoindexPages(
   sitemapContent: string,
   distDir: string,
   siteRoot: string,
@@ -70,7 +70,7 @@ async function removeNoindexPages(
   return filtered;
 }
 
-async function inferLastModifiedFromLinkedPages(
+export async function inferLastModifiedFromLinkedPages(
   sitemapContent: string,
   distDir: string,
   siteRoot: string,
@@ -159,7 +159,7 @@ async function inferLastModifiedFromLinkedPages(
   });
 }
 
-function getSitemapEntries(sitemapContent: string) {
+export function getSitemapEntries(sitemapContent: string) {
   return [...sitemapContent.matchAll(/<url>\s*([\s\S]*?)\s*<\/url>/g)].flatMap(
     ([, block]) => {
       if (!block) {
@@ -182,7 +182,7 @@ function getSitemapEntries(sitemapContent: string) {
   );
 }
 
-function getBuiltHtmlPathForUrl(
+export function getBuiltHtmlPathForUrl(
   loc: string,
   distDir: string,
   siteRootUrl: URL,
@@ -202,7 +202,7 @@ function getBuiltHtmlPathForUrl(
   return join(distDir, `${pathname.slice(1)}.html`);
 }
 
-function normalizeSitemapUrl(href: string, currentUrl: string, siteRootUrl: URL) {
+export function normalizeSitemapUrl(href: string, currentUrl: string, siteRootUrl: URL) {
   try {
     const url = new URL(href, currentUrl);
 

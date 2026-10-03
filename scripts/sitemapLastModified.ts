@@ -60,7 +60,7 @@ function updatePostLastModified(
   }
 }
 
-function getPostLastModified(filePath: string): string | undefined {
+export function getPostLastModified(filePath: string): string | undefined {
   const frontmatter = readFileSync(filePath, "utf8").match(
     /^---\r?\n([\s\S]*?)\r?\n---/,
   )?.[1];
