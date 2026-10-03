@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
+    "test": "vitest run",
     "preview": "astro preview",
     "astro": "astro",
     "lychee": "docker run --rm -v \"$PWD:/input\" -w /input -e GITHUB_TOKEN lycheeverse/lychee --root-dir /input/dist 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --max-concurrency 20 --user-agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0\" --fallback-extensions html -v --cache-exclude-status 429 --insecure --accept 200..=204 --no-progress --format json --output output.json",
@@ -50,6 +51,7 @@
     "markdownlint-cli2": "^0.23.3",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
+    "vitest": "^5.0.3",
     "wrangler": "^4.146.0"
   }
 }
