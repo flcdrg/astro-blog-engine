@@ -77,7 +77,9 @@ The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the 
 ### Verification / snapshot testing
 
 - `verified/` holds `.verified.*` snapshot files used by [Verify.Cli](https://github.com/VerifyTests/Verify) for regression testing in CI.
-- Run locally with `pnpm verify` (after `pnpm build`). The scripts verify `dist/feed.xml`, `dist/index.html`, and a specific post HTML file (`dist/2025/07/azure-pipeline-template-expression.html`); CI also verifies HTTP redirect traces.
+- Run locally with `pnpm verify` (after `pnpm build`). The scripts verify `dist/feed.xml`, `dist/index.html`, `dist/sitemap-0.xml`, and a specific post HTML file (`dist/2025/07/azure-pipeline-template-expression.html`); CI also verifies HTTP redirect traces.
+- After making changes, run `pnpm build` followed by `pnpm verify` to check all snapshots; `pnpm verify` runs `pnpm verify:dist`, `pnpm verify:post`, `pnpm verify:index`, and `pnpm verify:sitemap`. For a focused check, use the relevant script after building.
+- If a snapshot check fails, compare its `.received.*` file with the corresponding `.verified.*` file. Update the verified snapshot from the received file only when the difference is an expected result of the change; otherwise, fix the implementation. Rerun the failed verification command after accepting an expected snapshot change.
 - Scrubbers in the `verify:*` scripts normalize hashed `/_astro/` asset names, `title="..."` attributes, the Astro generator version, and the `data-image-component` marker so snapshots stay stable across builds.
 - To update a snapshot, copy the `.received.*` file over the corresponding `.verified.*` file.
 
