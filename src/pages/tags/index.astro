@@ -1,18 +1,16 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import onlyCurrent from "../../scripts/filters";
+import { getCurrentPosts, groupPostsByTag } from "../../scripts/posts";
 import { getCanonicalUrl } from "../../scripts/canonical";
 const pageTitle = "Blog Tags Archive";
-const allPosts = (await getCollection("blog")).filter(onlyCurrent);
+const allPosts = getCurrentPosts(await getCollection("blog"));
 
 // Collate all tags from all posts and count posts per tag
-const tagCounts = allPosts
-  .flatMap((post: any) => post.data.tags)
-  .reduce((acc: Record<string, number>, tag: string) => {
-    acc[tag] = (acc[tag] || 0) + 1;
-    return acc;
-  }, {});
+const tagCounts = [...groupPostsByTag(allPosts)].map(([tag, posts]) => [
+  tag,
+  posts.length,
+]);
 
 const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)

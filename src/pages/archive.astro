@@ -3,12 +3,12 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import getPostsByGroupCondition from "../scripts/getPostsByGroupCondition";
 import { DateTime } from "luxon";
-import onlyCurrent from "../scripts/filters";
+import { getCurrentPosts } from "../scripts/posts";
 import { getCanonicalUrl } from "../scripts/canonical";
 
 const pageTitle = "Blog Post Archive";
 
-const posts = (await getCollection("blog")).filter(onlyCurrent);
+const posts = getCurrentPosts(await getCollection("blog"));
 
 const description = "Browse Dave's Daydreams posts by year, including articles on .NET, Azure, DevOps, software engineering, and community events.";
 const collectionJsonLd = {

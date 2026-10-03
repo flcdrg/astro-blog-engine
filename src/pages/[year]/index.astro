@@ -3,32 +3,28 @@ import { getCollection } from "astro:content";
 import getPostsByGroupCondition from "../../scripts/getPostsByGroupCondition";
 import { DateTime } from "luxon";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCurrentPosts, sortPostsByDate } from "../../scripts/posts";
 
 import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
   GetStaticPaths,
 } from "astro";
-import onlyCurrent from "../../scripts/filters";
 import DateTimeComponent from "../../components/DateTimeComponent.astro";
 
 export const getStaticPaths = (async () => {
-  const posts = (await getCollection("blog")).filter(onlyCurrent);
+  const posts = getCurrentPosts(await getCollection("blog"));
 
   const years = Object.entries(
     getPostsByGroupCondition(posts, (post) =>
-      DateTime.fromISO(post.data.date).toJSDate().getFullYear()
+      DateTime.fromISO(post.data.date).year
     )
   )
     .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
     .map(([year, yearGroup]) => ({
       params: { year },
       props: {
-        posts: yearGroup.sort(
-          (a, b) =>
-            DateTime.fromISO(a.data.date).toJSDate().getTime() -
-            DateTime.fromISO(b.data.date).toJSDate().getTime()
-        ),
+        posts: sortPostsByDate(yearGroup),
       },
     }));
 
