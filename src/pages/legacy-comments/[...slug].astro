@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { legacyArchive, legacyCommentDate, orderLegacyComments } from "../../scripts/social/archive";
+import { sanitiseLegacyHtml } from "../../scripts/social/archive-import";
+import { getCurrentPosts } from "../../scripts/posts";
+
+export const getStaticPaths = (async () => {
+  const posts = getCurrentPosts(await getCollection("blog"));
+  return posts.filter((post) => legacyArchive.threads[post.id]?.length).map((post) => ({
+    params: { slug: post.id },
+    props: { id: post.id, title: post.data.title, comments: legacyArchive.threads[post.id]! },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { id, title, comments } = Astro.props;
+const pageTitle = "Archived comments from Disqus";
+const frontmatter = {
+  description: "Read preserved public comments from Disqus; this historical discussion is read-only, with new replies on the post's social threads.",
+};
+const ordered = orderLegacyComments(comments);
+const anchors = new Map(ordered.map((comment, index) => [comment.id, `legacy-comment-${index}`]));
+---
+
+<BaseLayout pageTitle={pageTitle} frontmatter={frontmatter} noindex={true}>
+  <h1>{pageTitle}</h1>
+  <p>Discussion of <a href={`/${encodeURI(id)}`}>{title}</a></p>
+  <p>This read-only archive preserves public comments from Disqus. Visit the original post for current discussions.</p>
+  <ol class="legacy-comments">
+    {ordered.map((comment) => (
+      <li id={anchors.get(comment.id)}>
+        <article>
+          <h2>{comment.name}</h2>
+          <p><a href={`#${anchors.get(comment.id)}`}><time datetime={comment.createdAt}>{legacyCommentDate(comment.createdAt)}</time></a></p>
+          {comment.parentId && anchors.has(comment.parentId) && (
+            <p><a href={`#${anchors.get(comment.parentId)}`}>Reply to another archived comment</a></p>
+          )}
+          <div set:html={sanitiseLegacyHtml(comment.html)} />
+        </article>
+      </li>
+    ))}
+  </ol>
+</BaseLayout>
+
+<style>
+  .legacy-comments { padding: 0; list-style: none; }
+  .legacy-comments li { border-top: 1px solid #7c899b; padding-block: 1rem; overflow-wrap: anywhere; }
+  .legacy-comments h2 { font-size: 1.1rem; }
+  .legacy-comments :global(pre) { white-space: pre-wrap; }
+</style>

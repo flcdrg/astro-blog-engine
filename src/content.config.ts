@@ -2,6 +2,7 @@ import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { DateTime } from "luxon";
+import { threadUrlSchema } from "./scripts/social/schema";
 
 const blog = defineCollection({
   type: "content_layer",
@@ -29,6 +30,8 @@ const blog = defineCollection({
       description: z.string().trim().optional(),
       modified_time: z.string().optional(),
       index: z.boolean().optional(),
+      blueskyUrl: threadUrlSchema("bluesky").optional(),
+      mastodonUrl: threadUrlSchema("mastodon").optional(),
     }),
 });
 

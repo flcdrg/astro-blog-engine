@@ -19,10 +19,26 @@ on:
         required: false
         default: true
         type: boolean
+      socialMode:
+        description: "Social publishing operation (requires opt-in)"
+        required: false
+        default: publish
+        type: choice
+        options:
+          - publish
+          - dry-run
+          - backfill
+          - initialise
+      socialResumeRun:
+        description: "Optional main workflow run ID containing a discovery checkpoint"
+        required: false
+        default: ""
+        type: string
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
+  actions: read
   id-token: write
   pull-requests: write # Required for PR comments
   deployments: write # Required for Cloudflare Pages
@@ -103,6 +119,21 @@ jobs:
       - name: Build
         if: github.event_name != 'pull_request'
         run: pnpm build
+
+      - name: Prepare social announcement previews
+        if: github.event_name == 'pull_request'
+        run: node scripts/social/preview.ts
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+      - name: Upload social announcement previews
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: social-preview
+          path: social-preview.json
+          retention-days: 2
 
       # begin-snippet: verify-cli-use-with-dotnet-tool
       - name: Setup .NET
@@ -234,6 +265,99 @@ jobs:
           command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
+  social:
+    runs-on: ubuntu-latest
+    needs: publish_to_cloudflare
+    name: Publish social announcements
+    if: github.ref == 'refs/heads/main' && vars.SOCIAL_PUBLISHING_ENABLED == 'true'
+    environment: production
+    permissions:
+      contents: read
+    concurrency:
+      group: social-publishing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/setup@v3
+        with:
+          runtime: node
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+      - name: Verify discovery checkpoint run
+        if: inputs.socialResumeRun != ''
+        uses: actions/github-script@v8
+        env:
+          RESUME_RUN: ${{ inputs.socialResumeRun }}
+        with:
+          script: |
+            const id = process.env.RESUME_RUN;
+            if (!/^[1-9][0-9]*$/.test(id)) throw new Error('Invalid checkpoint run ID');
+            const { data: run } = await github.rest.actions.getWorkflowRun({
+              ...context.repo, run_id: Number(id)
+            });
+            if (run.head_branch !== 'main' || run.event === 'pull_request' ||
+                run.repository.full_name !== `${context.repo.owner}/${context.repo.repo}` ||
+                run.path !== '.github/workflows/main.yml') {
+              throw new Error('Checkpoint must come from a trusted main publishing run');
+            }
+      - name: Download discovery checkpoint data
+        if: inputs.socialResumeRun != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: social-discovery-checkpoint
+          path: social-checkpoint-artifact
+          run-id: ${{ inputs.socialResumeRun }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create repository-scoped automation token
+        if: vars.SOCIAL_APP_ID != ''
+        id: social-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.SOCIAL_APP_ID }}
+          private-key: ${{ secrets.SOCIAL_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+      - name: Publish or reconcile social threads
+        run: node scripts/social/run.ts "$SOCIAL_MODE"
+        env:
+          SOCIAL_MODE: ${{ inputs.socialMode || 'publish' }}
+          SOCIAL_DEPLOYED: "true"
+          SOCIAL_AUTO_MERGE: ${{ vars.SOCIAL_AUTO_MERGE || 'false' }}
+          SOCIAL_DISCOVERY_CHECKPOINT: ${{ inputs.socialResumeRun != '' && 'social-checkpoint-artifact/social-discovery-checkpoint.json' || '' }}
+          GH_TOKEN: ${{ steps.social-token.outputs.token || secrets.SOCIAL_GITHUB_TOKEN }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+      - name: Upload backfill report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: social-backfill-report
+          path: social-backfill-report.json
+          if-no-files-found: ignore
+      - name: Upload publishing report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: social-publishing-report
+          path: social-publishing-report.json
+          if-no-files-found: ignore
+      - name: Upload discovery checkpoint
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: social-discovery-checkpoint
+          path: social-discovery-checkpoint.json
+          if-no-files-found: ignore
+      - name: Report publishing failure
+        if: failure()
+        run: echo 'Social publishing failed or needs reconciliation. Inspect the job log and automation/social-threads journal before retrying; do not delete pending operations.' >> "$GITHUB_STEP_SUMMARY"
+
   indexnow:
     runs-on: ubuntu-latest
     needs: publish_to_cloudflare
@@ -291,6 +415,19 @@ jobs:
         run: echo $OUTPUTS
         env:
           OUTPUTS: ${{ toJson(steps.deploy.outputs) }}
+
+      - name: Record preview attachment origin
+        run: node --input-type=module -e 'import {writeFileSync} from "node:fs"; writeFileSync("deployment.json", JSON.stringify({head:process.env.PR_HEAD_SHA,origin:new URL(process.env.PREVIEW_URL).origin}));'
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+
+      - name: Upload preview attachment origin
+        uses: actions/upload-artifact@v7
+        with:
+          name: social-preview-deployment
+          path: deployment.json
+          retention-days: 2
 
       - name: HTTP redirect testing
         shell: pwsh

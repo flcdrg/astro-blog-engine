@@ -1,0 +1,14 @@
+{
+  "enabled": false,
+  "productionOrigin": "https://david.gardiner.net.au",
+  "bluesky": {
+    "handle": "david.gardiner.net.au",
+    "service": "https://bsky.social"
+  },
+  "mastodon": {
+    "origin": "https://mastodon.online",
+    "username": "DavidRGardiner",
+    "maxCharacters": 500
+  },
+  "archiveReady": false
+}

@@ -41,3 +41,13 @@ wayback/replacements.json
 /.claude/settings.local.json
 
 ldlint
+
+# Social automation reports and untrusted preview artifacts
+/social-preview.json
+/social-preview-artifact/
+/social-preview-deployment/
+/deployment.json
+/social-backfill-report.json
+/social-publishing-report.json
+/social-discovery-checkpoint.json
+/social-checkpoint-artifact/
