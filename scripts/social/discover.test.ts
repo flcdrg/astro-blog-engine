@@ -14,7 +14,7 @@ const config: SocialConfig = {
   archiveReady: false,
 };
 
-function post(id: string, url = `${origin}/${id.replaceAll("/", "/")}`): ManifestPost {
+function post(id: string, url = `${origin}/${id}`): ManifestPost {
   return {
     id,
     source: `src/posts/${id.slice(0, 4)}/2026-10-03-${id.split("/").at(-1)}.md`,
