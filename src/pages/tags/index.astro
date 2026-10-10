@@ -10,9 +10,9 @@ const allPosts = getCurrentPosts(await getCollection("blog"));
 const tagCounts = [...groupPostsByTag(allPosts)].map(([tag, posts]) => [
   tag,
   posts.length,
-]);
+] as const);
 
-const tags = Object.entries(tagCounts).sort(([tagA], [tagB]) =>
+const tags = tagCounts.sort(([tagA], [tagB]) =>
   tagA.localeCompare(tagB)
 );
 

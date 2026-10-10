@@ -107,11 +107,38 @@ Configure production environment secrets:
 | `MASTODON_ACCESS_TOKEN` | Token with `read:accounts`, `write:statuses` and `write:media`                                            |
 | `SOCIAL_GITHUB_TOKEN`   | Dedicated GitHub App installation token or narrowly scoped token with repository contents/PR write access |
 
-Prefer a GitHub App installed only on the content repository, with contents and
-pull-request write permissions. Set the repository variable `SOCIAL_APP_ID` and
-secret `SOCIAL_APP_PRIVATE_KEY`; the job creates a fresh repository-scoped token
-for each run. `SOCIAL_GITHUB_TOKEN` is a fallback for a narrowly scoped access
-token when an App is unavailable.
+Prefer a dedicated GitHub App. It writes publishing state to a branch and opens
+mapping PRs. To create and configure it:
+
+1. Open **GitHub Settings → Developer settings → GitHub Apps → New GitHub App**.
+   For an organisation-owned app, use the organisation's settings instead.
+2. Choose a unique name, such as `Astro Blog Social Publisher`, and set the
+   **Homepage URL** to your repository URL. Untick **Active** under **Webhook**,
+   leave OAuth callback settings unused, and select **Only on this account** for
+   installation.
+3. Under **Repository permissions**, grant **Contents: Read and write** and
+   **Pull requests: Read and write**. **Metadata: Read-only** is included
+   automatically. No organisation permissions or subscribed events are needed.
+4. Create the app and copy its **App ID**, not its Client ID. Click
+   **Generate a private key** to download the PEM file.
+5. Under **Install App**, install it on your account using
+   **Only select repositories**. Select the engine repository for testing, or the
+   production content repository for production. Explicitly add the production
+   repository later when ready; do not grant access to all repositories.
+6. In the target repository's **Settings → Secrets and variables → Actions →
+   Variables**, set `SOCIAL_APP_ID` to the App ID and
+   `SOCIAL_PUBLISHING_ENABLED` to `true`.
+7. In **Settings → Environments → production → Environment secrets**, add
+   `SOCIAL_APP_PRIVATE_KEY` with the entire PEM file contents, including the
+   BEGIN and END lines. Configure the social account secrets in this environment
+   too; only enabled providers need credentials.
+
+The workflow creates a fresh, short-lived, repository-scoped installation token
+for each run. You do not need `SOCIAL_GITHUB_TOKEN` when using the App; it is a
+fallback for a narrowly scoped access token when an App is unavailable.
+Treat the PEM file as a secret: never commit it or paste it into chat.
+Keep `SOCIAL_AUTO_MERGE` unset or `false` while testing. The initialisation steps
+below still apply before first publication.
 
 The GitHub token must trigger normal PR and merge CI. Do not substitute
 `GITHUB_TOKEN` without accounting for its event-trigger restrictions. Never expose
