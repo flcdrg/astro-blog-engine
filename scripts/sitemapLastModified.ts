@@ -1,25 +1,44 @@
-import { execSync } from "child_process";
+import { execFileSync } from "node:child_process";
 import { existsSync, globSync, readFileSync } from "node:fs";
-import { join, resolve } from "path";
+import { join, resolve } from "node:path";
 
 import type { SitemapItem } from "@astrojs/sitemap";
 
-export function updateSitemapItemLastModified(item: SitemapItem) {
-  try {
-    const urlPattern = /https:\/\/.*?\/(\d{4})\/(\d{2})\/(.+)/;
-    const match = item.url.match(urlPattern);
+const nonBlogPageSources: Record<string, string[]> = {
+  "/": ["src/pages/index.astro"],
+  "/about": ["src/pages/about.astro"],
+  "/archive": ["src/pages/archive.astro"],
+  "/feed.xml": ["src/pages/feed.xml.ts"],
+  "/speaking": ["src/pages/speaking.astro", "src/data/speaking.json"],
+  "/tags": ["src/pages/tags/index.astro"],
+};
 
-    if (match && match[1] && match[2] && match[3]) {
-      updatePostLastModified(item, match[1], match[2], match[3]);
-    } else if (item.url.match(/\/about$/)) {
-      const filePath = join(process.cwd(), "src", "pages", "about.astro");
-      updateLastModifiedFromGit([filePath], item);
-    } else if (item.url.match(/\/speaking$/)) {
-      const filePaths = [
-        join(process.cwd(), "src", "pages", "speaking.astro"),
-        join(process.cwd(), "src", "data", "speaking.json"),
-      ];
-      updateLastModifiedFromGit(filePaths, item);
+export function updateSitemapItemLastModified(
+  item: SitemapItem,
+  root = process.cwd(),
+) {
+  try {
+    const pathname = new URL(item.url).pathname;
+    const postMatch = pathname.match(/^\/(\d{4})\/(\d{2})\/([^/]+)$/);
+
+    if (postMatch?.[1] && postMatch[2] && postMatch[3]) {
+      delete item.lastmod;
+      updatePostLastModified(
+        item,
+        postMatch[1],
+        postMatch[2],
+        decodeURIComponent(postMatch[3]),
+        root,
+      );
+      return;
+    }
+
+    delete item.lastmod;
+    const sourceFiles = getNonBlogPageSourceFiles(pathname, root);
+    if (sourceFiles) {
+      updateLastModifiedFromGit(sourceFiles, item, root);
+    } else {
+      console.error(`No source files configured for sitemap item ${item.url}`);
     }
   } catch (error) {
     console.error(
@@ -28,26 +47,47 @@ export function updateSitemapItemLastModified(item: SitemapItem) {
   }
 }
 
+export function getNonBlogPageSourceFiles(
+  pathname: string,
+  root = process.cwd(),
+): string[] | undefined {
+  let relativePaths = nonBlogPageSources[pathname];
+
+  if (!relativePaths && /^\/\d{4}$/.test(pathname)) {
+    relativePaths = ["src/pages/[year]/index.astro"];
+  } else if (!relativePaths && /^\/tags\/[^/]+$/.test(pathname)) {
+    relativePaths = ["src/pages/tags/[tag].astro"];
+  } else if (!relativePaths && /^\/tags\/[^/]+\.xml$/.test(pathname)) {
+    relativePaths = ["src/pages/tags/[tag].xml.ts"];
+  }
+
+  return relativePaths?.map((relativePath) => resolve(root, relativePath));
+}
+
 function updatePostLastModified(
   item: SitemapItem,
   year: string,
   month: string,
   slug: string,
+  root: string,
 ) {
-  const filePattern = `${year}-${month}-*-${slug}.md`;
-  const postsDir = resolve(process.cwd(), "src", "posts", year);
+  const postsDir = resolve(root, "src", "posts", year);
 
   try {
     if (!existsSync(postsDir)) {
       return;
     }
 
-    const files = globSync(filePattern, { cwd: postsDir });
+    const filePath = [".md", ".mdx"]
+      .flatMap((extension) =>
+        globSync(`${year}-${month}-*-${slug}${extension}`, {
+          cwd: postsDir,
+        }),
+      )
+      .map((file) => join(postsDir, file))
+      .at(0);
 
-    if (files.length > 0 && files[0]) {
-      const filePath = join(postsDir, files[0]);
-
-      // Git commit dates change with bulk edits, so use the post's own dates
+    if (filePath) {
       const lastModified = getPostLastModified(filePath);
       if (lastModified) {
         item.lastmod = lastModified;
@@ -69,25 +109,28 @@ export function getPostLastModified(filePath: string): string | undefined {
     return undefined;
   }
 
-  const timestamps = ["date", "modified_time"]
-    .map(
-      (key) =>
-        frontmatter.match(new RegExp(`^${key}:\\s*['"]?([^'"\\r\\n]+)`, "m"))?.[1],
-    )
-    .map((value) => (value ? Date.parse(value.trim()) : NaN))
-    .filter((ms) => Number.isFinite(ms));
+  const date = frontmatter.match(/^date:\s*['"]?([^'"\r\n]+)/m)?.[1];
+  const timestamp = date ? Date.parse(date.trim()) : NaN;
 
-  return timestamps.length > 0
-    ? new Date(Math.max(...timestamps)).toISOString()
+  return Number.isFinite(timestamp)
+    ? new Date(timestamp).toISOString()
     : undefined;
 }
 
-function updateLastModifiedFromGit(filePaths: string[], item: SitemapItem) {
+function updateLastModifiedFromGit(
+  filePaths: string[],
+  item: SitemapItem,
+  root: string,
+) {
   const timestamps = filePaths
     .filter(existsSync)
     .map((filePath) => {
-      const gitCmd = `git log -1 --pretty="format:%cI" "${filePath}"`;
-      return Date.parse(execSync(gitCmd, { encoding: "utf8" }).trim());
+      const timestamp = execFileSync(
+        "git",
+        ["log", "-1", "--format=%cI", "--", filePath],
+        { cwd: root, encoding: "utf8" },
+      ).trim();
+      return Date.parse(timestamp);
     })
     .filter((timestamp) => Number.isFinite(timestamp));
 

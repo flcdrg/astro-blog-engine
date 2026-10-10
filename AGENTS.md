@@ -61,7 +61,7 @@ The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the 
 
 ### Sitemap (`astro.config.ts`)
 
-- The `serialize` callback strips trailing slashes from all URLs and injects `lastmod`. For blog posts it is the later of the front matter `date` and `modified_time` (not git history, which bulk edits make inaccurate); `/about` and `/speaking` use `git log`.
+- The `serialize` callback strips trailing slashes from all URLs and injects `lastmod`. Blog posts use the front matter `date` only; non-blog pages use the latest Git commit time of their route source and directly related non-post data files.
 - Post files are resolved by reconstructing the file path from the URL pattern `/YYYY/MM/slug`.
 - Site URL defaults to `https://david.gardiner.net.au`; overridden by `DEPLOY_PRIME_URL` env var.
 
