@@ -19,6 +19,21 @@
   <category term="Azure"/>
   <category term="DevOps"/>
   <entry>
+    <id>https://david.gardiner.net.au/2026/10/test-post</id>
+    <updated>2026-10-11T18:00:00.000+10:30</updated>
+    <title>Test post about .NET 11</title>
+    <link href="https://david.gardiner.net.au/2026/10/test-post" rel="alternate" type="text/html" title="Test post about .NET 11"/>
+    <category term=".NET"/>
+    <published>2026-10-11T18:00:00.000+10:30</published>
+    <summary type="html">A short post about .NET 11</summary>
+    <content type="html">&lt;p&gt;.NET 11 will be released next month in November.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/dotnet-logo.CPhhz53U_hOT1W.webp&quot; alt=&quot;.NET logo&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;This is very exciting!&lt;/p&gt;
+</content>
+    <media:thumbnail url="https://david.gardiner.net.au/_astro/dotnet-logo.CPhhz53U.png" width="456" height="456"/>
+    <media:content medium="image" url="https://david.gardiner.net.au/_astro/dotnet-logo.CPhhz53U.png" width="456" height="456"/>
+  </entry>
+  <entry>
     <id>https://david.gardiner.net.au/2026/06/switchy-switch</id>
     <updated>2026-06-16T20:30:00.000+09:30</updated>
     <title>The network switch that keeps switching more than it should</title>
@@ -1265,39 +1280,5 @@ internal static IHostBuilder ConfigureAspNetCoreIntegration(this IHostBuilder bu
 </content>
     <media:thumbnail url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg" width="120" height="120"/>
     <media:content medium="image" url="https://david.gardiner.net.au/_astro/azure-logo.BF5E_tzp.jpg" width="120" height="120"/>
-  </entry>
-  <entry>
-    <id>https://david.gardiner.net.au/2025/02/powershell-command-arguments</id>
-    <updated>2025-02-14T12:00:00.000+10:30</updated>
-    <title>Why is PowerShell not expanding variables for a command?</title>
-    <link href="https://david.gardiner.net.au/2025/02/powershell-command-arguments" rel="alternate" type="text/html" title="Why is PowerShell not expanding variables for a command?"/>
-    <category term="PowerShell"/>
-    <published>2025-02-14T12:00:00.000+10:30</published>
-    <summary type="html">Why PowerShell can stop command arguments expanding as expected, and how to work around it.</summary>
-    <content type="html">&lt;p&gt;This had me perplexed. I have a PowerShell script that calls Docker and passes in some build arguments like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;docker build --secret id=npm,src=$($env:USERPROFILE)/.npmrc --progress=plain -t imagename .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;But it was failing with this error:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ERROR: failed to stat $($env:USERPROFILE)/.npmrc: CreateFile $($env:USERPROFILE)/.npmrc: The filename, directory name, or volume label syntax is incorrect.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It should be evaluating the &lt;code&gt;$($env:USERPROFILE)&lt;/code&gt; expression to the current user&apos;s profile/home directory, but it isn&apos;t.&lt;/p&gt;
-&lt;p&gt;Is there some recent breaking change in how PowerShell evaluates arguments to a native command? I skimmed the release notes but nothing jumped out.&lt;/p&gt;
-&lt;p&gt;I know you can use the &lt;a href=&quot;https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&amp;amp;WT.mc_id=DOP-MVP-5001655#the-stop-parsing-token&quot;&gt;&quot;stop-parsing token&quot; &lt;code&gt;--%&lt;/code&gt;&lt;/a&gt; to stop PowerShell from interpreting subsequent text on the line as commands or expressions, but I wasn&apos;t using that.&lt;/p&gt;
-&lt;p&gt;In fact the whole &lt;a href=&quot;https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5&amp;amp;WT.mc_id=DOP-MVP-5001655&quot;&gt;about_Parsing&lt;/a&gt; documentation is a good read to understand the different modes and how PowerShell passes arguments to native and PowerShell commands. But I still couldn&apos;t figure it out.&lt;/p&gt;
-&lt;p&gt;So what&apos;s going on?&lt;/p&gt;
-&lt;p&gt;Another tool I find useful when trying to diagnose issues with passing arguments is &lt;a href=&quot;https://community.chocolatey.org/packages/echoargs&quot;&gt;EchoArgs&lt;/a&gt;. It too reported the argument was not being evaluated.&lt;/p&gt;
-&lt;p&gt;But then I noticed something curious on the command line:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/echoargs-command-line.CQ6I5ZUF_1MfXVT.webp&quot; alt=&quot;Screenshot of echoargs command line with comma separating arguments in grey colour&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;That comma is being rendered in my command line in grey, but the rest of the arguments are white (with the exception of the variable expression). Could that be the problem?&lt;/p&gt;
-&lt;p&gt;Let&apos;s try enclosing the arguments in double quotes..&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;docker build --secret &quot;id=npm,src=$($env:USERPROFILE)/.npmrc&quot; --progress=plain -t imagename .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Notice the colours on the command line - the comma is not different now:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://david.gardiner.net.au/_astro/echoargs-command-line2.Dq7CjtrV_25jXJp.webp&quot; alt=&quot;Screenshot of echo args command line, now with double quotes and the comma not in a different colour&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;And the colouring on the command line also hints that it is not treating the comma as something special.&lt;/p&gt;
-&lt;p&gt;And now our Docker command works!&lt;/p&gt;
-</content>
-    <media:thumbnail url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
-    <media:content medium="image" url="https://david.gardiner.net.au/_astro/powershell-logo.Ct6r75lr.png" width="256" height="256"/>
   </entry>
 </feed>
