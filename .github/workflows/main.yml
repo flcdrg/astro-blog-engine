@@ -197,6 +197,18 @@ jobs:
           echo ""
           diff -u verified/index.html.received.html verified/index.html.verified.html
 
+      - name: Verify tags
+        id: verify_tags
+        if: github.repository == 'flcdrg/astro-blog-engine'
+        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/tags.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
+
+      - name: Diff tags if error
+        if: failure() && steps.verify_tags.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
+        run: |
+          ls -al verified/
+          echo ""
+          diff -u verified/tags.html.verified.html verified/tags.html.received.html
+
       # dist as artifact
       - name: Upload dist as artifact
         uses: actions/upload-artifact@v7
