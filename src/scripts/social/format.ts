@@ -30,7 +30,7 @@ export function formatAnnouncement(post: ManifestPost, provider: Provider, maxCh
   const warnings: string[] = [];
   const text = () => [`Blogged: ${title.join("")}`, description.join(""), post.url, tags.map((tag) => `#${tag}`).join(" ")].filter(Boolean).join("\n\n");
   const length = (value: string) => provider === "mastodon"
-    ? graphemes(value).length - graphemes(post.url).length + reservedUrlLength
+    ? graphemes(value).length + [...value.matchAll(/https?:\/\/[^\s]+/gi)].reduce((total, [url]) => total + reservedUrlLength - graphemes(url).length, 0)
     : graphemes(value).length;
   const tooLong = () => length(text()) > limit || (provider === "bluesky" && new TextEncoder().encode(text()).length > 3000);
   const originalDescription = description.length;

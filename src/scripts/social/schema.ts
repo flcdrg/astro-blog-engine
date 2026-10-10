@@ -25,7 +25,7 @@ export const configSchema = z.object({
   productionOrigin: z.url().refine((value) => {
     const url = new URL(value);
     return url.protocol === "https:" && url.origin === value;
-  }),
+  }, "productionOrigin must be an HTTPS origin with no trailing slash, path, query or fragment (for example, https://example.com)."),
   bluesky: z.object({
     handle: z.string().min(1),
     service: z.url().refine((value) => {

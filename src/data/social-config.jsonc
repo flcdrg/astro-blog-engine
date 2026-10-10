@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "productionOrigin": "https://astro-blog-engine.david-e6a.workers.dev",
+  "bluesky": {
+    "handle": "astroblogengine.bsky.social",
+    "service": "https://bsky.social"
+  },
+  // "mastodon": {
+  //   "origin": "https://mastodon.online",
+  //   "username": "DavidRGardiner",
+  //   "maxCharacters": 500
+  // },
+  "archiveReady": false
+}

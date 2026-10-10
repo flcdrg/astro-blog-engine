@@ -1,4 +1,5 @@
-import { XMLParser, XMLValidator } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
+import { SyntaxValidator } from "fast-xml-validator";
 import sanitizeHtml from "sanitize-html";
 import { z } from "astro/zod";
 import { DateTime } from "luxon";
@@ -59,7 +60,11 @@ export function importDisqusXml(
   approvedIds: ReadonlySet<string> = new Set(),
 ): DisqusImportResult {
   if (/<!DOCTYPE/i.test(xml)) throw new Error("Disqus exports must not contain a document type declaration.");
-  if (XMLValidator.validate(xml) !== true) throw new Error("Invalid Disqus XML.");
+  try {
+    SyntaxValidator.validate(xml);
+  } catch {
+    throw new Error("Invalid Disqus XML.");
+  }
   const parsed: unknown = new XMLParser({
     ignoreAttributes: false, removeNSPrefix: true,
     parseTagValue: false, parseAttributeValue: false, trimValues: false,

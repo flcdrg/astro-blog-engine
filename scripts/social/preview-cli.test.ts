@@ -4,8 +4,38 @@ import { join, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
 import { expect, it } from "vitest";
 import { previewSchema } from "./preview";
+import { loadSocialConfig } from "../../src/scripts/social/load-config";
 
-it("previews every added post but not edits to existing posts using the real CLI", async () => {
+it("loads JSON or JSONC social configuration without hiding invalid files", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "social-config-"));
+  const jsonPath = join(directory, "social-config.json");
+  const jsoncPath = join(directory, "social-config.jsonc");
+  const config = { enabled: false, archiveReady: false, productionOrigin: "https://example.com" };
+  try {
+    await writeFile(jsoncPath, `{
+      // Test account configuration
+      "enabled": true,
+      "archiveReady": false,
+      "productionOrigin": "https://example.com",
+    }`);
+    expect(loadSocialConfig(directory)).toEqual({ ...config, enabled: true });
+    await writeFile(jsonPath, JSON.stringify(config));
+    expect(loadSocialConfig(directory)).toEqual(config);
+    await writeFile(jsonPath, "{invalid}");
+    expect(() => loadSocialConfig(directory)).toThrow(SyntaxError);
+    await rm(jsonPath);
+    await writeFile(jsoncPath, '{"enabled": true,,}');
+    expect(() => loadSocialConfig(directory)).toThrow(/Invalid JSONC/);
+    await writeFile(jsoncPath, '{"enabled": "invalid"}');
+    expect(() => loadSocialConfig(directory)).toThrow();
+    await rm(jsoncPath);
+    expect(() => loadSocialConfig(directory)).toThrow(/ENOENT/);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+it.each(["json", "jsonc"])("previews every added post but not edits to existing posts using the real CLI with %s configuration", async (extension) => {
   const directory = await mkdtemp(join(tmpdir(), "social-preview-"));
   const git = (...args: string[]) => execFileSync("git", [
     "-c", "core.hooksPath=/dev/null",
@@ -40,11 +70,11 @@ it("previews every added post but not edits to existing posts using the real CLI
         ...template, id: `2026/10/post${index}`, source, url: `https://example.com/2026/10/post${index}`,
       })),
     }));
-    await writeFile(join(directory, "src/data/social-config.json"), JSON.stringify({
+    await writeFile(join(directory, `src/data/social-config.${extension}`), `${extension === "jsonc" ? "// Test accounts\n" : ""}${JSON.stringify({
       enabled: false, archiveReady: false, productionOrigin: "https://example.com",
       bluesky: { handle: "example.com", service: "https://bsky.social" },
       mastodon: { origin: "https://mastodon.online", username: "example", maxCharacters: 500 },
-    }));
+    })}`);
     execFileSync(process.execPath, [resolve("scripts/social/preview.ts")], {
       cwd: directory, env: { ...process.env, PR_BASE_SHA: base, PR_HEAD_SHA: head }, stdio: "pipe",
     });

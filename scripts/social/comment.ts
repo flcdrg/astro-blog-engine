@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { configSchema } from "../../src/scripts/social/schema.ts";
+import { loadSocialConfig } from "../../src/scripts/social/load-config.ts";
 import { previewSchema, renderPreview } from "./preview.ts";
 import { gh } from "./github.ts";
 import { z } from "astro/zod";
@@ -14,7 +14,7 @@ const content = await readFile("social-preview-artifact/social-preview.json", "u
 if (Buffer.byteLength(content) > 1_000_000) throw new Error("Preview artifact too large");
 const preview = previewSchema.parse(JSON.parse(content));
 if (preview.head !== head) throw new Error("Preview artifact SHA mismatch");
-const config = configSchema.parse(JSON.parse(await readFile("src/data/social-config.json", "utf8")));
+const config = loadSocialConfig();
 const deployment = z.object({ head: z.string(), origin: z.url() }).strict().parse(
   JSON.parse(await readFile("social-preview-deployment/deployment.json", "utf8")),
 );

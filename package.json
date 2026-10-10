@@ -39,6 +39,8 @@
     "astrojs-atom": "^4.0.99",
     "dompurify": "^3.4.16",
     "fast-xml-parser": "^5.11.2",
+    "fast-xml-validator": "^1.4.2",
+    "jsonc-parser": "^3.3.1",
     "luxon": "^3.7.2",
     "marked": "^18.1.0",
     "node-html-parser": "^9.0.4",

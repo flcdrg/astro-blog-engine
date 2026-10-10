@@ -272,6 +272,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && vars.SOCIAL_PUBLISHING_ENABLED == 'true'
     environment: production
     permissions:
+      actions: read
       contents: read
     concurrency:
       group: social-publishing

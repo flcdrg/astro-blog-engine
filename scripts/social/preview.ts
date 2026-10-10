@@ -3,7 +3,8 @@ import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { z } from "astro/zod";
 import { DateTime } from "luxon";
-import { configSchema, manifestSchema, manifestPostSchema, type SocialConfig } from "../../src/scripts/social/schema.ts";
+import { manifestSchema, manifestPostSchema, type SocialConfig } from "../../src/scripts/social/schema.ts";
+import { loadSocialConfig } from "../../src/scripts/social/load-config.ts";
 import { formatAnnouncement, isEligible } from "../../src/scripts/social/format.ts";
 
 export const previewSchema = z.object({
@@ -64,7 +65,7 @@ export async function generatePreview(base: string, head: string) {
   const manifest = manifestSchema.parse(JSON.parse(await readFile("dist/social-posts.json", "utf8")));
   const added = new Set(execFileSync("git", ["diff", "--name-only", "--diff-filter=A", "-z", `${base}...${head}`, "--", "src/posts"], { encoding: "utf8" }).split("\0"));
   const preview = previewSchema.parse({ version: 1, head, posts: manifest.posts.filter((post) => added.has(post.source)) });
-  const config = configSchema.parse(JSON.parse(await readFile("src/data/social-config.json", "utf8")));
+  const config = loadSocialConfig();
   // Render now as well so formatting failures are visible in the PR build.
   renderPreview(preview, config);
   await writeFile("social-preview.json", JSON.stringify(preview, null, 2) + "\n");

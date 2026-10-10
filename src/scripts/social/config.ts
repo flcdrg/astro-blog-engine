@@ -1,8 +1,8 @@
-import rawConfig from "../../data/social-config.json";
 import rawMappings from "../../data/social-posts.json";
-import { configSchema, mappingsSchema, type Mapping } from "./schema";
+import { mappingsSchema, type Mapping } from "./schema";
+import { loadSocialConfig } from "./load-config";
 
-export const socialConfig = configSchema.parse(rawConfig);
+export const socialConfig = loadSocialConfig();
 export const socialMappings = mappingsSchema.parse(rawMappings);
 
 export function getSocialMapping(id: string, overrides: Mapping): Mapping {

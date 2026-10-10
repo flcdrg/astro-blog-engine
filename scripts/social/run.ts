@@ -1,5 +1,6 @@
 import { appendFile, readFile, writeFile } from "node:fs/promises";
-import { configSchema, manifestSchema, mappingsSchema, stateSchema } from "../../src/scripts/social/schema.ts";
+import { manifestSchema, mappingsSchema, stateSchema } from "../../src/scripts/social/schema.ts";
+import { loadSocialConfig } from "../../src/scripts/social/load-config.ts";
 import { isEligible } from "../../src/scripts/social/format.ts";
 import { Journal } from "./github.ts";
 import { discover, discoveryCheckpointSchema } from "./discover.ts";
@@ -9,7 +10,7 @@ import { mergeProgress } from "./state.ts";
 const mode = process.argv[2] ?? "dry-run";
 if (!["dry-run", "backfill", "initialise", "publish"].includes(mode)) throw new Error("Use dry-run, backfill, initialise or publish");
 if (mode === "publish" && process.env.SOCIAL_DISCOVERY_CHECKPOINT) throw new Error("Discovery checkpoints are only for dry-run, backfill or initialise");
-const config = configSchema.parse(JSON.parse(await readFile("src/data/social-config.json", "utf8")));
+const config = loadSocialConfig();
 const manifest = manifestSchema.parse(JSON.parse(await readFile("dist/social-posts.json", "utf8")));
 if (manifest.origin !== config.productionOrigin) throw new Error("Manifest origin does not match production");
 for (const post of manifest.posts) {

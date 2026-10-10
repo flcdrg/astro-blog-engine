@@ -82,6 +82,10 @@ the production content repository, not just the engine. Set its production origi
 account identities and `enabled: true`; remove a provider object to disable that
 network. Also set the repository variable `SOCIAL_PUBLISHING_ENABLED=true`.
 
+You can use `src/data/social-config.jsonc` instead to allow comments and trailing
+commas. If both files exist, the `.json` file takes precedence. Both formats use
+the same configuration validation.
+
 Announcements run only after a successful production deployment on `main`, including
 scheduled builds. The complete `dist/social-posts.json` manifest, rather than the
 ten-entry feed, supplies eligible non-draft posts. PR builds include scheduled and
@@ -97,11 +101,11 @@ prepare an announcement or PR preview.
 
 Configure production environment secrets:
 
-| Secret | Purpose |
-| --- | --- |
-| `BLUESKY_APP_PASSWORD` | App password for the configured Bluesky account |
-| `MASTODON_ACCESS_TOKEN` | Token with `read:accounts`, `write:statuses` and `write:media` |
-| `SOCIAL_GITHUB_TOKEN` | Dedicated GitHub App installation token or narrowly scoped token with repository contents/PR write access |
+| Secret                  | Purpose                                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------- |
+| `BLUESKY_APP_PASSWORD`  | App password for the configured Bluesky account                                                           |
+| `MASTODON_ACCESS_TOKEN` | Token with `read:accounts`, `write:statuses` and `write:media`                                            |
+| `SOCIAL_GITHUB_TOKEN`   | Dedicated GitHub App installation token or narrowly scoped token with repository contents/PR write access |
 
 Prefer a GitHub App installed only on the content repository, with contents and
 pull-request write permissions. Set the repository variable `SOCIAL_APP_ID` and
