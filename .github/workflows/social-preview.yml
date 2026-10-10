@@ -1,0 +1,75 @@
+name: Comment social announcement previews
+
+on:
+  workflow_run:
+    workflows: ["Build and Deploy"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+jobs:
+  comment:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify originating pull request
+        id: verify
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            if (run.repository.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
+              throw new Error('Unexpected workflow repository');
+            }
+            const workflow = await github.rest.actions.getWorkflow({
+              ...context.repo, workflow_id: run.workflow_id
+            });
+            if (workflow.data.path !== '.github/workflows/main.yml') {
+              throw new Error('Unexpected originating workflow');
+            }
+            const candidates = run.pull_requests;
+            if (candidates.length !== 1) throw new Error('Expected one originating pull request');
+            const { data: pr } = await github.rest.pulls.get({
+              ...context.repo, pull_number: candidates[0].number
+            });
+            if (pr.state !== 'open' || pr.head.sha !== run.head_sha || pr.base.ref !== 'main') {
+              throw new Error('Stale or invalid preview run');
+            }
+            core.setOutput('number', String(pr.number));
+            core.setOutput('head', pr.head.sha);
+      - name: Checkout trusted default-branch code
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: pnpm/setup@v3
+        with:
+          runtime: node
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - name: Download data only
+        uses: actions/download-artifact@v8
+        with:
+          name: social-preview
+          path: social-preview-artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update announcement examples
+        uses: actions/download-artifact@v8
+        with:
+          name: social-preview-deployment
+          path: social-preview-deployment
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment announcement examples
+        run: node scripts/social/comment.ts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.verify.outputs.number }}
+          PR_HEAD_SHA: ${{ steps.verify.outputs.head }}
+      - name: Report comment failure
+        if: failure()
+        run: echo 'Announcement preview comment failed. No social posts or uploads were attempted.' >> "$GITHUB_STEP_SUMMARY"

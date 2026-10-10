@@ -1,0 +1,67 @@
+---
+import type { Mapping } from "../scripts/social/schema";
+
+interface Props {
+  mapping: Mapping;
+}
+
+const { mapping } = Astro.props;
+const threads = [
+  { provider: "bluesky", label: "Bluesky", url: mapping.blueskyUrl },
+  { provider: "mastodon", label: "Mastodon", url: mapping.mastodonUrl },
+].filter((thread) => thread.url);
+---
+
+{threads.length > 0 && (
+  <aside class="social-discussion" aria-labelledby="social-discussion-heading">
+    <h2 id="social-discussion-heading">Join the discussion</h2>
+    <p>Replies are loaded from public social networks when their section is visible. No account is needed to read them.</p>
+    {threads.map((thread) => (
+      <section
+        id={`social-discussion-${thread.provider}`}
+        data-social-discussion
+        data-provider={thread.provider}
+        data-bluesky-url={thread.provider === "bluesky" ? mapping.blueskyUrl : undefined}
+        data-bluesky-uri={thread.provider === "bluesky" ? mapping.blueskyUri : undefined}
+        data-mastodon-url={thread.provider === "mastodon" ? mapping.mastodonUrl : undefined}
+        aria-labelledby={`social-discussion-${thread.provider}-heading`}
+      >
+        <h3 id={`social-discussion-${thread.provider}-heading`}>{thread.label}</h3>
+        <p><a href={thread.url} target="_blank" rel="nofollow noopener noreferrer">Read or reply on {thread.label}</a></p>
+        <p data-discussion-status role="status" aria-live="polite"></p>
+        <button data-discussion-retry type="button" hidden>Retry loading {thread.label}</button>
+        <div data-discussion-content></div>
+        <noscript><p>Enable JavaScript to preview replies here, or follow the source link to read the discussion.</p></noscript>
+      </section>
+    ))}
+  </aside>
+)}
+
+<script>
+  import { initialiseDiscussions } from "../scripts/social/discussion-client";
+  initialiseDiscussions();
+  document.addEventListener("astro:page-load", initialiseDiscussions);
+</script>
+
+<style is:inline>
+  .social-discussion { --discussion-border: #a3afbd; --discussion-muted: #415169; margin-block: 2rem; }
+  .dark .social-discussion { --discussion-border: #6a7890; --discussion-muted: #c3ccdc; }
+  .social-discussion section { border-top: 1px solid var(--discussion-border); margin-top: 1rem; padding-block: 1rem; }
+  .social-discussion .social-discussion__replies { list-style: none; padding: 0; }
+  .social-discussion .social-discussion__reply { border: 1px solid var(--discussion-border); border-radius: .4rem; padding: 1rem; margin-block: 1rem; scroll-margin-top: 1rem; }
+  .social-discussion .social-discussion__reply-header { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+  .social-discussion .social-discussion__author { display: inline-flex; align-items: center; gap: .5rem; }
+  .social-discussion .social-discussion__avatar { border-radius: 50%; width: 2rem; height: 2rem; }
+  .social-discussion .social-discussion__likes { display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding: 0; list-style: none; }
+  .social-discussion .social-discussion__content { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .social-discussion .social-discussion__content p { white-space: normal; }
+  .social-discussion .social-discussion__content pre { white-space: pre-wrap; }
+  .social-discussion .social-discussion__note,
+  .social-discussion .social-discussion__parent { color: var(--discussion-muted); font-size: .9rem; }
+  .social-discussion a,
+  .social-discussion summary { overflow-wrap: anywhere; }
+  .social-discussion summary { cursor: pointer; padding-block: .5rem; }
+  .social-discussion button { font: inherit; color: inherit; background: transparent; border: 1px solid var(--discussion-border); border-radius: .25rem; padding: .5rem 1rem; cursor: pointer; }
+  .social-discussion :focus-visible { outline: 3px solid #e97637; outline-offset: 3px; }
+  .social-discussion [hidden] { display: none; }
+</style>

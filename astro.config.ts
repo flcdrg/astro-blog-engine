@@ -15,6 +15,7 @@ export default defineConfig({
   site: siteUrl,
   integrations: [
     sitemap({
+      filter: (page) => !new URL(page).pathname.startsWith("/legacy-comments/"),
       serialize(item) {
         // ensure we have no trailing slash for files
         item.url = item.url.replace(/\/$/, "");

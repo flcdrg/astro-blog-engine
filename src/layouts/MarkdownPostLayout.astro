@@ -4,6 +4,8 @@ import { getCanonicalUrl } from "../scripts/canonical";
 import { indexWordThreshold, isBelowIndexWordThreshold, isPostFrom2025Onwards, isPostNoindex } from "../scripts/indexing";
 import BaseLayout from "./BaseLayout.astro";
 import { Disqus } from "astro-disqus";
+import { socialConfig } from "../scripts/social/config";
+import type { Mapping } from "../scripts/social/schema";
 
 type PostLink = { id: string; title: string };
 
@@ -26,8 +28,13 @@ interface Props {
   previous?: PostLink | undefined;
   next?: PostLink | undefined;
   related?: PostLink[] | undefined;
+  socialMapping?: Mapping | undefined;
+  legacyCommentsUrl?: string | undefined;
 }
-const { frontmatter, wordCount, previous, next, related } = Astro.props;
+const { frontmatter, wordCount, previous, next, related, socialMapping, legacyCommentsUrl } = Astro.props;
+const SocialDiscussion = socialMapping?.blueskyUrl || socialMapping?.mastodonUrl
+  ? (await import("../components/SocialDiscussion.astro")).default
+  : undefined;
 
 const description = frontmatter.description;
 const image = frontmatter.image;
@@ -36,6 +43,7 @@ const title = frontmatter.title;
 const canonicalUrl = getCanonicalUrl(Astro.url, Astro.site);
 const canonicalUrlString = canonicalUrl?.toString();
 const shouldRenderDisqus =
+  !socialConfig.archiveReady &&
   process.env.GITHUB_REF === "refs/heads/main" &&
   process.env.GITHUB_REPOSITORY !== "flcdrg/astro-blog-engine";
 
@@ -207,6 +215,12 @@ const noindex = isPostNoindex(frontmatter, wordCount);
         </a>
       )}
     </nav>
+  )}
+
+  {SocialDiscussion && socialMapping && <SocialDiscussion mapping={socialMapping} />}
+
+  {legacyCommentsUrl && (
+    <p><a href={legacyCommentsUrl}>Read archived Disqus comments</a></p>
   )}
 
   {shouldRenderDisqus && (

@@ -7,6 +7,8 @@ import type {
   GetStaticPaths,
 } from "astro";
 import { countWords, isPostNoindex } from "../scripts/indexing";
+import { getSocialMapping } from "../scripts/social/config";
+import { legacyArchiveLink } from "../scripts/social/archive";
 import {
   getCurrentPosts,
   getPostDateMillis,
@@ -85,11 +87,16 @@ const { Content } = await render(post);
 
 // Compute word count from raw markdown body (used for noindex decision on thin content)
 const wordCount = countWords(post.body);
+const socialMapping = getSocialMapping(post.id, {
+  ...(post.data.blueskyUrl ? { blueskyUrl: post.data.blueskyUrl } : {}),
+  ...(post.data.mastodonUrl ? { mastodonUrl: post.data.mastodonUrl } : {}),
+});
+const legacyCommentsUrl = legacyArchiveLink(post.id);
 ---
 
 {
   post && (
-    <MarkdownPostLayout frontmatter={post.data} wordCount={wordCount} previous={previous} next={next} related={related}>
+    <MarkdownPostLayout frontmatter={post.data} wordCount={wordCount} previous={previous} next={next} related={related} socialMapping={socialMapping} legacyCommentsUrl={legacyCommentsUrl}>
       <Content />
     </MarkdownPostLayout>
   )
