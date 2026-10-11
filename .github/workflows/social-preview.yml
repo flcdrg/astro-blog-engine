@@ -30,7 +30,15 @@ jobs:
             if (workflow.data.path !== '.github/workflows/main.yml') {
               throw new Error('Unexpected originating workflow');
             }
-            const candidates = run.pull_requests;
+            let candidates = run.pull_requests ?? [];
+            if (candidates.length === 0) {
+              const associated = await github.paginate(github.rest.repos.listPullRequestsAssociatedWithCommit, {
+                ...context.repo, commit_sha: run.head_sha, per_page: 100
+              });
+              candidates = associated.filter(pr =>
+                pr.state === 'open' && pr.head.sha === run.head_sha && pr.base.ref === 'main'
+              );
+            }
             if (candidates.length !== 1) throw new Error('Expected one originating pull request');
             const { data: pr } = await github.rest.pulls.get({
               ...context.repo, pull_number: candidates[0].number
