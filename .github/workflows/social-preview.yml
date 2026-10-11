@@ -21,6 +21,7 @@ jobs:
         with:
           script: |
             const run = context.payload.workflow_run;
+            core.setOutput('eligible', 'false');
             if (run.repository.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
               throw new Error('Unexpected workflow repository');
             }
@@ -39,26 +40,37 @@ jobs:
                 pr.state === 'open' && pr.head.sha === run.head_sha && pr.base.ref === 'main'
               );
             }
+            if (candidates.length === 0) {
+              core.info('Skipping preview: no open pull request matches the completed build head.');
+              return;
+            }
             if (candidates.length !== 1) throw new Error('Expected one originating pull request');
             const { data: pr } = await github.rest.pulls.get({
               ...context.repo, pull_number: candidates[0].number
             });
-            if (pr.state !== 'open' || pr.head.sha !== run.head_sha || pr.base.ref !== 'main') {
-              throw new Error('Stale or invalid preview run');
+            if (pr.base.ref !== 'main') throw new Error('Invalid preview base branch');
+            if (pr.state !== 'open' || pr.head.sha !== run.head_sha) {
+              core.info('Skipping preview: pull request is closed or its head has changed.');
+              return;
             }
+            core.setOutput('eligible', 'true');
             core.setOutput('number', String(pr.number));
             core.setOutput('head', pr.head.sha);
       - name: Checkout trusted default-branch code
+        if: steps.verify.outputs.eligible == 'true'
         uses: actions/checkout@v7
         with:
           ref: main
           persist-credentials: false
       - uses: pnpm/setup@v3
+        if: steps.verify.outputs.eligible == 'true'
         with:
           runtime: node
           cache: true
       - run: pnpm install --frozen-lockfile
+        if: steps.verify.outputs.eligible == 'true'
       - name: Download data only
+        if: steps.verify.outputs.eligible == 'true'
         uses: actions/download-artifact@v8
         with:
           name: social-preview
@@ -66,6 +78,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update announcement examples
+        if: steps.verify.outputs.eligible == 'true'
         uses: actions/download-artifact@v8
         with:
           name: social-preview-deployment
@@ -73,6 +86,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Comment announcement examples
+        if: steps.verify.outputs.eligible == 'true'
         run: node scripts/social/comment.ts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
