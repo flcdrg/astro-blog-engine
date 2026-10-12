@@ -135,79 +135,74 @@ jobs:
           path: social-preview.json
           retention-days: 2
 
-      # begin-snippet: verify-cli-use-with-dotnet-tool
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: 10.x
-
-      - name: Install Verify.Cli
-        run: dotnet tool install --global Verify.Cli
-
       - name: Verify Feed
         # Skip feed verification in blog repository as it will change frequently
         if: github.repository == 'flcdrg/astro-blog-engine'
-        id: verify_feed
+        uses: flcdrg/verify-cli-action@v1
+        with:
+          file: dist/feed.xml
+          verified-directory: verified
+          working-directory: .
+          scrub-inline-datetime: "yyyy-MM-ddTHH:mm:ss.fffZ"
+
+      - name: Fix sitemap XML formatting
+        if: github.repository == 'flcdrg/astro-blog-engine'
+        shell: pwsh
         run: |
-          verify --file dist/feed.xml --verified-dir verified --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
-      # end-snippet
-      # begin-snippet: verify-cli-diff-in-ci
-      - name: Diff files if error
-        if: failure() && steps.verify_feed.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
-        run: |
-          diff -u dist/feed.xml verified/feed.xml.verified.xml
-      # end-snippet
+          ([xml](Get-Content ./dist/sitemap-0.xml)).Save("./dist/sitemap-0.xml")
+
       - name: Verify sitemap
-        id: verify_sitemap
         # Skip sitemap verification in blog repository as it will be different
         if: github.repository == 'flcdrg/astro-blog-engine'
-        run: |
-          pnpm verify:sitemap
+        uses: flcdrg/verify-cli-action@v1
+        with:
+          file: dist/sitemap-0.xml
+          verified-directory: verified
+          scrub-inline-datetime: "yyyy-MM-ddTHH:mm:ss.fffZ"
+          working-directory: .
 
-      - name: Diff sitemap if error
-        if: failure() && steps.verify_sitemap.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
-        run: |
-          diff -u verified/sitemap-0.xml.verified.xml verified/sitemap-0.xml.received.xml
-
-      # begin-snippet: verify-cli-use-with-docker
       - name: Verify post
-        id: verify_post
         if: github.event_name == 'pull_request' || github.repository == 'flcdrg/astro-blog-engine'
-        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/2025/07/azure-pipeline-template-expression.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
-      # end-snippet
-
-      - name: Diff post if error
-        if: failure() && steps.verify_post.outcome == 'failure'
-        run: |
-          ls -al verified/
-          echo ""
-          diff -u verified/azure-pipeline-template-expression.html.verified.html verified/azure-pipeline-template-expression.html.received.html
+        uses: flcdrg/verify-cli-action@v1
+        with:
+          file: dist/2025/07/azure-pipeline-template-expression.html
+          verified-directory: verified
+          working-directory: .
+          scrub-inline-pattern: |
+            (?<prefix>")/_astro/[^"]+(?<suffix>")
+            (?<prefix>title=")[^"]+(?<suffix>")
+            (?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")
+          scrub-inline-remove: ' data-image-component="true"'
+          verbosity: detailed
 
       # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
       - name: Verify home
         if: github.repository == 'flcdrg/astro-blog-engine'
-        id: verify_home
-        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/index.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
-      # end-snippet
-
-      - name: Diff home if error
-        if: failure() && steps.verify_home.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
-        run: |
-          ls -al verified/
-          echo ""
-          diff -u verified/index.html.received.html verified/index.html.verified.html
+        uses: flcdrg/verify-cli-action@v1
+        with:
+          file: dist/index.html
+          verified-directory: verified
+          scrub-inline-pattern: |
+            (?<prefix>")/_astro/[^"]+(?<suffix>")
+            (?<prefix>title=")[^"]+(?<suffix>")
+            (?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")
+          working-directory: .
+          scrub-inline-remove: ' data-image-component="true"'
+          verbosity: detailed
 
       - name: Verify tags
-        id: verify_tags
         if: github.repository == 'flcdrg/astro-blog-engine'
-        run: docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/dist/tags.html --verified-dir /tmp/verified --scrub-inline-pattern '(?<prefix>")/_astro/[^"]+(?<suffix>")' --scrub-inline-pattern '(?<prefix>title=")[^"]+(?<suffix>")' --scrub-inline-remove ' data-image-component="true"' --scrub-inline-pattern '(?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")' --verbosity detailed
-
-      - name: Diff tags if error
-        if: failure() && steps.verify_tags.outcome == 'failure' && github.repository == 'flcdrg/astro-blog-engine'
-        run: |
-          ls -al verified/
-          echo ""
-          diff -u verified/tags.html.verified.html verified/tags.html.received.html
+        uses: flcdrg/verify-cli-action@v1
+        with:
+          file: dist/tags.html
+          verified-directory: verified
+          scrub-inline-pattern: |
+            (?<prefix>")/_astro/[^"]+(?<suffix>")
+            (?<prefix>title=")[^"]+(?<suffix>")
+            (?<prefix>meta name="generator" content="Astro v)[\d\.]+(?<suffix>")
+          working-directory: .
+          scrub-inline-remove: ' data-image-component="true"'
+          verbosity: detailed
 
       # dist as artifact
       - name: Upload dist as artifact
