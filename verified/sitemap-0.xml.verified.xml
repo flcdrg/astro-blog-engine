@@ -161,8 +161,12 @@
     <lastmod>DateTime_36</lastmod>
   </url>
   <url>
-    <loc>https://david.gardiner.net.au/about</loc>
+    <loc>https://david.gardiner.net.au/2026/10/test-post</loc>
     <lastmod>DateTime_37</lastmod>
+  </url>
+  <url>
+    <loc>https://david.gardiner.net.au/about</loc>
+    <lastmod>DateTime_38</lastmod>
   </url>
   <url>
     <loc>https://david.gardiner.net.au/archive</loc>
@@ -170,6 +174,6 @@
   </url>
   <url>
     <loc>https://david.gardiner.net.au/speaking</loc>
-    <lastmod>DateTime_38</lastmod>
+    <lastmod>DateTime_39</lastmod>
   </url>
 </urlset>
