@@ -11,7 +11,7 @@ export async function GET() {
     if (!import.meta.env.DEV && (post.data.draft || DateTime.fromISO(post.data.date, { zone: "Australia/Adelaide" }) > DateTime.now())) continue;
     if (!post.filePath) throw new Error(`Missing source path for ${post.id}`);
     const image = post.data.image
-      ? await getImage({ src: post.data.image, format: "jpeg" })
+      ? await getImage({ src: post.data.image, format: post.data.image.format === "svg" ? "svg" : "jpeg" })
       : undefined;
     posts.push({
       id: post.id,
