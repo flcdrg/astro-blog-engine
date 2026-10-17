@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build --timings",
     "test": "vitest run",
     "social:dry-run": "node scripts/social/run.ts dry-run",
     "social:preview": "node scripts/social/preview.ts",
