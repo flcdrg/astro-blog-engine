@@ -14,11 +14,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      linkCache:
-        description: "Enable Link Checker cache restore/save"
-        required: false
-        default: true
-        type: boolean
       socialMode:
         description: "Social publishing operation (requires opt-in)"
         required: false
@@ -50,10 +45,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Pnpm Setup
-        uses: pnpm/setup@v3
+        uses: pnpm/setup@v3.1.1
         with:
           runtime: node
 
@@ -66,10 +61,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Pnpm Setup
-        uses: pnpm/setup@v3
+        uses: pnpm/setup@v3.1.1
         with:
           runtime: node
           cache: true
@@ -91,12 +86,12 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0 # Fetch all history for lastMod
 
       - name: Setup dist cache
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: dist
           key: ${{ runner.os }}-dist-${{ hashFiles('pnpm-lock.yaml') }}
@@ -105,7 +100,7 @@ jobs:
             ${{ runner.os }}-dist
 
       - name: Pnpm Setup
-        uses: pnpm/setup@v3
+        uses: pnpm/setup@v3.1.1
         with:
           runtime: node
           cache: true
@@ -129,7 +124,7 @@ jobs:
 
       - name: Upload social announcement previews
         if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: social-preview
           path: social-preview.json
@@ -138,7 +133,7 @@ jobs:
       - name: Verify Feed
         # Skip feed verification in blog repository as it will change frequently
         if: github.repository == 'flcdrg/astro-blog-engine'
-        uses: flcdrg/verify-cli-action@v1
+        uses: flcdrg/verify-cli-action@v1.2.0
         with:
           file: dist/feed.xml
           verified-directory: verified
@@ -154,7 +149,7 @@ jobs:
       - name: Verify sitemap
         # Skip sitemap verification in blog repository as it will be different
         if: github.repository == 'flcdrg/astro-blog-engine'
-        uses: flcdrg/verify-cli-action@v1
+        uses: flcdrg/verify-cli-action@v1.2.0
         with:
           file: dist/sitemap-0.xml
           verified-directory: verified
@@ -163,7 +158,7 @@ jobs:
 
       - name: Verify post
         if: github.event_name == 'pull_request' || github.repository == 'flcdrg/astro-blog-engine'
-        uses: flcdrg/verify-cli-action@v1
+        uses: flcdrg/verify-cli-action@v1.2.0
         with:
           file: dist/2025/07/azure-pipeline-template-expression.html
           verified-directory: verified
@@ -178,7 +173,7 @@ jobs:
       # Only do this for 'flcdrg/astro-blog-engine' (as the content there is static)
       - name: Verify home
         if: github.repository == 'flcdrg/astro-blog-engine'
-        uses: flcdrg/verify-cli-action@v1
+        uses: flcdrg/verify-cli-action@v1.2.0
         with:
           file: dist/index.html
           verified-directory: verified
@@ -192,7 +187,7 @@ jobs:
 
       - name: Verify tags
         if: github.repository == 'flcdrg/astro-blog-engine'
-        uses: flcdrg/verify-cli-action@v1
+        uses: flcdrg/verify-cli-action@v1.2.0
         with:
           file: dist/tags.html
           verified-directory: verified
@@ -206,7 +201,7 @@ jobs:
 
       # dist as artifact
       - name: Upload dist as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: dist
           path: dist
@@ -214,7 +209,7 @@ jobs:
           retention-days: 2
 
       - name: Upload wrangler.jsonc
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: wrangler.jsonc
           path: wrangler.jsonc
@@ -239,14 +234,14 @@ jobs:
 
     steps:
       - name: Pnpm Setup
-        uses: pnpm/setup@v3
+        uses: pnpm/setup@v3.1.1
         with:
           version: 12
           runtime: node@24
           install: false
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: dist
           path: dist
@@ -258,7 +253,7 @@ jobs:
         run: echo ${{ secrets.INDEXNOW_KEY }} > dist/${{ secrets.INDEXNOW_KEY }}.txt
 
       - name: Download wrangler.jsonc
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: wrangler.jsonc
           path: .
@@ -285,21 +280,21 @@ jobs:
       group: social-publishing
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: pnpm/setup@v3
+      - uses: pnpm/setup@v3.1.1
         with:
           runtime: node
           cache: true
       - run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: dist
           path: dist
       - name: Verify discovery checkpoint run
         if: inputs.socialResumeRun != ''
-        uses: actions/github-script@v9
+        uses: actions/github-script@v9.0.0
         env:
           RESUME_RUN: ${{ inputs.socialResumeRun }}
         with:
@@ -316,7 +311,7 @@ jobs:
             }
       - name: Download discovery checkpoint data
         if: inputs.socialResumeRun != ''
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: social-discovery-checkpoint
           path: social-checkpoint-artifact
@@ -325,7 +320,7 @@ jobs:
       - name: Create repository-scoped automation token
         if: vars.SOCIAL_APP_ID != ''
         id: social-token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@v3.3.0
         with:
           app-id: ${{ vars.SOCIAL_APP_ID }}
           private-key: ${{ secrets.SOCIAL_APP_PRIVATE_KEY }}
@@ -343,21 +338,21 @@ jobs:
           MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
       - name: Upload backfill report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: social-backfill-report
           path: social-backfill-report.json
           if-no-files-found: ignore
       - name: Upload publishing report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: social-publishing-report
           path: social-publishing-report.json
           if-no-files-found: ignore
       - name: Upload discovery checkpoint
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: social-discovery-checkpoint
           path: social-discovery-checkpoint.json
@@ -373,7 +368,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
     steps:
       - name: indexnow-action
-        uses: bojieyang/indexnow-action@v3
+        uses: bojieyang/indexnow-action@v3.0.0
         with:
           sitemap-location: "https://david.gardiner.net.au/sitemap-0.xml"
           limit: 50
@@ -397,15 +392,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Pnpm Setup
-        uses: pnpm/setup@v3
+        uses: pnpm/setup@v3.1.1
         with:
           runtime: node
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: dist
           path: dist
@@ -431,7 +426,7 @@ jobs:
           PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
 
       - name: Upload preview attachment origin
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: social-preview-deployment
           path: deployment.json
@@ -448,7 +443,7 @@ jobs:
           (Get-Content httptraces.txt)
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 10.x
 
@@ -466,7 +461,7 @@ jobs:
 
       - name: Upload scripts as artifact
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: verified-http-traces
           path: verified
@@ -516,174 +511,3 @@ jobs:
 
           $response = Invoke-WebRequest -Method Post -Uri "https://pubsubhubbub.appspot.com/" -Body @{ "hub.mode" = "publish"; "hub.url" = $url }
           Write-Host "Response: $($response.StatusCode)"
-
-  lighthouse:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Lighthouse Report
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Download dist artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: dist
-          path: dist
-
-      - name: Pnpm Setup
-        uses: pnpm/setup@v3
-        with:
-          runtime: node
-
-      - name: Extract latest post URL from feed
-        id: extract-url
-        run: |
-          [xml]$feedXml = Get-Content "dist/feed.xml"
-          $firstEntry = $feedXml.feed.entry[0]
-          $originalUrl = $firstEntry.link | Where-Object { $_.rel -eq "alternate" -and $_.type -eq "text/html" } | Select-Object -First 1 | ForEach-Object { $_.href }
-          $localhostUrl = $originalUrl -replace "https://[^/]+", "http://localhost"
-
-          # append .html to the URL if it doesn't already end with .html
-          if ($localhostUrl -notlike "*.html") {
-            $localhostUrl += ".html"
-          }
-          echo "latest-url=$localhostUrl" >> $env:GITHUB_OUTPUT
-          echo "Latest URL: $localhostUrl"
-        shell: pwsh
-
-      - name: run Lighthouse CI
-        run: |
-          # Robots.txt defaults to disallow, which is not what we want for the lighthouse test
-          rm dist/robots.txt
-
-          pnpm lhci autorun --collect.url="${{ steps.extract-url.outputs.latest-url }}" --collect.url="http://localhost/index.html" --collect.url="http://localhost/speaking.html" --collect.url="http://localhost/2025.html"
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-      - name: Lighthouse Summary
-        run: |
-          # Generate a summary of the Lighthouse report
-          $json = Get-Content .lighthouseci/links.json | ConvertFrom-Json
-
-          $markDown = "## Lighthouse Report Summary`n`n"
-          $markDown += "| URL | Performance | Accessibility | Best Practices | SEO | PWA |`n"
-          $markDown += "| --- | :---: | :---: | :---: | :---: | :---: |`n"
-
-          foreach ($property in $json.PSObject.Properties) {
-            $url = $property.Name
-            $reportUrl = $property.Value
-            
-            # Find all related lhr files for this URL
-            $lhrFiles = Get-ChildItem .lighthouseci/lhr-*.json | Where-Object { 
-              $content = Get-Content $_ | ConvertFrom-Json
-              $content.requestedUrl -eq $url -or $content.finalUrl -eq $url
-            }
-            
-            # Get the latest file based on fetchTime
-            $latestLhrFile = $lhrFiles | ForEach-Object {
-              $content = Get-Content $_ | ConvertFrom-Json
-              [PSCustomObject]@{
-                File = $_
-                FetchTime = $content.fetchTime
-              }
-            } | Sort-Object -Property FetchTime -Descending | Select-Object -First 1
-            
-            if ($latestLhrFile) {
-              $lhrContent = Get-Content $latestLhrFile.File | ConvertFrom-Json
-              
-              # Calculate scores - multiply by 100 and round to show as percentages
-              $performance = [Math]::Round($lhrContent.categories.performance.score * 100)
-              $accessibility = [Math]::Round($lhrContent.categories.accessibility.score * 100)
-              $bestPractices = [Math]::Round($lhrContent.categories.'best-practices'.score * 100)
-              $seo = [Math]::Round($lhrContent.categories.seo.score * 100)
-              $pwa = if ($lhrContent.categories.pwa.score) { [Math]::Round($lhrContent.categories.pwa.score * 100) } else { "N/A" }
-              
-              # Add emoji indicators based on score
-              $getEmoji = {
-                param($score)
-                if ($score -eq "N/A") { return "N/A" }
-                if ($score -ge 90) { return "✅ $score%" }
-                elseif ($score -ge 50) { return "⚠️ $score%" }
-                else { return "❌ $score%" }
-              }
-              
-              # Display scores with emojis
-              $markDown += "| [$url]($reportUrl) | $(&$getEmoji $performance) | $(&$getEmoji $accessibility) | $(&$getEmoji $bestPractices) | $(&$getEmoji $seo) | $(&$getEmoji $pwa) |`n"
-            }
-            else {
-              $markDown += "| [$url]($reportUrl) | No data | No data | No data | No data | No data |`n"
-            }
-          }
-
-          echo $markDown >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
-
-      - name: Lighthouse artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: lighthouse-results
-          path: .lighthouseci
-          retention-days: 5
-
-  linkChecker:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Link Checker
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      # Cache lychee results (e.g. to avoid hitting rate limits)
-      - name: Restore lychee cache
-        id: restore-cache
-        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.linkCache == 'true' }}
-        uses: actions/cache/restore@v6
-        with:
-          path: .lycheecache
-          key: cache-lychee-${{ github.sha }}
-          restore-keys: cache-lychee-
-
-      - name: Download dist artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: dist
-          path: dist
-
-      - name: Link Checker
-        id: lychee
-        uses: lycheeverse/lychee-action@v2.9.0
-        with:
-          fail: false
-          output: ${{ github.workspace }}/output.json
-          format: json
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          args: --root-dir "$(pwd)/dist/" 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --max-concurrency 20 --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0" --fallback-extensions html -v --cache-exclude-status '429' --insecure --accept '200..=204,403,429'
-
-      - name: Report results
-        run: |
-          ./Generate-LycheeReport.ps1 -InputJsonFile output.json -OutputMarkdownFile output.md
-
-          ls -al
-
-          cat output.md
-
-          cat output.md >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
-
-      - name: Publish results
-        uses: actions/upload-artifact@v7
-        with:
-          name: link-checker-results
-          path: output.*
-          retention-days: 5
-
-      - name: Save lychee cache
-        uses: actions/cache/save@v6
-        if: ${{ always() && (github.event_name != 'workflow_dispatch' || github.event.inputs.linkCache == 'true') }}
-        with:
-          path: .lycheecache
-          key: ${{ steps.restore-cache.outputs.cache-primary-key }}

@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Verify originating pull request
         id: verify
-        uses: actions/github-script@v9
+        uses: actions/github-script@v9.0.0
         with:
           script: |
             const run = context.payload.workflow_run;
@@ -58,11 +58,11 @@ jobs:
             core.setOutput('head', pr.head.sha);
       - name: Checkout trusted default-branch code
         if: steps.verify.outputs.eligible == 'true'
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           ref: main
           persist-credentials: false
-      - uses: pnpm/setup@v3
+      - uses: pnpm/setup@v3.1.1
         if: steps.verify.outputs.eligible == 'true'
         with:
           runtime: node
@@ -71,7 +71,7 @@ jobs:
         if: steps.verify.outputs.eligible == 'true'
       - name: Download data only
         if: steps.verify.outputs.eligible == 'true'
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: social-preview
           path: social-preview-artifact
@@ -79,7 +79,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update announcement examples
         if: steps.verify.outputs.eligible == 'true'
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: social-preview-deployment
           path: social-preview-deployment

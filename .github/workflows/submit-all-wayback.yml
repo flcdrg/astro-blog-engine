@@ -18,7 +18,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v27
         with:
           name: link-checker-results
-          workflow: main.yml
+          workflow: post-build-checks.yml
           branch: main
           path: ./artifacts
           github_token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}

@@ -1,0 +1,191 @@
+name: Post-build Checks
+
+on:
+  workflow_run:
+    workflows: ["Build and Deploy"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  lighthouse:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    name: Lighthouse Report
+
+    steps:
+      - name: Checkout trusted workflow code
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: dist
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pnpm Setup
+        uses: pnpm/setup@v3.1.1
+        with:
+          runtime: node
+
+      - name: Extract latest post URL from feed
+        id: extract-url
+        run: |
+          [xml]$feedXml = Get-Content "dist/feed.xml"
+          $firstEntry = $feedXml.feed.entry[0]
+          $originalUrl = $firstEntry.link | Where-Object { $_.rel -eq "alternate" -and $_.type -eq "text/html" } | Select-Object -First 1 | ForEach-Object { $_.href }
+          $localhostUrl = $originalUrl -replace "https://[^/]+", "http://localhost"
+
+          # append .html to the URL if it doesn't already end with .html
+          if ($localhostUrl -notlike "*.html") {
+            $localhostUrl += ".html"
+          }
+          echo "latest-url=$localhostUrl" >> $env:GITHUB_OUTPUT
+          Write-Host "Latest URL: $localhostUrl"
+        shell: pwsh
+
+      - name: Run Lighthouse CI
+        run: |
+          # Robots.txt defaults to disallow, which is not what we want for the lighthouse test
+          rm dist/robots.txt
+
+          pnpm lhci autorun --collect.url="${{ steps.extract-url.outputs.latest-url }}" --collect.url="http://localhost/index.html" --collect.url="http://localhost/speaking.html" --collect.url="http://localhost/2025.html"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ github.event.workflow_run.event != 'pull_request' && secrets.LHCI_GITHUB_APP_TOKEN || '' }}
+
+      - name: Lighthouse Summary
+        run: |
+          # Generate a summary of the Lighthouse report
+          $json = Get-Content .lighthouseci/links.json | ConvertFrom-Json
+
+          $markDown = "## Lighthouse Report Summary`n`n"
+          $markDown += "| URL | Performance | Accessibility | Best Practices | SEO | PWA |`n"
+          $markDown += "| --- | :---: | :---: | :---: | :---: | :---: |`n"
+
+          foreach ($property in $json.PSObject.Properties) {
+            $url = $property.Name
+            $reportUrl = $property.Value
+            
+            # Find all related lhr files for this URL
+            $lhrFiles = Get-ChildItem .lighthouseci/lhr-*.json | Where-Object { 
+              $content = Get-Content $_ | ConvertFrom-Json
+              $content.requestedUrl -eq $url -or $content.finalUrl -eq $url
+            }
+            
+            # Get the latest file based on fetchTime
+            $latestLhrFile = $lhrFiles | ForEach-Object {
+              $content = Get-Content $_ | ConvertFrom-Json
+              [PSCustomObject]@{
+                File = $_
+                FetchTime = $content.fetchTime
+              }
+            } | Sort-Object -Property FetchTime -Descending | Select-Object -First 1
+            
+            if ($latestLhrFile) {
+              $lhrContent = Get-Content $latestLhrFile.File | ConvertFrom-Json
+              
+              # Calculate scores - multiply by 100 and round to show as percentages
+              $performance = [Math]::Round($lhrContent.categories.performance.score * 100)
+              $accessibility = [Math]::Round($lhrContent.categories.accessibility.score * 100)
+              $bestPractices = [Math]::Round($lhrContent.categories.'best-practices'.score * 100)
+              $seo = [Math]::Round($lhrContent.categories.seo.score * 100)
+              $pwa = if ($lhrContent.categories.pwa.score) { [Math]::Round($lhrContent.categories.pwa.score * 100) } else { "N/A" }
+              
+              # Add emoji indicators based on score
+              $getEmoji = {
+                param($score)
+                if ($score -eq "N/A") { return "N/A" }
+                if ($score -ge 90) { return "✅ $score%" }
+                elseif ($score -ge 50) { return "⚠️ $score%" }
+                else { return "❌ $score%" }
+              }
+              
+              # Display scores with emojis
+              $markDown += "| [$url]($reportUrl) | $(&$getEmoji $performance) | $(&$getEmoji $accessibility) | $(&$getEmoji $bestPractices) | $(&$getEmoji $seo) | $(&$getEmoji $pwa) |`n"
+            }
+            else {
+              $markDown += "| [$url]($reportUrl) | No data | No data | No data | No data | No data |`n"
+            }
+          }
+
+          echo $markDown >> $env:GITHUB_STEP_SUMMARY
+        shell: pwsh
+
+      - name: Lighthouse artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+          retention-days: 5
+
+  linkChecker:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    name: Link Checker
+
+    steps:
+      - name: Checkout trusted workflow code
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+
+      # Cache lychee results (e.g. to avoid hitting rate limits)
+      - name: Restore lychee cache
+        id: restore-cache
+        uses: actions/cache/restore@v6.1.0
+        with:
+          path: .lycheecache
+          key: cache-lychee-${{ github.event.workflow_run.head_sha }}
+          restore-keys: cache-lychee-
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: dist
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Link Checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          fail: false
+          output: ${{ github.workspace }}/output.json
+          format: json
+          token: ${{ github.event.workflow_run.event != 'pull_request' && secrets.CUSTOM_GITHUB_TOKEN || '' }}
+          args: --root-dir "$(pwd)/dist/" 'dist/**/*.html' --cache --max-cache-age 7d --max-retries 0 --max-concurrency 20 --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0" --fallback-extensions html -v --cache-exclude-status '429' --insecure --accept '200..=204,403,429'
+
+      - name: Report results
+        run: |
+          ./Generate-LycheeReport.ps1 -InputJsonFile output.json -OutputMarkdownFile output.md
+
+          ls -al
+
+          cat output.md
+
+          cat output.md >> $env:GITHUB_STEP_SUMMARY
+        shell: pwsh
+
+      - name: Publish results
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: link-checker-results
+          path: output.*
+          retention-days: 5
+
+      - name: Save lychee cache
+        if: always()
+        uses: actions/cache/save@v6.1.0
+        with:
+          path: .lycheecache
+          key: ${{ steps.restore-cache.outputs.cache-primary-key }}
