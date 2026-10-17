@@ -13,6 +13,7 @@
   </author>
   <link href="https://david.gardiner.net.au/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://flcdrg.superfeedr.com" rel="hub"/>
+  <link href="https://pubsubhubbub.appspot.com/" rel="hub"/>
   <link href="https://david.gardiner.net.au/" rel="alternate" type="text/html" hreflang="en-AU"/>
   <category term=".NET"/>
   <category term="Software Development"/>

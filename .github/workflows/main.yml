@@ -502,6 +502,21 @@ jobs:
           $response = Invoke-WebRequest -Method Post -Uri "https://flcdrg.superfeedr.com" -Body @{ "hub.mode" = "publish"; "hub.url" = $url }
           Write-Host "Response: $($response.StatusCode)"
 
+  ping_pubsubhubbub:
+    runs-on: ubuntu-latest
+    needs: publish_to_cloudflare
+    name: Ping PubSubHubbub
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository != 'flcdrg/astro-blog-engine'
+
+    steps:
+      - shell: pwsh
+        run: |
+          $url = "https://david.gardiner.net.au/feed.xml"
+          Write-Host "Pinging PubSubHubbub with URL: $url"
+
+          $response = Invoke-WebRequest -Method Post -Uri "https://pubsubhubbub.appspot.com/" -Body @{ "hub.mode" = "publish"; "hub.url" = $url }
+          Write-Host "Response: $($response.StatusCode)"
+
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
