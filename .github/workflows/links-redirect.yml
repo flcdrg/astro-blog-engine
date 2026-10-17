@@ -14,13 +14,13 @@ jobs:
     name: Generate Redirect Links PR
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
       - name: Download Latest Artifact
         uses: dawidd6/action-download-artifact@v27
         with:
           name: link-checker-results
-          workflow: main.yml
+          workflow: post-build-checks.yml
           branch: main
           path: ./artifacts
           github_token: ${{ secrets.CREATE_PULLREQUEST_ACCESS_TOKEN }}
@@ -98,7 +98,7 @@ jobs:
           "should_continue=$hasRedirectMap" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         shell: pwsh
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
         with:
           name: redirect-replacements
@@ -107,7 +107,7 @@ jobs:
 
       - name: Replacements
         if: ${{ steps.build_replacements.outputs.should_continue == 'True' }}
-        uses: flcdrg/replace-multiple-action@v4
+        uses: flcdrg/replace-multiple-action@v4.1.361
         with:
           files: "src/posts/**/*.md"
           findJsonFile: ./artifacts/replacements.json
