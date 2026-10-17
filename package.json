@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build --timings",
     "test": "vitest run",
     "social:dry-run": "node scripts/social/run.ts dry-run",
     "social:preview": "node scripts/social/preview.ts",
@@ -36,24 +36,24 @@
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@types/luxon": "^3.7.6",
-    "astro": "^7.3.8",
+    "astro": "^7.4.0",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.123",
-    "dompurify": "^3.4.16",
+    "dompurify": "^3.4.17",
     "fast-xml-parser": "^5.11.2",
     "fast-xml-validator": "^1.4.2",
     "jsonc-parser": "^3.3.1",
     "luxon": "^3.7.2",
-    "marked": "^18.1.0",
+    "marked": "^18.1.1",
     "node-html-parser": "^9.0.4",
-    "sanitize-html": "^2.18.0",
+    "sanitize-html": "^2.18.1",
     "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=24 <25"
   },
-  "packageManager": "pnpm@12.9.0+sha512.8f64efa0b792986ca98ae568791bcd7722807e274c4f0c1d9853c62116495c584119db98762a2a5343b1684d361b9ae26fdd16d551666d7635346d3fae830ddd",
+  "packageManager": "pnpm@12.14.0+sha512.c18ba6d87993d3d164cb5e8948f32b2c06ee854487e06cd8d86781342fb3e5bb4634367034711e86802baa9c37bea906ce1929ad08d70884c97d801df13389a6",
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
     "@types/sanitize-html": "^2.16.2",
@@ -62,7 +62,7 @@
     "markdownlint-cli2": "^0.23.3",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
-    "vitest": "^5.0.4",
-    "wrangler": "^4.150.0"
+    "vitest": "^5.0.5",
+    "wrangler": "^4.151.0"
   }
 }
