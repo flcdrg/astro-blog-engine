@@ -9,11 +9,13 @@ const state: PublishingState = { version: 1, baseline: ["2026/10/post"], operati
 let calls: Array<{ args: string[]; input?: Record<string, unknown> }>;
 let nonMapping: boolean;
 let existing: boolean;
+let autoMergeEnabled: boolean;
 
 beforeEach(() => {
   calls = [];
   nonMapping = false;
   existing = false;
+  autoMergeEnabled = false;
   mocks.exec.mockImplementation((_file: string, args: string[], options: { input?: string }) => {
     const input = options.input ? JSON.parse(options.input) as Record<string, unknown> : undefined;
     calls.push({ args, ...(input ? { input } : {}) });
@@ -25,7 +27,7 @@ beforeEach(() => {
     if (path.endsWith("/git/trees")) return JSON.stringify({ sha: "newtree" });
     if (path.endsWith("/git/commits")) return JSON.stringify({ sha: "newcommit" });
     if (path.includes("/compare/")) return JSON.stringify({ files: [{ filename: nonMapping ? "README.md" : "src/data/social-posts.json" }] });
-    if (path.includes("/pulls?")) return JSON.stringify(existing ? [{ number: 1, draft: false, body: "", user: { login: "bot" } }] : []);
+    if (path.includes("/pulls?")) return JSON.stringify(existing ? [{ number: 1, draft: false, auto_merge: autoMergeEnabled ? { enabled_by: { login: "bot" } } : null, body: "", user: { login: "bot" } }] : []);
     if (path.endsWith("/pulls")) return JSON.stringify({ number: 1, draft: false, body: input?.body, user: { login: "bot" } });
     if (path.includes("/rules/branches/")) return JSON.stringify([{ type: "required_status_checks", parameters: { required_status_checks: [{ context: "build" }] } }]);
     if (path.includes("/contents/")) return JSON.stringify({ content: Buffer.from("{}").toString("base64") });
@@ -59,6 +61,7 @@ describe("durable mapping journal", () => {
   });
   it("suspends auto-merge before persisting pending progress", async () => {
     existing = true;
+    autoMergeEnabled = true;
     const pending: PublishingState = { ...state, operations: { "2026/10/post": { mastodon: { status: "pending", startedAt: "2026-10-01T00:00:00Z" } } } };
     const journal = new Journal("owner/repo", sha);
     await journal.persist({}, pending);
@@ -66,6 +69,14 @@ describe("durable mapping journal", () => {
     const tree = calls.findIndex((call) => call.args[1]?.endsWith("/git/trees"));
     expect(hold).toBeGreaterThanOrEqual(0);
     expect(hold).toBeLessThan(tree);
+  });
+  it("does not disable auto-merge when it is already disabled", async () => {
+    existing = true;
+    const pending: PublishingState = { ...state, operations: { "2026/10/post": { mastodon: { status: "pending", startedAt: "2026-10-01T00:00:00Z" } } } };
+    const journal = new Journal("owner/repo", sha);
+    await journal.persist({}, pending);
+    expect(calls.some((call) => call.args.includes("--disable-auto"))).toBe(false);
+    expect(calls.some((call) => call.args[1]?.endsWith("/git/trees"))).toBe(true);
   });
   it("rejects PRs changing code even when auto-merge is requested", async () => {
     nonMapping = true;

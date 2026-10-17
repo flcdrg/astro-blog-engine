@@ -45,9 +45,11 @@ export class Journal {
     if (mainRef.object.sha !== this.main) throw new Error("Main changed after deployment; rerun using its current successful deployment");
     const incomplete = Object.values(state.operations).some((providers) => Object.values(providers).some((op) => op.status !== "complete"));
     if (incomplete || reviewRequired) {
-      const open = gh<Array<{ number: number; draft: boolean }>>(`repos/${this.repo}/pulls?state=open&head=${this.repo.split("/")[0]}:${branch}&base=main`);
+      const open = gh<Array<{ number: number; draft: boolean; auto_merge: unknown | null }>>(`repos/${this.repo}/pulls?state=open&head=${this.repo.split("/")[0]}:${branch}&base=main`);
       for (const pr of open) {
-        execFileSync("gh", ["pr", "merge", String(pr.number), "--repo", this.repo, "--disable-auto"], { stdio: "inherit" });
+        if (pr.auto_merge) {
+          execFileSync("gh", ["pr", "merge", String(pr.number), "--repo", this.repo, "--disable-auto"], { stdio: "inherit" });
+        }
         if (!pr.draft) execFileSync("gh", ["pr", "ready", String(pr.number), "--repo", this.repo, "--undo"], { stdio: "inherit" });
       }
     }
