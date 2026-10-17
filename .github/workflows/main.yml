@@ -299,7 +299,7 @@ jobs:
           path: dist
       - name: Verify discovery checkpoint run
         if: inputs.socialResumeRun != ''
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           RESUME_RUN: ${{ inputs.socialResumeRun }}
         with:
