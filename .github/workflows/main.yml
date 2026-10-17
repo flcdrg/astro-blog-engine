@@ -325,7 +325,7 @@ jobs:
       - name: Create repository-scoped automation token
         if: vars.SOCIAL_APP_ID != ''
         id: social-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ vars.SOCIAL_APP_ID }}
           private-key: ${{ secrets.SOCIAL_APP_PRIVATE_KEY }}
