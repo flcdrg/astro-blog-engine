@@ -18,5 +18,6 @@
     ],
     "cSpell.words": [
         "frontmatter"
-    ]
+    ],
+    "blogTagsHelper.fileGlobPattern": "src/posts/**/*.md"
 }
