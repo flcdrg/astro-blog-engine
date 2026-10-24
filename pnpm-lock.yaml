@@ -179,8 +179,8 @@ importers:
         specifier: ^0.26.0
         version: 0.26.0
       '@atproto/common':
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.6
+        version: 0.8.6
       '@fortawesome/fontawesome-svg-core':
         specifier: ^7.3.1
         version: 7.3.1
@@ -387,8 +387,12 @@ packages:
     resolution: {integrity: sha512-eJEgJVI61n5t/ieluVOxaEl16hWKipvy60SWOLcISanOywvEW5MkOeeg4PVeYqntBvYn1ldZiNHDrFsEyt6+Jg==}
     engines: {node: '>=22'}
 
-  '@atproto/common@0.8.5':
-    resolution: {integrity: sha512-3F/qNX/LibHQITeV6cClycSVd/klMpO+xCvhUOvGcIjQRB1lcZJ1VygG9vtvnHbfItOt/JsDQNCGwE9smba96g==}
+  '@atproto/common-web@0.5.15':
+    resolution: {integrity: sha512-1u/30RbRtF8h69soQFldCiYmvv90KIG38MvZyFYBnUn8ygQxE3TRL2SDU87hJeU5mSXySgAMcJc4GE7m/kZK/A==}
+    engines: {node: '>=22'}
+
+  '@atproto/common@0.8.6':
+    resolution: {integrity: sha512-kdizsqq8jbPZ0YiQDaK8HXeH48Ss2fbRlX4Ga+3Tz8F+Eb2eDNvCEp2Z7+5EajrdBjXhI97Sn8ZBQC0CSWItyg==}
     engines: {node: '>=22'}
 
   '@atproto/lex-cbor@0.1.7':
@@ -409,6 +413,10 @@ packages:
 
   '@atproto/syntax@0.7.6':
     resolution: {integrity: sha512-luKQTcWw1H1jLmYvX34ldBqNjz2orF082njmcF9fxbWTqVhsO+TpY0FHRKVPoV7dwL0Y3L16DNz1ma0LFGH25g==}
+    engines: {node: '>=22'}
+
+  '@atproto/syntax@0.7.7':
+    resolution: {integrity: sha512-MJ+QUo8yzAGP2SOQKs2CBI2ouY5KaO9Pv5a7laX3xtrkfWmS/s96L/FCJm5VBHEvKXmd6ap/HSGypYclQcfoWA==}
     engines: {node: '>=22'}
 
   '@atproto/xrpc@0.8.15':
@@ -4358,9 +4366,16 @@ snapshots:
       '@atproto/syntax': 0.7.6
       zod: 3.25.76
 
-  '@atproto/common@0.8.5':
+  '@atproto/common-web@0.5.15':
     dependencies:
-      '@atproto/common-web': 0.5.14
+      '@atproto/lex-data': 0.1.8
+      '@atproto/lex-json': 0.1.7
+      '@atproto/syntax': 0.7.7
+      zod: 3.25.76
+
+  '@atproto/common@0.8.6':
+    dependencies:
+      '@atproto/common-web': 0.5.15
       '@atproto/lex-cbor': 0.1.7
       '@atproto/lex-data': 0.1.8
       multiformats: 13.4.2
@@ -4391,6 +4406,11 @@ snapshots:
       zod: 3.25.76
 
   '@atproto/syntax@0.7.6':
+    dependencies:
+      iso-datestring-validator: 2.2.2
+      tslib: 2.8.1
+
+  '@atproto/syntax@0.7.7':
     dependencies:
       iso-datestring-validator: 2.2.2
       tslib: 2.8.1
