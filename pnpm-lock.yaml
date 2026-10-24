@@ -170,8 +170,8 @@ importers:
   .:
     dependencies:
       '@astrojs/check':
-        specifier: ^0.9.10
-        version: 0.9.10(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)
+        specifier: ^0.9.11
+        version: 0.9.11(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)
       '@astrojs/sitemap':
         specifier: 3.7.4
         version: 3.7.4
@@ -194,8 +194,8 @@ importers:
         specifier: ^3.7.6
         version: 3.7.6
       astro:
-        specifier: ^7.4.0
-        version: 7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
+        specifier: ^7.4.1
+        version: 7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
       astro-disqus:
         specifier: ^1.0.1
         version: 1.0.1
@@ -241,10 +241,10 @@ importers:
         version: 2.16.2
       astro-canonical:
         specifier: ^1.1.1
-        version: 1.1.1(astro@7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))
+        version: 1.1.1(astro@7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))
       astro-mermaid:
         specifier: ^2.1.0
-        version: 2.1.0(astro@7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))(mermaid@11.17.2)
+        version: 2.1.0(astro@7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))(mermaid@11.17.2)
       markdownlint-cli2:
         specifier: ^0.23.3
         version: 0.23.3(supports-color@10.2.2)
@@ -270,8 +270,8 @@ packages:
     resolution: {integrity: sha512-GMDC7Eo0myBUA/QLBl0u+OcegJ8LiBhccmNZR34KmprQNP8gQUJlWlOOZWUsxNA2rNS6GuPYcGDyLoPnjmn4/Q==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@astrojs/check@0.9.10':
-    resolution: {integrity: sha512-zgx/UQMozdjOa3bOxjgeCFdtpE3c9rRX6xHwa+2QXvy8z8Akifu2AtubHyv/zzC2znO8dl8fFWL4K+Ba9kS8HQ==}
+  '@astrojs/check@0.9.11':
+    resolution: {integrity: sha512-TcDC2KT3t0XHFv/geBsA02/HuVXuzLwAfAzLPG2FvBW/DL3tzxu2voVaqcKSN56dN2DNlYC/3FKrmxrDs6actg==}
     hasBin: true
     peerDependencies:
       typescript: ^5.0.0 || ^6.0.0
@@ -1539,8 +1539,8 @@ packages:
       '@mermaid-js/layout-elk':
         optional: true
 
-  astro@7.4.0:
-    resolution: {integrity: sha512-6ThZU2bp7asGSceVcnh3r23dE88HpYN5vxtnCWYYrjr8lpQjx4eDW6/W8WgNlcc+T/b8zHmQ/EcS4DpQG4ZoOg==}
+  astro@7.4.1:
+    resolution: {integrity: sha512-mzWNEWSef1VQDgFku6Gp0v8Qx53NOkNlOIDQcX9ovxAZ1QXic6cks/FFo+gxPM9anXuat4X1FhB61KTk3XFvgg==}
     engines: {node: '>=22.22.0', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     peerDependencies:
@@ -1688,10 +1688,6 @@ packages:
 
   chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
-
-  chokidar@4.0.3:
-    resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
-    engines: {node: '>= 14.16.0'}
 
   chokidar@5.0.0:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
@@ -3265,10 +3261,6 @@ packages:
     resolution: {integrity: sha512-s4VSOf6yN0rvbRZGxs8Om5CWj6seneMwK3oDb4lWDH0UPhWcxwOWw5+qk24bxq87szX1ydrwylIOp2uG1ojUpA==}
     engines: {node: '>= 0.8'}
 
-  readdirp@4.1.2:
-    resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
-    engines: {node: '>= 14.18.0'}
-
   readdirp@5.1.1:
     resolution: {integrity: sha512-Kko+Y5XQ6fM+Ce3dq3m9YGxnacYZYl9cA1wZjaF3Vbry2L3i1qVg8+CAgNPsXRArPMUMCaOR7oa9Nqntc43JKA==}
     engines: {node: '>= 20.19.0'}
@@ -4222,10 +4214,10 @@ snapshots:
     transitivePeerDependencies:
       - '@emnapi/runtime'
 
-  '@astrojs/check@0.9.10(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)':
+  '@astrojs/check@0.9.11(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)':
     dependencies:
       '@astrojs/language-server': 2.17.2(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)
-      chokidar: 4.0.3
+      chokidar: 5.0.0
       kleur: 4.1.5
       typescript: 6.0.3
       yargs: 18.2.0
@@ -5410,21 +5402,21 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  astro-canonical@1.1.1(astro@7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)):
+  astro-canonical@1.1.1(astro@7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)):
     dependencies:
-      astro: 7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
 
   astro-disqus@1.0.1: {}
 
-  astro-mermaid@2.1.0(astro@7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))(mermaid@11.17.2):
+  astro-mermaid@2.1.0(astro@7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1))(mermaid@11.17.2):
     dependencies:
-      astro: 7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
       import-meta-resolve: 4.2.0
       mdast-util-to-string: 4.0.0
       mermaid: 11.17.2
       unist-util-visit: 5.1.0
 
-  astro@7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1):
+  astro@7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1):
     dependencies:
       '@astrojs/compiler-rs': 0.5.2
       '@astrojs/internal-helpers': 0.13.0
@@ -5515,7 +5507,7 @@ snapshots:
 
   astrojs-atom@4.0.123(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1):
     dependencies:
-      astro: 7.4.0(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
+      astro: 7.4.1(@types/node@26.6.5)(esbuild@0.28.2)(yaml@2.9.1)
       fast-xml-builder: 1.3.1
       fast-xml-parser: 5.11.2
     transitivePeerDependencies:
@@ -5664,10 +5656,6 @@ snapshots:
   character-reference-invalid@2.0.1: {}
 
   chardet@0.7.0: {}
-
-  chokidar@4.0.3:
-    dependencies:
-      readdirp: 4.1.2
 
   chokidar@5.0.0:
     dependencies:
@@ -7459,8 +7447,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.4.24
       unpipe: 1.0.0
-
-  readdirp@4.1.2: {}
 
   readdirp@5.1.1: {}
 
