@@ -1,4 +1,4 @@
-export const indexWordThreshold = 100;
+export const indexWordThreshold = 250;
 
 export function countWords(body: string | undefined): number {
   return body ? body.trim().split(/\s+/).filter(Boolean).length : 0;
