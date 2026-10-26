@@ -45,12 +45,16 @@ and see some common examples of their usage.">
       "name": "David Gardiner",
       "url": "https://david.gardiner.net.au/",
       "logo": "https://www.gravatar.com/avatar/37edf2567185071646d62ba28b868fab",
+      "founder": {
+        "@id": "https://david.gardiner.net.au/about#person"
+      },
       "sameAs": [
         "https://github.com/flcdrg",
         "https://www.linkedin.com/in/davidrgardiner/",
         "https://mastodon.online/@DavidRGardiner",
         "https://stackoverflow.com/users/25702/david-gardiner",
-        "https://bsky.app/profile/david.gardiner.net.au"
+        "https://bsky.app/profile/david.gardiner.net.au",
+        "https://hub.docker.com/u/flcdrg"
       ]
     },
     {
@@ -61,6 +65,9 @@ and see some common examples of their usage.">
       "description": "Blog by David Gardiner",
       "publisher": {
         "@id": "https://david.gardiner.net.au/#organization"
+      },
+      "author": {
+        "@id": "https://david.gardiner.net.au/about#person"
       }
     },
     {
@@ -80,11 +87,22 @@ and see some common examples of their usage.">
       },
       "author": {
         "@type": "Person",
+        "@id": "https://david.gardiner.net.au/about#person",
         "name": "David Gardiner",
-        "url": "https://david.gardiner.net.au/"
+        "url": "https://david.gardiner.net.au/about",
+        "jobTitle": "Senior Developer",
+        "sameAs": [
+          "https://github.com/flcdrg",
+          "https://www.linkedin.com/in/davidrgardiner/",
+          "https://mastodon.online/@DavidRGardiner",
+          "https://stackoverflow.com/users/25702/david-gardiner",
+          "https://bsky.app/profile/david.gardiner.net.au",
+          "https://hub.docker.com/u/flcdrg"
+        ]
       },
       "publisher": {
         "@type": "Organization",
+        "@id": "https://david.gardiner.net.au/#organization",
         "name": "David Gardiner",
         "logo": {
           "@type": "ImageObject",
@@ -230,7 +248,11 @@ and see some common examples of their usage.">
   
   <h1>Azure Pipelines template expressions</h1>
 
-  <p><time datetime="2025-07-14T08:00:00.000+09:30" title="STRING_0">14th July 2025</time></p>
+  <p class="post-meta">
+    <time datetime="2025-07-14T08:00:00.000+09:30" title="STRING_0">14th July 2025</time>
+    <span class="post-meta-separator" aria-hidden="true">·</span>
+    <span class="post-author">by <a rel="author" href="/about">David Gardiner</a></span>
+  </p>
 
   <p><em>Template expressions are a compile-time feature of Azure Pipelines. Learn how they differ to custom conditions
 and see some common examples of their usage.</em></p>
