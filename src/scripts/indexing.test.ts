@@ -42,12 +42,12 @@ describe("isPostFrom2025Onwards", () => {
 
 describe("isPostNoindex", () => {
   it("noindexes short posts published before 2025", () => {
-    expect(isPostNoindex({ date: "2024-12-31" }, 99)).toBe(true);
+    expect(isPostNoindex({ date: "2024-12-31" }, indexWordThreshold - 1)).toBe(true);
   });
 
   it("keeps posts indexable at the word boundary or from 2025 onwards", () => {
-    expect(isPostNoindex({ date: "2024-12-31" }, 100)).toBe(false);
-    expect(isPostNoindex({ date: "2025-01-01" }, 99)).toBe(false);
+    expect(isPostNoindex({ date: "2024-12-31" }, indexWordThreshold)).toBe(false);
+    expect(isPostNoindex({ date: "2025-01-01" }, indexWordThreshold - 1)).toBe(false);
   });
 
   it("honours an explicit index override", () => {
