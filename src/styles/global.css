@@ -168,6 +168,18 @@ p {
   color: #00539F;
 }
 
+.post-meta {
+  color: #555;
+}
+
+.dark .post-meta {
+  color: #c8c8c8;
+}
+
+.post-meta-separator {
+  margin: 0 0.4em;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
