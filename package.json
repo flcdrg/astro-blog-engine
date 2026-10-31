@@ -28,7 +28,7 @@
     "verify:stable": "pnpm verify:post"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.11",
+    "@astrojs/check": "^0.9.12",
     "@astrojs/sitemap": "3.7.4",
     "@atproto/api": "^0.29.5",
     "@atproto/common": "^0.8.6",
@@ -36,7 +36,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@types/luxon": "^3.7.6",
-    "astro": "^7.4.1",
+    "astro": "^7.4.2",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.123",
     "dompurify": "^3.4.17",
@@ -58,7 +58,7 @@
     "@lhci/cli": "^0.15.1",
     "@types/sanitize-html": "^2.16.2",
     "astro-canonical": "^1.1.1",
-    "astro-mermaid": "^2.1.0",
+    "astro-mermaid": "^2.2.0",
     "markdownlint-cli2": "^0.24.0",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
