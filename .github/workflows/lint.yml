@@ -16,5 +16,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
 
-      - uses: DavidAnson/markdownlint-cli2-action@v24.2.0
+      - uses: DavidAnson/markdownlint-cli2-action@v25.0.0
         # continue-on-error: true
