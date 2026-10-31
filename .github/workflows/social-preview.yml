@@ -62,7 +62,7 @@ jobs:
         with:
           ref: main
           persist-credentials: false
-      - uses: pnpm/setup@v3.1.1
+      - uses: pnpm/setup@v3.1.2
         if: steps.verify.outputs.eligible == 'true'
         with:
           runtime: node
