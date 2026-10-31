@@ -90,7 +90,7 @@ The `verify*` scripts require `dist/` to exist (run `pnpm build` first) and the 
 - Deployed to Cloudflare Pages via Wrangler (`wrangler deploy` for production, `wrangler versions upload` for PR previews).
 - PR preview jobs also run `Test-HttpRedirects.ps1` and verify HTTP trace snapshots.
 - Link checking uses lychee; Lighthouse CI runs on every build.
-- The `.astro/` directory and `dist/` are cached in CI keyed on `pnpm-lock.yaml`.
+- CI caches Astro's default build/content cache at `node_modules/.astro`, keyed on dependency and Astro/TypeScript configuration files. `dist/` is generated build output uploaded as an artifact, not used as a build cache.
 
 ## Environment variables
 
