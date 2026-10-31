@@ -90,20 +90,17 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for lastMod
 
-      - name: Setup dist cache
-        uses: actions/cache@v6.1.0
-        with:
-          path: dist
-          key: ${{ runner.os }}-dist-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-dist-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-dist
-
       - name: Pnpm Setup
         uses: pnpm/setup@v3.1.2
         with:
           runtime: node
           cache: true
+
+      - name: Setup Astro build cache
+        uses: actions/cache@v6.1.0
+        with:
+          path: node_modules/.astro
+          key: ${{ runner.os }}-astro-${{ hashFiles('pnpm-lock.yaml', 'package.json', 'astro.config.ts', 'src/content.config.ts', 'tsconfig.json') }}
 
       # PR builds use dev mode
       - name: Build PR
