@@ -12,13 +12,13 @@ workflows:
     '.github/workflows/links-redirect.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/upload-artifact@v7.0.2'
-        - 'dawidd6/action-download-artifact@v27'
+        - 'dawidd6/action-download-artifact@v28'
         - 'flcdrg/replace-multiple-action@v4.1.361'
         - 'peter-evans/create-pull-request@v8.1.1'
     '.github/workflows/links.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/upload-artifact@v7.0.2'
-        - 'dawidd6/action-download-artifact@v27'
+        - 'dawidd6/action-download-artifact@v28'
         - 'flcdrg/replace-multiple-action@v4.1.361'
         - 'flcdrg/wayback-machine-query-action@v7.0.198'
         - 'peter-evans/create-pull-request@v8.1.1'
@@ -51,7 +51,7 @@ workflows:
         - 'actions/github-script@v9.0.0'
         - 'pnpm/setup@v3.1.2'
     '.github/workflows/submit-all-wayback.yml':
-        - 'dawidd6/action-download-artifact@v27'
+        - 'dawidd6/action-download-artifact@v28'
 dependencies:
     'actions/cache@v6.1.0':
         ref: 'v6.1.0'
@@ -108,9 +108,9 @@ dependencies:
         commit: 'sha1-696eb3f2509270d7b882d2aa68347bc676e7af34'
         owner_id: 1828270
         repo_id: 329203602
-    'dawidd6/action-download-artifact@v27':
-        ref: 'v27'
-        commit: 'sha1-eab87c9830c39eff17e5a6eadb20bfb4bc880477'
+    'dawidd6/action-download-artifact@v28':
+        ref: 'v28'
+        commit: 'sha1-a92c7ae74cf1df8810783758581e485ac3aaa309'
         owner_id: 9713907
         repo_id: 239218448
     'dependabot/fetch-metadata@v3.1.0':
