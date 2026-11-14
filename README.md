@@ -80,7 +80,9 @@ mastodonUrl: https://your.instance/@yourname/123456789012345678
 Publishing is **disabled by default**. Configure `src/data/social-config.json` in
 the production content repository, not just the engine. Set its production origin,
 account identities and `enabled: true`; remove a provider object to disable that
-network. Also set the repository variable `SOCIAL_PUBLISHING_ENABLED=true`.
+network. For LinkedIn, set `linkedin.personUrn` to the authorised member's
+`urn:li:person:<sub>` value. Also set the repository variable
+`SOCIAL_PUBLISHING_ENABLED=true`.
 
 You can use `src/data/social-config.jsonc` instead to allow comments and trailing
 commas. If both files exist, the `.json` file takes precedence. Both formats use
@@ -96,8 +98,9 @@ derived from tags (`.NET` becomes `#dotnet`). Descriptions are shortened first,
 then optional hashtags/title if necessary; the URL is preserved. Mastodon uploads
 the resolved frontmatter image if present, using `imageAlt` as its description.
 Missing alt text or failed media preparation defers that network instead of silently
-posting without the requested image. A new post needs a non-empty description to
-prepare an announcement or PR preview.
+posting without the requested image. LinkedIn publishes a text-only post, limited to
+3,000 characters. A new post needs a non-empty description to prepare an announcement
+or PR preview.
 
 Configure production environment secrets:
 
@@ -105,7 +108,27 @@ Configure production environment secrets:
 | ----------------------- | --------------------------------------------------------------------------------------------------------- |
 | `BLUESKY_APP_PASSWORD`  | App password for the configured Bluesky account                                                           |
 | `MASTODON_ACCESS_TOKEN` | Token with `read:accounts`, `write:statuses` and `write:media`                                            |
+| `LINKEDIN_ACCESS_TOKEN` | OAuth access token with `w_member_social`, `openid` and `profile` for the configured member               |
 | `SOCIAL_GITHUB_TOKEN`   | Dedicated GitHub App installation token or narrowly scoped token with repository contents/PR write access |
+
+To enable LinkedIn personal-profile posts, create an app in the [LinkedIn
+Developer Portal](https://www.linkedin.com/developers/) and add the **Share on
+LinkedIn** and **Sign In with LinkedIn using OpenID Connect** products. Authorise
+the member with the `w_member_social`, `openid` and `profile` scopes using LinkedIn's
+[OAuth 2.0 authorisation-code flow](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow),
+then use the OIDC `sub` claim as `linkedin.personUrn` (`urn:li:person:<sub>`). Put
+the OAuth access token in the production environment secret `LINKEDIN_ACCESS_TOKEN`;
+never put it in repository files or expose it to pull-request builds. The publisher
+does not perform OAuth authorisation or token refresh. LinkedIn access
+tokens normally expire after about 60 days, so replace the secret manually when it
+expires. Programmatic refresh tokens are available only to approved Marketing
+Developer Platform partners. The publisher uses LinkedIn's versioned Posts API and
+does not read member post history; the reviewed publishing baseline prevents
+publishing older blog posts. If an API submission has an uncertain outcome, check
+the LinkedIn profile and record the confirmed URL in the post's `linkedinUrl`
+frontmatter or the social mapping file. The next publishing run will mark that
+operation complete rather than submit a duplicate. LinkedIn posts are not shown in
+the site's discussion UI.
 
 Prefer a dedicated GitHub App. It writes publishing state to a branch and opens
 mapping PRs. To create and configure it:
@@ -174,7 +197,8 @@ Progress is durably recorded on `automation/social-threads` before external writ
 including record/media IDs and uncertain outcomes. Completed mappings reach the
 site through a follow-up PR and deployment. Do not delete pending journal entries:
 reconcile uncertain submissions before retrying, particularly Mastodon's limited
-idempotency window. The two providers recover independently.
+idempotency window. Bluesky and Mastodon recover independently; LinkedIn submissions
+with uncertain outcomes require manual reconciliation.
 
 Set `SOCIAL_AUTO_MERGE=true` only after configuring enforced required checks and
 token permissions in the production repository. Only mapping/state-only PRs with
@@ -185,7 +209,7 @@ Incomplete operations keep the PR in draft; unavailable checks leave it for revi
 
 PR builds prepare examples for every newly added post, including drafts/scheduled
 posts with clear labels. A separate trusted workflow updates one bot comment with
-the proposed Bluesky and Mastodon text, length warnings, and planned Mastodon image
+the proposed Bluesky, Mastodon and LinkedIn text, length warnings, and planned Mastodon image
 path/alt text. To show the image itself, set the optional `previewHostSuffix` in
 social configuration to your trusted Cloudflare account host, for example
 `your-account.workers.dev`; only images from that host are embedded. Text uses

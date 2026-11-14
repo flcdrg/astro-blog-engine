@@ -25,6 +25,7 @@ export async function GET() {
       ...(image ? { image: { path: image.src, alt: post.data.imageAlt ?? "" } } : {}),
       ...(post.data.blueskyUrl ? { blueskyUrl: post.data.blueskyUrl } : {}),
       ...(post.data.mastodonUrl ? { mastodonUrl: post.data.mastodonUrl } : {}),
+      ...(post.data.linkedinUrl ? { linkedinUrl: post.data.linkedinUrl } : {}),
     });
   }
   return new Response(JSON.stringify(manifestSchema.parse({

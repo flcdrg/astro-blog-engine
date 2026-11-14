@@ -1,9 +1,24 @@
 import { z } from "astro/zod";
 
-export const providerSchema = z.enum(["bluesky", "mastodon"]);
+export const providerSchema = z.enum(["bluesky", "mastodon", "linkedin"]);
 export type Provider = z.infer<typeof providerSchema>;
+type ThreadProvider = "bluesky" | "mastodon";
 
-export function parseThreadUrl(value: string, provider: Provider) {
+export function parseLinkedInPostUrl(value: string) {
+  const url = new URL(value);
+  if (url.protocol !== "https:" || url.hostname !== "www.linkedin.com" || url.username || url.password || url.port || url.search || url.hash) {
+    throw new Error("Invalid LinkedIn post URL");
+  }
+  const match = url.pathname.match(/^\/feed\/update\/(urn:li:(?:share|ugcPost):[A-Za-z0-9_-]+)\/?$/);
+  if (!match) throw new Error("Invalid LinkedIn post URL");
+  return { urn: match[1]! };
+}
+
+export const linkedinPostUrlSchema = z.string().refine((url) => {
+  try { parseLinkedInPostUrl(url); return true; } catch { return false; }
+}, "Invalid LinkedIn post URL");
+
+export function parseThreadUrl(value: string, provider: ThreadProvider) {
   const url = new URL(value);
   if (url.protocol !== "https:" || url.username || url.password || url.port || url.search || url.hash) {
     throw new Error(`Invalid ${provider} thread URL`);
@@ -15,7 +30,7 @@ export function parseThreadUrl(value: string, provider: Provider) {
   return { origin: url.origin, actor: match[1]!, id: match[2]! };
 }
 
-export const threadUrlSchema = (provider: Provider) => z.string().refine((url) => {
+export const threadUrlSchema = (provider: ThreadProvider) => z.string().refine((url) => {
   try { parseThreadUrl(url, provider); return true; } catch { return false; }
 }, `Invalid ${provider} thread URL`);
 
@@ -38,6 +53,9 @@ export const configSchema = z.object({
     username: z.string().min(1),
     maxCharacters: z.number().int().positive(),
   }).optional(),
+  linkedin: z.object({
+    personUrn: z.string().regex(/^urn:li:person:[A-Za-z0-9_-]+$/),
+  }).optional(),
   archiveReady: z.boolean(),
 });
 export type SocialConfig = z.infer<typeof configSchema>;
@@ -46,6 +64,7 @@ export const mappingSchema = z.object({
   blueskyUrl: threadUrlSchema("bluesky").optional(),
   blueskyUri: z.string().regex(/^at:\/\/did:[^/]+\/app\.bsky\.feed\.post\/[a-zA-Z0-9]+$/).optional(),
   mastodonUrl: threadUrlSchema("mastodon").optional(),
+  linkedinUrl: linkedinPostUrlSchema.optional(),
 }).strict();
 export const mappingsSchema = z.record(z.string(), mappingSchema);
 export type Mapping = z.infer<typeof mappingSchema>;
@@ -63,6 +82,7 @@ export const manifestPostSchema = z.object({
   image: z.object({ path: z.string().startsWith("/"), alt: z.string() }).optional(),
   blueskyUrl: threadUrlSchema("bluesky").optional(),
   mastodonUrl: threadUrlSchema("mastodon").optional(),
+  linkedinUrl: linkedinPostUrlSchema.optional(),
 }).strict();
 export type ManifestPost = z.infer<typeof manifestPostSchema>;
 export const manifestSchema = z.object({

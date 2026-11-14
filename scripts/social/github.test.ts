@@ -10,12 +10,14 @@ let calls: Array<{ args: string[]; input?: Record<string, unknown> }>;
 let nonMapping: boolean;
 let existing: boolean;
 let autoMergeEnabled: boolean;
+let mappingsContent: string;
 
 beforeEach(() => {
   calls = [];
   nonMapping = false;
   existing = false;
   autoMergeEnabled = false;
+  mappingsContent = "{}";
   mocks.exec.mockImplementation((_file: string, args: string[], options: { input?: string }) => {
     const input = options.input ? JSON.parse(options.input) as Record<string, unknown> : undefined;
     calls.push({ args, ...(input ? { input } : {}) });
@@ -30,7 +32,7 @@ beforeEach(() => {
     if (path.includes("/pulls?")) return JSON.stringify(existing ? [{ number: 1, draft: false, auto_merge: autoMergeEnabled ? { enabled_by: { login: "bot" } } : null, body: "", user: { login: "bot" } }] : []);
     if (path.endsWith("/pulls")) return JSON.stringify({ number: 1, draft: false, body: input?.body, user: { login: "bot" } });
     if (path.includes("/rules/branches/")) return JSON.stringify([{ type: "required_status_checks", parameters: { required_status_checks: [{ context: "build" }] } }]);
-    if (path.includes("/contents/")) return JSON.stringify({ content: Buffer.from("{}").toString("base64") });
+    if (path.includes("/contents/")) return JSON.stringify({ content: Buffer.from(mappingsContent).toString("base64") });
     if (path === "graphql") return JSON.stringify({ data: { viewer: { login: "bot" } } });
     if (path === "repos/owner/repo") return JSON.stringify({ allow_auto_merge: true });
     return "{}";
@@ -91,6 +93,29 @@ describe("durable mapping journal", () => {
     const journal = new Journal("owner/repo", sha);
     await journal.persist({}, state);
     journal.openPullRequest(state);
+    expect(calls.some((call) => call.args.includes("--auto"))).toBe(true);
+  });
+  it("verifies completed LinkedIn operations against their durable URL mapping", async () => {
+    vi.stubEnv("SOCIAL_AUTO_MERGE", "true");
+    const url = "https://www.linkedin.com/feed/update/urn:li:share:123/";
+    const mappings = { "2026/10/post": { linkedinUrl: url } };
+    const completed: PublishingState = {
+      ...state,
+      operations: {
+        "2026/10/post": {
+          linkedin: {
+            status: "complete",
+            startedAt: "2026-10-01T00:00:00Z",
+            uri: "urn:li:share:123",
+            url,
+          },
+        },
+      },
+    };
+    mappingsContent = JSON.stringify(mappings);
+    const journal = new Journal("owner/repo", sha);
+    await journal.persist(mappings, completed);
+    journal.openPullRequest(completed);
     expect(calls.some((call) => call.args.includes("--auto"))).toBe(true);
   });
 });

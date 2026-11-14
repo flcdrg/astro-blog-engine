@@ -7,6 +7,7 @@ import {
   createBlueskyRecordKey,
   createBlueskyWriter,
   createBoundedFetch,
+  createLinkedInWriter,
   createMastodonWriter,
   prepareMastodonImage,
   extractBlueskyLinks,
@@ -15,10 +16,12 @@ import {
   ProviderHttpError,
   type BlueskyReader,
   type BlueskyWriter,
+  type LinkedInWriter,
   type MastodonReader,
   type MastodonStatus,
   type MastodonWriter,
 } from "./providers.ts";
+import { parseLinkedInPostUrl } from "../../src/scripts/social/schema.ts";
 import type {
   ManifestPost,
   Mapping,
@@ -59,6 +62,7 @@ export class JournalPersistenceError extends Error {
 export type PublishOptions = {
   now?: DateTime;
   createBlueskyWriter?: (config: SocialConfig) => Promise<BlueskyWriter>;
+  createLinkedInWriter?: (config: SocialConfig) => Promise<LinkedInWriter>;
   createMastodonWriter?: (config: SocialConfig) => Promise<MastodonWriter>;
   verifyPostIsLive?: (url: string, origin: string) => Promise<void>;
   prepareImage?: typeof prepareMastodonImage;
@@ -113,6 +117,8 @@ function restoreCompletedMapping(
     mergeMapping(mappings, postId, { blueskyUrl: operation.url, blueskyUri: operation.uri });
   } else if (provider === "mastodon") {
     mergeMapping(mappings, postId, { mastodonUrl: operation.url });
+  } else if (provider === "linkedin") {
+    mergeMapping(mappings, postId, { linkedinUrl: operation.url });
   } else {
     return false;
   }
@@ -127,7 +133,9 @@ function operationCompleteMapping(
 ): boolean {
   if (restoreCompletedMapping(mappings, postId, provider, operation)) return true;
   const mapping = mappings[postId];
-  return Boolean(provider === "bluesky" ? mapping?.blueskyUrl : mapping?.mastodonUrl);
+  return Boolean(provider === "bluesky"
+    ? mapping?.blueskyUrl
+    : provider === "mastodon" ? mapping?.mastodonUrl : mapping?.linkedinUrl);
 }
 
 function postUrl(post: ManifestPost, origin: string): string {
@@ -328,7 +336,7 @@ async function pollMastodonMedia(
 async function reconcileFreshPost(
   input: PublishPostsInput,
   post: ManifestPost,
-  provider: Provider,
+  provider: "bluesky" | "mastodon",
   readers: { bluesky?: BlueskyReader; mastodon?: MastodonReader },
   persist: () => Promise<void>,
 ): Promise<boolean> {
@@ -524,6 +532,67 @@ async function publishMastodonPost(
   }
 }
 
+function getLinkedInUrl(urn: string): string {
+  const url = `https://www.linkedin.com/feed/update/${urn}/`;
+  parseLinkedInPostUrl(url);
+  return url;
+}
+
+async function publishLinkedInPost(
+  input: PublishPostsInput,
+  post: ManifestPost,
+  writer: LinkedInWriter,
+  persist: () => Promise<void>,
+  now: DateTime,
+): Promise<{ url: string; warnings: string[] }> {
+  const existing = getOperation(input.state, post.id, "linkedin");
+  if (existing?.status === "complete") {
+    if (!operationCompleteMapping(input.mappings, post.id, "linkedin", existing)) {
+      throw new Error("Completed LinkedIn operation has no durable mapping; manual recovery is required");
+    }
+    await persist();
+    return { url: input.mappings[post.id]!.linkedinUrl!, warnings: [] };
+  }
+  if (existing?.submittedAt || existing?.status === "uncertain") {
+    if (existing.status !== "uncertain") {
+      setOperation(input.state, post.id, "linkedin", { ...existing, status: "uncertain" });
+      await persist();
+    }
+    throw new Error("LinkedIn submission outcome is uncertain; check the profile and record its URL manually before retrying");
+  }
+
+  const formatted = formatAnnouncement(post, "linkedin");
+  const operation: Operation = {
+    ...(existing ?? { startedAt: now.toUTC().toISO()! }),
+    status: "pending",
+    submittedAt: now.toUTC().toISO()!,
+  };
+  setOperation(input.state, post.id, "linkedin", operation);
+  await persist();
+
+  let created: { urn: string };
+  try {
+    created = await writer.createPost(formatted.text);
+  } catch (error) {
+    if (error instanceof JournalPersistenceError) throw error;
+    if (isDefinitelyRejected(error)) {
+      const { submittedAt: _submittedAt, ...rejectedOperation } = operation;
+      setOperation(input.state, post.id, "linkedin", { ...rejectedOperation, status: "pending" });
+      await persist();
+      throw new Error(`LinkedIn rejected the post without publishing it: ${errorMessage(error)}`, { cause: error });
+    }
+    setOperation(input.state, post.id, "linkedin", { ...operation, status: "uncertain" });
+    await persist();
+    throw new Error(`LinkedIn submission outcome is uncertain; check the profile before retrying: ${errorMessage(error)}`, { cause: error });
+  }
+
+  const url = getLinkedInUrl(created.urn);
+  mergeMapping(input.mappings, post.id, { linkedinUrl: url });
+  setOperation(input.state, post.id, "linkedin", { ...operation, status: "complete", uri: created.urn, url });
+  await persist();
+  return { url, warnings: formatted.warnings };
+}
+
 export async function publishPosts(
   input: PublishPostsInput,
   options: PublishOptions = {},
@@ -533,6 +602,7 @@ export async function publishPosts(
     for (const post of input.posts) {
       result.skipped.push({ postId: post.id, provider: "bluesky", reason: "publishing is disabled" });
       result.skipped.push({ postId: post.id, provider: "mastodon", reason: "publishing is disabled" });
+      result.skipped.push({ postId: post.id, provider: "linkedin", reason: "publishing is disabled" });
     }
     return result;
   }
@@ -555,36 +625,48 @@ export async function publishPosts(
       for (const provider of ["bluesky", "mastodon"] as const) {
         result.skipped.push({ postId: post.id, provider, reason: "draft posts are never published" });
       }
+      result.skipped.push({ postId: post.id, provider: "linkedin", reason: "draft posts are never published" });
     } else if (!isEligible(post, now)) {
       const publicationDate = DateTime.fromISO(post.date, { zone: "Australia/Adelaide" });
       const reason = publicationDate.isValid ? "publication date is in the future" : "publication date is invalid";
       for (const provider of ["bluesky", "mastodon"] as const) {
         result.skipped.push({ postId: post.id, provider, reason });
       }
+      result.skipped.push({ postId: post.id, provider: "linkedin", reason });
     } else {
       eligiblePosts.push(post);
     }
   }
   let blueskyWriter: BlueskyWriter | undefined;
   let mastodonWriter: MastodonWriter | undefined;
+  let linkedinWriter: LinkedInWriter | undefined;
   let blueskyInitialisationError: unknown;
   let mastodonInitialisationError: unknown;
+  let linkedinInitialisationError: unknown;
 
   for (const post of eligiblePosts) {
     if (baseline.has(post.id)) {
       for (const provider of ["bluesky", "mastodon"] as const) {
         result.skipped.push({ postId: post.id, provider, reason: "post is part of the initial publishing baseline" });
       }
+      result.skipped.push({ postId: post.id, provider: "linkedin", reason: "post is part of the initial publishing baseline" });
       continue;
     }
 
     let completedMappingRecovered = false;
-    for (const provider of ["bluesky", "mastodon"] as const) {
+    for (const provider of ["bluesky", "mastodon", "linkedin"] as const) {
       const operation = getOperation(input.state, post.id, provider);
-      const override = provider === "bluesky" ? post.blueskyUrl : post.mastodonUrl;
+      const override = provider === "bluesky" ? post.blueskyUrl : provider === "mastodon" ? post.mastodonUrl : post.linkedinUrl;
       const mapped = provider === "bluesky"
         ? input.mappings[post.id]?.blueskyUrl
-        : input.mappings[post.id]?.mastodonUrl;
+        : provider === "mastodon" ? input.mappings[post.id]?.mastodonUrl : input.mappings[post.id]?.linkedinUrl;
+      if (provider === "linkedin" && operation && operation.status !== "complete" && (override || mapped)) {
+        const url = override ?? mapped!;
+        mergeMapping(input.mappings, post.id, { linkedinUrl: url });
+        setOperation(input.state, post.id, provider, { ...operation, status: "complete", url });
+        completedMappingRecovered = true;
+        continue;
+      }
       if (operation?.status === "complete" && !override && !mapped) {
         if (!restoreCompletedMapping(input.mappings, post.id, provider, operation)) {
           throw new Error(`Completed ${provider} operation for ${post.id} has no recoverable mapping`);
@@ -595,17 +677,18 @@ export async function publishPosts(
     if (completedMappingRecovered) await persist();
 
     const providerNeedsWork = (provider: Provider) => {
-      const override = provider === "bluesky" ? post.blueskyUrl : post.mastodonUrl;
+      const override = provider === "bluesky" ? post.blueskyUrl : provider === "mastodon" ? post.mastodonUrl : post.linkedinUrl;
       const mapped = provider === "bluesky"
         ? input.mappings[post.id]?.blueskyUrl
-        : input.mappings[post.id]?.mastodonUrl;
+        : provider === "mastodon" ? input.mappings[post.id]?.mastodonUrl : input.mappings[post.id]?.linkedinUrl;
       const op = getOperation(input.state, post.id, provider);
       return !override && !mapped && op?.status !== "complete";
     };
     const needsBluesky = Boolean(input.config.bluesky && providerNeedsWork("bluesky"));
     const needsMastodon = Boolean(input.config.mastodon && providerNeedsWork("mastodon"));
-    if (!needsBluesky && !needsMastodon) {
-      for (const provider of ["bluesky", "mastodon"] as const) {
+    const needsLinkedIn = Boolean(input.config.linkedin && providerNeedsWork("linkedin"));
+    if (!needsBluesky && !needsMastodon && !needsLinkedIn) {
+      for (const provider of ["bluesky", "mastodon", "linkedin"] as const) {
         result.skipped.push({ postId: post.id, provider, reason: "already mapped, overridden, or complete" });
       }
       continue;
@@ -666,6 +749,27 @@ export async function publishPosts(
       } catch (error) {
         if (error instanceof JournalPersistenceError) throw error;
         result.failures.push({ postId: post.id, provider: "mastodon", message: errorMessage(error) });
+      }
+    }
+
+    if (needsLinkedIn) {
+      try {
+        if (liveCheckError) throw liveCheckError;
+        if (!linkedinWriter) {
+          if (linkedinInitialisationError) throw linkedinInitialisationError;
+          try {
+            linkedinWriter = await (options.createLinkedInWriter ?? createLinkedInWriter)(input.config);
+          } catch (error) {
+            linkedinInitialisationError = error;
+            throw error;
+          }
+        }
+        const published = await publishLinkedInPost(input, post, linkedinWriter, persist, now);
+        result.published.push({ postId: post.id, provider: "linkedin", url: published.url });
+        result.warnings.push(...published.warnings.map((message) => ({ postId: post.id, provider: "linkedin" as const, message })));
+      } catch (error) {
+        if (error instanceof JournalPersistenceError) throw error;
+        result.failures.push({ postId: post.id, provider: "linkedin", message: errorMessage(error) });
       }
     }
   }

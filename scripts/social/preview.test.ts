@@ -6,6 +6,7 @@ const config = {
   enabled: false, productionOrigin: "https://example.com", archiveReady: false,
   bluesky: { handle: "example.com", service: "https://bsky.social" },
   mastodon: { origin: "https://mastodon.online", username: "name", maxCharacters: 500 },
+  linkedin: { personUrn: "urn:li:person:123" },
 };
 const post = {
   id: "2026/10/example", source: "src/posts/2026/2026-10-01-example.md",
@@ -19,6 +20,8 @@ describe("announcement PR previews", () => {
     const preview = previewSchema.parse({ version: 1, head: "a".repeat(40), posts: [post] });
     const body = renderPreview(preview, config);
     expect(body).toContain(formatAnnouncement(post, "bluesky").text);
+    expect(body).toContain(formatAnnouncement(post, "linkedin").text);
+    expect(body).toContain("**LinkedIn**");
     expect(body).toContain("Useful image");
     expect(body).toContain("/_astro/test.jpg");
   });

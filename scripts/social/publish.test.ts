@@ -3,7 +3,13 @@ import { describe, expect, it, vi } from "vitest";
 import { TID } from "@atproto/common";
 
 import { JournalPersistenceError, publishPosts, SocialPublishError } from "./publish";
-import { ProviderHttpError, type BlueskyWriter, type MastodonStatus, type MastodonWriter } from "./providers";
+import {
+  ProviderHttpError,
+  type BlueskyWriter,
+  type LinkedInWriter,
+  type MastodonStatus,
+  type MastodonWriter,
+} from "./providers";
 import type { ManifestPost, Mappings, PublishingState, SocialConfig } from "../../src/scripts/social/schema";
 
 const origin = "https://david.gardiner.net.au";
@@ -158,10 +164,124 @@ describe("publishPosts", () => {
       blueskyUri: "at://did:plc:author/app.bsky.feed.post/existing",
       mastodonUrl: "https://mastodon.online/@david/999",
     });
+
     expect(harness.persist).toHaveBeenCalledTimes(2);
     expect(bluesky.createCount).toBe(0);
     expect(createStatus).not.toHaveBeenCalled();
     expect(harness.value.state.operations).toEqual({});
+  });
+
+  it("publishes a LinkedIn announcement and persists its post URL", async () => {
+    const target = post();
+    const linkedinConfig: SocialConfig = {
+      ...baseConfig,
+      bluesky: undefined,
+      mastodon: undefined,
+      linkedin: { personUrn: "urn:li:person:member-123" },
+    };
+    const harness = input([target], { config: linkedinConfig });
+    const writer: LinkedInWriter = {
+      createPost: vi.fn(async () => ({ urn: "urn:li:share:123456" })),
+    };
+    const result = await publishPosts(harness.value, {
+      ...testOptions,
+      createLinkedInWriter: async () => writer,
+    });
+
+    expect(result.published).toEqual([{
+      postId: target.id,
+      provider: "linkedin",
+      url: "https://www.linkedin.com/feed/update/urn:li:share:123456/",
+    }]);
+    expect(harness.value.mappings[target.id]?.linkedinUrl).toContain("urn:li:share:123456");
+    expect(harness.value.state.operations[target.id]?.linkedin).toMatchObject({
+      status: "complete",
+      uri: "urn:li:share:123456",
+      url: "https://www.linkedin.com/feed/update/urn:li:share:123456/",
+    });
+    expect(harness.persist).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not publish LinkedIn announcements for posts in the initial baseline", async () => {
+    const target = post();
+    const linkedinConfig: SocialConfig = {
+      ...baseConfig,
+      bluesky: undefined,
+      mastodon: undefined,
+      linkedin: { personUrn: "urn:li:person:member-123" },
+    };
+    const harness = input([target], {
+      config: linkedinConfig,
+      state: state([target.id]),
+    });
+    const createLinkedInWriter = vi.fn(async () => {
+      throw new Error("Baseline posts must not initialise or publish to LinkedIn");
+    });
+
+    const result = await publishPosts(harness.value, { ...testOptions, createLinkedInWriter });
+
+    expect(result.skipped).toContainEqual(expect.objectContaining({ provider: "linkedin", reason: "post is part of the initial publishing baseline" }));
+    expect(createLinkedInWriter).not.toHaveBeenCalled();
+  });
+
+  it("does not automatically retry an uncertain LinkedIn submission", async () => {
+    const target = post();
+    const linkedinConfig: SocialConfig = {
+      ...baseConfig,
+      bluesky: undefined,
+      mastodon: undefined,
+      linkedin: { personUrn: "urn:li:person:member-123" },
+    };
+    const harness = input([target], { config: linkedinConfig });
+    const writer: LinkedInWriter = {
+      createPost: vi.fn(async () => { throw new Error("connection reset after remote write"); }),
+    };
+    const options = { ...testOptions, createLinkedInWriter: async () => writer };
+
+    await expect(publishPosts(harness.value, options)).rejects.toBeInstanceOf(SocialPublishError);
+    expect(harness.value.state.operations[target.id]?.linkedin?.status).toBe("uncertain");
+    await expect(publishPosts(harness.value, options)).rejects.toBeInstanceOf(SocialPublishError);
+    expect(writer.createPost).toHaveBeenCalledTimes(1);
+  });
+
+  it("resolves an uncertain LinkedIn submission from a manually verified URL", async () => {
+    const target = post();
+    const linkedinUrl = "https://www.linkedin.com/feed/update/urn:li:share:confirmed/";
+    const linkedinConfig: SocialConfig = {
+      ...baseConfig,
+      bluesky: undefined,
+      mastodon: undefined,
+      linkedin: { personUrn: "urn:li:person:member-123" },
+    };
+    const harness = input([target], {
+      config: linkedinConfig,
+      mappings: { [target.id]: { linkedinUrl } },
+      state: {
+        version: 1,
+        baseline: [],
+        operations: {
+          [target.id]: {
+            linkedin: {
+              status: "uncertain",
+              startedAt: now.toUTC().toISO()!,
+              submittedAt: now.toUTC().toISO()!,
+            },
+          },
+        },
+      },
+    });
+    const createLinkedInWriter = vi.fn(async () => {
+      throw new Error("The confirmed post must not be submitted again");
+    });
+
+    await publishPosts(harness.value, { ...testOptions, createLinkedInWriter });
+
+    expect(harness.value.state.operations[target.id]?.linkedin).toMatchObject({
+      status: "complete",
+      url: linkedinUrl,
+    });
+    expect(createLinkedInWriter).not.toHaveBeenCalled();
+    expect(harness.persist).toHaveBeenCalledTimes(1);
   });
 
   it.each(["ambiguous", "incomplete"] as const)("fails a %s Bluesky preflight independently of Mastodon", async (kind) => {

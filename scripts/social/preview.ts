@@ -42,10 +42,11 @@ export function renderPreview(preview: Preview, config: SocialConfig, deployment
     sections.push(`### Post ${sections.filter((s) => s.startsWith("### Post")).length + 1}`, block(post.title));
     const date = DateTime.fromISO(post.date, { zone: "Australia/Adelaide", locale: "en-AU" }).toLocaleString(DateTime.DATETIME_FULL);
     sections.push(block(`${post.draft ? "Draft: will not publish" : isEligible(post) ? "Ready after production deployment" : "Scheduled"}\nPublication: ${date}`));
-    for (const provider of ["bluesky", "mastodon"] as const) {
+    for (const provider of ["bluesky", "mastodon", "linkedin"] as const) {
       if (!config[provider]) continue;
-      const formatted = formatAnnouncement(post, provider, config.mastodon?.maxCharacters);
-      sections.push(`**${provider === "bluesky" ? "Bluesky" : "Mastodon"}** (${formatted.length}/${formatted.limit})`, block(formatted.text));
+      const formatted = formatAnnouncement(post, provider, provider === "mastodon" ? config.mastodon?.maxCharacters : undefined);
+      const name = provider === "bluesky" ? "Bluesky" : provider === "mastodon" ? "Mastodon" : "LinkedIn";
+      sections.push(`**${name}** (${formatted.length}/${formatted.limit})`, block(formatted.text));
       if (formatted.warnings.length) sections.push(block(formatted.warnings.join("\n")));
     }
     if (post.image && config.mastodon) {

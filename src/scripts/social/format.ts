@@ -21,9 +21,9 @@ export function canonicalMatch(value: string, origin: string): string | undefine
   } catch { return undefined; }
 }
 
-export function formatAnnouncement(post: ManifestPost, provider: Provider, maxCharacters = 500, reservedUrlLength = 23) {
+export function formatAnnouncement(post: ManifestPost, provider: Provider, maxCharacters?: number, reservedUrlLength = 23) {
   if (!post.description.trim()) throw new Error(`Post ${post.id} needs a description before preparing an announcement`);
-  const limit = provider === "bluesky" ? 300 : maxCharacters;
+  const limit = provider === "bluesky" ? 300 : maxCharacters ?? (provider === "linkedin" ? 3000 : 500);
   let title = graphemes(post.title.replace(/\s+/g, " ").trim());
   let description = graphemes(post.description.replace(/\s+/g, " ").trim());
   const tags = [...new Set(post.tags.filter((tag) => tag !== "others").map(normaliseHashtag).filter(Boolean))];

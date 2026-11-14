@@ -7,7 +7,6 @@ import {
   type ManifestPost,
   type Mapping,
   type Mappings,
-  type Provider,
   type SocialConfig,
 } from "../../src/scripts/social/schema.ts";
 import {
@@ -24,11 +23,11 @@ import {
 
 const historyPageLimit = 1_000;
 const blueskyCandidateSchema = mappingSchema.refine(
-  (value) => Boolean(value.blueskyUrl && value.blueskyUri && !value.mastodonUrl),
+  (value) => Boolean(value.blueskyUrl && value.blueskyUri && !value.mastodonUrl && !value.linkedinUrl),
   "Bluesky checkpoint candidates require only a Bluesky URL and URI",
 );
 const mastodonCandidateSchema = mappingSchema.refine(
-  (value) => Boolean(value.mastodonUrl && !value.blueskyUrl && !value.blueskyUri),
+  (value) => Boolean(value.mastodonUrl && !value.blueskyUrl && !value.blueskyUri && !value.linkedinUrl),
   "Mastodon checkpoint candidates require only a Mastodon URL",
 );
 const providerCheckpoint = (candidate: typeof blueskyCandidateSchema) => z.object({
@@ -46,12 +45,13 @@ export const discoveryCheckpointSchema = z.object({
   }).strict(),
 }).strict();
 export type DiscoveryCheckpoint = z.infer<typeof discoveryCheckpointSchema>;
+type DiscoverableProvider = "bluesky" | "mastodon";
 type ProviderCheckpoint = NonNullable<DiscoveryCheckpoint["providers"]["bluesky"]>;
 
-export type DiscoveryAmbiguity = { postId: string; provider: Provider; candidates: string[] };
+export type DiscoveryAmbiguity = { postId: string; provider: DiscoverableProvider; candidates: string[] };
 export type DiscoveryUnmatched = {
   postId: string;
-  provider: Provider;
+  provider: DiscoverableProvider;
   reason: "no-exact-link-match" | "history-incomplete";
 };
 export type DiscoveryResult = {
@@ -60,7 +60,7 @@ export type DiscoveryResult = {
   unmatched: DiscoveryUnmatched[];
   complete: boolean;
   restartRequired: boolean;
-  errors: Partial<Record<Provider, string>>;
+  errors: Partial<Record<DiscoverableProvider, string>>;
   resume: { blueskyCursor?: string; mastodonMaxId?: string };
   checkpoint: DiscoveryCheckpoint;
 };
@@ -95,7 +95,7 @@ function scopeFingerprint(config: SocialConfig, posts: ManifestPost[]): string {
   })).digest("hex");
 }
 
-function candidateIdentity(mapping: Mapping, provider: Provider): string {
+function candidateIdentity(mapping: Mapping, provider: DiscoverableProvider): string {
   if (provider === "bluesky") return mapping.blueskyUri!;
   const thread = parseThreadUrl(mapping.mastodonUrl!, "mastodon");
   return `${thread.origin}/${thread.id}`;
@@ -103,7 +103,7 @@ function candidateIdentity(mapping: Mapping, provider: Provider): string {
 
 function addCandidates(
   progress: ProviderCheckpoint,
-  provider: Provider,
+  provider: DiscoverableProvider,
   links: string[],
   mapping: Mapping,
   index: Map<string, string[]>,

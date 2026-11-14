@@ -24,10 +24,27 @@ describe("social contracts and formatting", () => {
     const result = formatAnnouncement({ ...post, url: post.url + "x".repeat(300) }, "mastodon");
     expect(result.length).toBeLessThan(150);
   });
+  it("formats LinkedIn announcements within the Posts API limit", () => {
+    const result = formatAnnouncement({ ...post, description: "x".repeat(4000) }, "linkedin");
+    expect(result.limit).toBe(3000);
+    expect(result.length).toBeLessThanOrEqual(3000);
+    expect(result.text).toContain(post.url);
+    expect(result.warnings).toContain("Description shortened to fit the platform limit.");
+  });
   it("rejects malformed thread URLs and preserves string status IDs", () => {
     expect(parseThreadUrl("https://mastodon.online/@name/1234567890123456789", "mastodon").id).toBe("1234567890123456789");
     expect(() => parseThreadUrl("https://bsky.app.evil/profile/me/post/abc", "bluesky")).toThrow();
     expect(() => parseThreadUrl("https://name:pass@mastodon.online/@name/123", "mastodon")).toThrow();
+  });
+  it("validates LinkedIn post URLs", () => {
+    expect(manifestPostSchema.parse({
+      ...post,
+      linkedinUrl: "https://www.linkedin.com/feed/update/urn:li:share:123/",
+    }).linkedinUrl).toContain("urn:li:share:123");
+    expect(() => manifestPostSchema.parse({
+      ...post,
+      linkedinUrl: "https://www.linkedin.com/feed/update/urn:li:share:123/?tracking=1",
+    })).toThrow();
   });
   it("excludes drafts and future posts", () => {
     const now = DateTime.fromISO("2026-10-03T12:00:00+09:30");
