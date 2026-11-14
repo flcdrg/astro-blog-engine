@@ -335,6 +335,7 @@ jobs:
           GH_TOKEN: ${{ steps.social-token.outputs.token || secrets.SOCIAL_GITHUB_TOKEN }}
           BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
           MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
       - name: Upload backfill report
         if: always()
         uses: actions/upload-artifact@v7.0.2

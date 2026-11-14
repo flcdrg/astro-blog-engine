@@ -10,5 +10,8 @@
   //   "username": "DavidRGardiner",
   //   "maxCharacters": 500
   // },
+  // "linkedin": {
+  //   "personUrn": "urn:li:person:your-member-id"
+  // },
   "archiveReady": false
 }

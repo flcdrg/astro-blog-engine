@@ -98,7 +98,9 @@ export class Journal {
     const mappings = mappingsSchema.parse(JSON.parse(Buffer.from(file.content, "base64").toString("utf8")));
     for (const [id, providers] of Object.entries(state.operations)) {
       for (const [provider, operation] of Object.entries(providers)) {
-        const mappedUrl = provider === "bluesky" ? mappings[id]?.blueskyUrl : mappings[id]?.mastodonUrl;
+        const mappedUrl = provider === "bluesky"
+          ? mappings[id]?.blueskyUrl
+          : provider === "mastodon" ? mappings[id]?.mastodonUrl : mappings[id]?.linkedinUrl;
         if (!operation.url || operation.url !== mappedUrl) throw new Error(`Completed ${provider} operation for ${id} does not match its mapping`);
       }
     }

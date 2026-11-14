@@ -8,6 +8,7 @@ import {
   createBlueskyRecordKey,
   createBlueskyReader,
   createBlueskyWriter,
+  createLinkedInWriter,
   createMastodonReader,
   createMastodonWriter,
   createBoundedFetch,
@@ -29,6 +30,10 @@ const blueskyConfig: SocialConfig = {
 const mastodonConfig: SocialConfig = {
   enabled: true, archiveReady: false, productionOrigin: "https://example.com",
   mastodon: { origin: "https://mastodon.example", username: "author", maxCharacters: 500 },
+};
+const linkedinConfig: SocialConfig = {
+  enabled: true, archiveReady: false, productionOrigin: "https://example.com",
+  linkedin: { personUrn: "urn:li:person:member-123" },
 };
 const validAccount = { id: "123", acct: "author", username: "author" };
 
@@ -67,6 +72,40 @@ describe("social provider helpers", () => {
       Response.json(init?.method === "POST" ? { id: "999", visibility: "public" } : validAccount);
     const writer = await createMastodonWriter(mastodonConfig, { fetch, accessToken: "mock-token" });
     await expect(writer.createStatus({ text: "A post", idempotencyKey: "key" })).rejects.toThrow(/status submission returned a malformed/);
+  });
+
+  it("verifies the LinkedIn member and submits a versioned Posts API request", async () => {
+    let postRequest: { url: URL; init: RequestInit | undefined } | undefined;
+    const fetch = vi.fn<typeof globalThis.fetch>(async (input, init) => {
+      const url = new URL(input instanceof Request ? input.url : String(input));
+      if (url.pathname === "/v2/userinfo") return Response.json({ sub: "member-123" });
+      postRequest = { url, init };
+      return new Response(null, {
+        status: 201,
+        headers: { "x-restli-id": "urn:li:share:123456" },
+      });
+    });
+    const writer = await createLinkedInWriter(linkedinConfig, { fetch, accessToken: "mock-token" });
+    expect(await writer.createPost("Blogged: A useful post")).toEqual({ urn: "urn:li:share:123456" });
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(postRequest?.url.href).toBe("https://api.linkedin.com/rest/posts");
+    const headers = new Headers(postRequest?.init?.headers);
+    expect(headers.get("Authorization")).toBe("Bearer mock-token");
+    expect(headers.get("Linkedin-Version")).toBe("202610");
+    expect(headers.get("X-Restli-Protocol-Version")).toBe("2.0.0");
+    expect(JSON.parse(String(postRequest?.init?.body))).toMatchObject({
+      author: "urn:li:person:member-123",
+      commentary: "Blogged: A useful post",
+      visibility: "PUBLIC",
+      lifecycleState: "PUBLISHED",
+    });
+  });
+
+  it("refuses a LinkedIn token for a different configured member", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>(async () => Response.json({ sub: "someone-else" }));
+    await expect(createLinkedInWriter(linkedinConfig, { fetch, accessToken: "mock-token" }))
+      .rejects.toThrow(/different member/);
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it("uses the public AppView for unauthenticated handle resolution and author-feed reads", async () => {

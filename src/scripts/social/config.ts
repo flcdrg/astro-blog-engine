@@ -14,5 +14,6 @@ export function getSocialMapping(id: string, overrides: Mapping): Mapping {
       blueskyUrl: overrides.blueskyUrl,
     } : {}),
     ...(overrides.mastodonUrl ? { mastodonUrl: overrides.mastodonUrl } : {}),
+    ...(overrides.linkedinUrl ? { linkedinUrl: overrides.linkedinUrl } : {}),
   };
 }

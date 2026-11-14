@@ -260,7 +260,12 @@ export type MastodonWriter = MastodonReader & {
   }): Promise<MastodonStatus>;
 };
 
+export type LinkedInWriter = {
+  createPost(text: string): Promise<{ urn: string }>;
+};
+
 type MastodonOptions = FetchOptions & { accessToken?: string };
+type LinkedInOptions = FetchOptions & { accessToken?: string };
 
 const mastodonAccountSchema = z.object({
   id: z.string().regex(/^\d+$/),
@@ -295,6 +300,11 @@ const mastodonMediaSchema = z.object({
   id: z.string().regex(/^\d+$/),
   url: z.url().nullable().optional(),
 });
+const linkedInUserInfoSchema = z.object({
+  sub: z.string().regex(/^[A-Za-z0-9_-]+$/),
+});
+const linkedInPostUrnSchema = z.string().regex(/^urn:li:(?:share|ugcPost):[A-Za-z0-9_-]+$/);
+const linkedInApiVersion = "202610";
 
 function validatePayload<T>(schema: z.ZodType<T>, value: unknown, operation: string): T {
   const parsed = schema.safeParse(value);
@@ -440,6 +450,64 @@ export async function createMastodonWriter(
         },
       );
       return validatePayload(mastodonStatusSchema, await readJson<unknown>(response, "Mastodon status submission"), "Mastodon status submission");
+    },
+  };
+}
+
+export async function createLinkedInWriter(
+  config: SocialConfig,
+  options: LinkedInOptions = {},
+): Promise<LinkedInWriter> {
+  if (!config.linkedin) throw new Error("LinkedIn is not configured");
+  const personUrn = config.linkedin.personUrn;
+  const accessToken = options.accessToken ?? process.env.LINKEDIN_ACCESS_TOKEN;
+  if (!accessToken) throw new Error("LINKEDIN_ACCESS_TOKEN is required to publish to LinkedIn");
+
+  const fetchImpl = createBoundedFetch(options);
+  const userInfoResponse = await fetchImpl("https://api.linkedin.com/v2/userinfo", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const userInfo = validatePayload(
+    linkedInUserInfoSchema,
+    await readJson<unknown>(userInfoResponse, "LinkedIn member lookup"),
+    "LinkedIn member lookup",
+  );
+  const expectedMemberId = personUrn.slice("urn:li:person:".length);
+  if (userInfo.sub !== expectedMemberId) {
+    throw new Error("LinkedIn access token belongs to a different member than configured");
+  }
+
+  return {
+    async createPost(text) {
+      const response = await fetchImpl("https://api.linkedin.com/rest/posts", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          "Linkedin-Version": linkedInApiVersion,
+          "X-Restli-Protocol-Version": "2.0.0",
+        },
+        body: JSON.stringify({
+          author: personUrn,
+          commentary: text,
+          visibility: "PUBLIC",
+          distribution: {
+            feedDistribution: "MAIN_FEED",
+            targetEntities: [],
+            thirdPartyDistributionChannels: [],
+          },
+          lifecycleState: "PUBLISHED",
+          isReshareDisabledByAuthor: false,
+        }),
+      });
+      if (!response.ok) {
+        throw new ProviderHttpError("LinkedIn post submission", response.status, response.headers.get("retry-after"));
+      }
+      const urn = response.headers.get("x-restli-id");
+      if (!urn || !linkedInPostUrnSchema.safeParse(urn).success) {
+        throw new Error("LinkedIn post submission returned an invalid post ID");
+      }
+      return { urn };
     },
   };
 }

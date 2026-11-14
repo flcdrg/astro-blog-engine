@@ -1,6 +1,6 @@
 import { z } from "astro/zod";
 import { DateTime } from "luxon";
-import { parseThreadUrl, type Mapping, type Provider } from "./schema";
+import { parseThreadUrl, type DiscussionProvider, type Mapping } from "./schema";
 
 export const MAX_REPLIES = 20;
 export const MAX_LIKE_AVATARS = 5;
@@ -221,7 +221,7 @@ async function fetchJson(url: string, signal: AbortSignal, request: PublicFetch)
 }
 
 export async function loadDiscussion(
-  provider: Provider, mapping: Mapping, request: PublicFetch = fetch,
+  provider: DiscussionProvider, mapping: Mapping, request: PublicFetch = fetch,
   timeout = DISCUSSION_TIMEOUT_MS,
 ): Promise<Discussion> {
   const controller = new AbortController();
