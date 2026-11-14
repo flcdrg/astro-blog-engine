@@ -175,11 +175,11 @@ const noindex = isPostNoindex(frontmatter, wordCount);
     ...(description ? { description } : {}),
     ...(image ? { image } : {}),
     ...(frontmatter.imageAlt ? { imageAlt: frontmatter.imageAlt } : {}),
-    tags: frontmatter.tags
   }} 
   canonicalUrl={canonicalUrlString}
   pageJsonLd={postJsonLd}
   noindex={noindex}
+  ogType="article"
 >
   <slot name="head" slot="head" />
   
