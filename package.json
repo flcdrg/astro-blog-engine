@@ -62,7 +62,7 @@
     "markdownlint-cli2": "^0.24.0",
     "mermaid": "^11.17.2",
     "run-script-os": "^1.1.6",
-    "vitest": "^5.0.5",
+    "vitest": "^5.1.0",
     "wrangler": "^4.157.0"
   }
 }
