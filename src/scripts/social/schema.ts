@@ -2,7 +2,9 @@ import { z } from "astro/zod";
 
 export const providerSchema = z.enum(["bluesky", "mastodon", "linkedin"]);
 export type Provider = z.infer<typeof providerSchema>;
-type ThreadProvider = "bluesky" | "mastodon";
+export const discussionProviderSchema = z.enum(["bluesky", "mastodon"]);
+export type DiscussionProvider = z.infer<typeof discussionProviderSchema>;
+type ThreadProvider = DiscussionProvider;
 
 export function parseLinkedInPostUrl(value: string) {
   const url = new URL(value);

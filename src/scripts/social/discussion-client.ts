@@ -1,6 +1,6 @@
 import DOMPurify from "dompurify";
 import { discussionDate, loadDiscussion, safeDiscussionUrl, type Discussion, type DiscussionAuthor } from "./discussion";
-import { mappingSchema, providerSchema } from "./schema";
+import { discussionProviderSchema, mappingSchema } from "./schema";
 
 export function sanitiseDiscussionHtml(html: string): DocumentFragment {
   const fragment = DOMPurify.sanitize(html, {
@@ -143,7 +143,7 @@ export function initialiseDiscussions(): void {
       status.textContent = "Loading public discussion…";
       container.setAttribute("aria-busy", "true");
       try {
-        const provider = providerSchema.parse(section.dataset["provider"]);
+        const provider = discussionProviderSchema.parse(section.dataset["provider"]);
         const mapping = mappingSchema.parse({
           ...(section.dataset["blueskyUrl"] ? { blueskyUrl: section.dataset["blueskyUrl"] } : {}),
           ...(section.dataset["blueskyUri"] ? { blueskyUri: section.dataset["blueskyUri"] } : {}),

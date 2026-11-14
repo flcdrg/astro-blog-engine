@@ -3,6 +3,7 @@ import {
   decodeBlueskyDiscussion, decodeMastodonDiscussion, discussionDate,
   loadDiscussion, safeDiscussionUrl, MAX_REPLIES, MAX_LIKE_AVATARS,
 } from "./discussion";
+import { discussionProviderSchema } from "./schema";
 
 const author = { did: "did:plc:author", handle: "author.example", displayName: "Public author", avatar: "https://cdn.example/avatar.jpg" };
 const rootUri = "at://did:plc:author/app.bsky.feed.post/root";
@@ -21,6 +22,10 @@ const mastodonPost = (id: string, visibility = "public", parent = "1") => ({
 });
 
 describe("public discussion boundaries", () => {
+  it("does not accept LinkedIn as a discussion provider", () => {
+    expect(discussionProviderSchema.safeParse("linkedin").success).toBe(false);
+  });
+
   it("does not present missing engagement counts as zero", () => {
     const { likeCount, replyCount, repostCount, ...post } = blueskyPost("root");
     const result = decodeBlueskyDiscussion({ thread: { post } }, { likes: [] });
