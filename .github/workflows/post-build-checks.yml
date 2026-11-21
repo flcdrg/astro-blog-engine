@@ -32,7 +32,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pnpm Setup
-        uses: pnpm/setup@v3.1.2
+        uses: pnpm/setup@v3.2.0
         with:
           runtime: node
 
