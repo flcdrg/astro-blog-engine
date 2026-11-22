@@ -209,8 +209,8 @@ importers:
         specifier: ^5.12.0
         version: 5.12.0
       fast-xml-validator:
-        specifier: ^1.4.2
-        version: 1.4.2
+        specifier: ^1.4.4
+        version: 1.4.4
       jsonc-parser:
         specifier: ^3.3.1
         version: 3.3.1
@@ -2428,8 +2428,8 @@ packages:
     resolution: {integrity: sha512-/pXxRBtwxY9w8z7YbgsvIPPcPvFDsTbIkWwTQJhzNJPokj+TbN6ftmcv4j/pEQDvOCNnKGDzuk5Bo2oogIOiFg==}
     hasBin: true
 
-  fast-xml-validator@1.4.2:
-    resolution: {integrity: sha512-dN1Z5tBDxhJ1e8ccerKI+MWdwZ8oUWhWTSYISFeHKUOzlaZrwnwxcHKN3d7R9IOqtCtk6ynbEiZhjo/8RtDwIA==}
+  fast-xml-validator@1.4.4:
+    resolution: {integrity: sha512-fWG5d4HDV0z2+325gI5BYZMxNZYJx1RSxvSP+ZGC3eCrwdlHQUxQDN6bBrO3oVnBxrdZoHJHp6lJExt1/OCQGg==}
 
   fastdom@1.0.12:
     resolution: {integrity: sha512-LB+xjSTEbjHE1cWsxu+tN2Xqr1kpi+V9aADI7sVM5ZMaXyYGPHULQMzpJMYqOTULK/73pUkWVzzObFRBkPr+hg==}
@@ -6507,7 +6507,7 @@ snapshots:
       strnum: 2.5.1
       xml-naming: 0.3.0
 
-  fast-xml-validator@1.4.2:
+  fast-xml-validator@1.4.4:
     dependencies:
       detailed-xml-validator: 2.2.0
       path-expression-matcher: 1.6.2
