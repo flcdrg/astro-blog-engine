@@ -39,7 +39,7 @@
     "astro": "^7.4.12",
     "astro-disqus": "^1.0.1",
     "astrojs-atom": "^4.0.123",
-    "dompurify": "^3.4.17",
+    "dompurify": "^3.5.0",
     "fast-xml-parser": "^5.12.1",
     "fast-xml-validator": "^1.4.4",
     "jsonc-parser": "^3.3.1",
