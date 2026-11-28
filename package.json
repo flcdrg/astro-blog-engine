@@ -44,7 +44,7 @@
     "fast-xml-validator": "^1.4.4",
     "jsonc-parser": "^3.3.1",
     "luxon": "^3.7.2",
-    "marked": "^18.2.0",
+    "marked": "^18.3.0",
     "node-html-parser": "^9.0.5",
     "sanitize-html": "^2.18.2",
     "sharp": "^0.35.5",
