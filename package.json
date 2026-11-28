@@ -30,7 +30,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.12",
     "@astrojs/sitemap": "3.7.5",
-    "@atproto/api": "^0.30.0",
+    "@atproto/api": "^0.32.7",
     "@atproto/common": "^0.8.10",
     "@fortawesome/fontawesome-svg-core": "^7.3.1",
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
